@@ -8,6 +8,6 @@ import org.springframework.context.annotation.PropertySource;
  */
 
 @Configuration
-@PropertySource("classpath:spreadsheet.properties")
+@PropertySource("file:spreadsheet.properties")
 public class Config {
 }
