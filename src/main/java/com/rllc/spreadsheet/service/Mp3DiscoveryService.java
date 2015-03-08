@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -27,9 +28,13 @@ public class Mp3DiscoveryService {
     @Value("${mp3.directory}")
     private String mp3Directory;
 
+    @PostConstruct
+    public void init() {
+        logger.info("scanning mp3 directory [{}]", mp3Directory);
+    }
+
     public List<Sermon> getMp3s() {
         List<Sermon> sermonList = new ArrayList<>();
-
         List<File> mp3Files = (List<File>) FileUtils.listFiles(new File(mp3Directory), new String[]{"mp3"}, true);
 
         for (File mp3FileHandle : mp3Files) {
