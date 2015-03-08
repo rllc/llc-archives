@@ -53,6 +53,9 @@ public class Mp3DiscoveryService {
                     filename = mp3FileHandle.getAbsolutePath()
                             .replace(mp3Directory, "")
                             .replace("\\", "/");
+                    if (filename.startsWith("/")) {
+                        filename = filename.substring(1);
+                    }
                     date = parseDate(id3v1Tag.getTitle(), mp3FileHandle.getName());
                     time = parseTime(id3v1Tag.getTitle());
                     bibleText = parseBibleText(id3v1Tag.getAlbum());
@@ -62,6 +65,9 @@ public class Mp3DiscoveryService {
                     filename = mp3FileHandle.getAbsolutePath()
                             .replace(mp3Directory, "")
                             .replace("\\", "/");
+                    if (filename.startsWith("/")) {
+                        filename = filename.substring(1);
+                    }
                     date = parseDate(id3v2Tag.getTitle(), mp3FileHandle.getName());
                     time = parseTime(id3v2Tag.getTitle());
                     bibleText = parseBibleText(id3v2Tag.getAlbum());
