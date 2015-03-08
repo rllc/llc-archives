@@ -2,6 +2,7 @@ package com.rllc.spreadsheet.service;
 
 import com.mpatric.mp3agic.*;
 import com.rllc.spreadsheet.domain.Sermon;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 @Component
 public class Mp3DiscoveryService {
-    
+
     private static final Logger logger = LoggerFactory.getLogger(Mp3DiscoveryService.class);
 
     @Value("${mp3.directory}")
@@ -30,12 +30,7 @@ public class Mp3DiscoveryService {
     public List<Sermon> getMp3s() {
         List<Sermon> sermonList = new ArrayList<>();
 
-        File directory = new File(mp3Directory);
-        File[] mp3Files = directory.listFiles(new FilenameFilter() {
-            public boolean accept(File dir, String name) {
-                return name.endsWith(".mp3");
-            }
-        });
+        List<File> mp3Files = (List<File>) FileUtils.listFiles(new File(mp3Directory), new String[]{"mp3"}, true);
 
         for (File mp3FileHandle : mp3Files) {
             logger.info("-------------- {}  --------------", mp3FileHandle.getName());
