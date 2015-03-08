@@ -50,14 +50,18 @@ public class Mp3DiscoveryService {
 
                 if (mp3file.hasId3v1Tag()) {
                     ID3v1 id3v1Tag = mp3file.getId3v1Tag();
-                    filename = mp3FileHandle.getAbsolutePath().replace(mp3Directory, "");
+                    filename = mp3FileHandle.getAbsolutePath()
+                            .replace(mp3Directory, "")
+                            .replace("\\", "/");
                     date = parseDate(id3v1Tag.getTitle(), mp3FileHandle.getName());
                     time = parseTime(id3v1Tag.getTitle());
                     bibleText = parseBibleText(id3v1Tag.getAlbum());
                     minister = parseMinister(id3v1Tag.getArtist());
                 } else if (mp3file.hasId3v2Tag()) {
                     ID3v2 id3v2Tag = mp3file.getId3v2Tag();
-                    filename = mp3FileHandle.getAbsolutePath().replace(mp3Directory, "");
+                    filename = mp3FileHandle.getAbsolutePath()
+                            .replace(mp3Directory, "")
+                            .replace("\\", "/");
                     date = parseDate(id3v2Tag.getTitle(), mp3FileHandle.getName());
                     time = parseTime(id3v2Tag.getTitle());
                     bibleText = parseBibleText(id3v2Tag.getAlbum());
