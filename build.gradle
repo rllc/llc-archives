@@ -1,0 +1,38 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.2.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+
+sourceCompatibility = 1.7
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    baseName = 'rllc-spreadsheet'
+    version =  '0.1.0'
+}
+
+dependencies {
+    compile 'org.slf4j:slf4j-api:1.7.5'
+    compile 'com.google.gdata:core:1.47.1'
+    compile 'com.mpatric:mp3agic:0.8.3'
+    compile 'org.apache.commons:commons-lang3:3.0'
+
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+
+    testCompile "junit:junit:4.11"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.3'
+}
