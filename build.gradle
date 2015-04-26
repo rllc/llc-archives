@@ -33,6 +33,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
 
     testCompile "junit:junit:4.11"
+    testCompile 'commons-io:commons-io:2.4'
     testCompile "org.spockframework:spock-core:${spockVersion}"
 }
 

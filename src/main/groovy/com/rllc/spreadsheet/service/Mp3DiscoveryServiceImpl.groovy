@@ -23,7 +23,7 @@ class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
     TextParsingService textParsingService
 
     @Value("\${mp3.directory}")
-    private String mp3Directory;
+    String mp3Directory;
 
     @PostConstruct
     public void init() {
@@ -31,25 +31,31 @@ class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
     }
 
     @Override
-    public List<Sermon> getMp3s() {
-        List<Sermon> sermonList = new ArrayList<>();
+    List<Sermon> getMp3s() {
+        List mp3Files = findMp3Files()
+        processMp3Files(mp3Files)
+    }
+
+    @Override
+    List<File> findMp3Files() {
         def mp3Files = []
         new File(mp3Directory).eachDirRecurse() { dir ->
             dir.eachFileMatch(~/.*.mp3/) { file ->
                 mp3Files << file
             }
         }
+        mp3Files
+    }
 
-        for (File mp3FileHandle : mp3Files) {
-            logger.info "-" * 50
-            logger.info mp3FileHandle.name
-            logger.info "-" * 50
+    @Override
+    List<Sermon> processMp3Files(List mp3Files) {
+        def sermonList = []
+        mp3Files.each { mp3FileHandle ->
+            logger.debug "> ${mp3FileHandle.name}"
             try {
-                Mp3File mp3file = new Mp3File(mp3FileHandle.getAbsolutePath());
-                ID3v1 id3v1Tag = mp3file.hasId3v1Tag() ? mp3file.id3v1Tag : mp3file.id3v2Tag
-                Sermon sermon = extractId3v1TagData(mp3FileHandle, id3v1Tag)
-                logger.info sermon
-                sermonList.add(sermon);
+                def mp3file = new Mp3File(mp3FileHandle.absolutePath);
+                def id3v1Tag = mp3file.hasId3v1Tag() ? mp3file.id3v1Tag : mp3file.id3v2Tag
+                sermonList << extractId3v1TagData(mp3FileHandle, id3v1Tag)
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (UnsupportedTagException e) {
@@ -58,13 +64,13 @@ class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
                 e.printStackTrace();
             }
         }
-        return sermonList;
+        sermonList
     }
 
     @Override
     Sermon extractId3v1TagData(File mp3FileHandle, ID3v1 id3v1Tag) {
-        return new Sermon(
-                fileName: textParsingService.parseFilename(mp3FileHandle),
+        new Sermon(
+                fileName: textParsingService.parseFilename(mp3FileHandle.absolutePath),
                 date: textParsingService.parseDate(id3v1Tag.title, mp3FileHandle.name),
                 time: textParsingService.parseTime(id3v1Tag.title),
                 bibleText: textParsingService.parseBibleText(id3v1Tag.album),

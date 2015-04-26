@@ -16,10 +16,6 @@ class TextParsingServiceImplTest extends Specification {
         textParsingService.mp3Directory = mp3Directory
     }
 
-    void cleanup() {
-
-    }
-
     def "ParseFilename"() {
         when: "filename is parsed"
         def filename = textParsingService.parseFilename("$mp3Directory\\$mp3File")

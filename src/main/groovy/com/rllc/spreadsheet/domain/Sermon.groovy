@@ -5,11 +5,11 @@ package com.rllc.spreadsheet.domain
  */
 class Sermon {
 
-    String date
-    String time
-    String minister
-    String bibleText
-    String notes
-    String fileName
+    String date = ''
+    String time = ''
+    String minister = ''
+    String bibleText = ''
+    String notes = ''
+    String fileName = ''
 
 }
