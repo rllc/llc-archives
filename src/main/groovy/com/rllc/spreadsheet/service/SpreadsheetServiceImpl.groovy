@@ -1,50 +1,43 @@
-package com.rllc.spreadsheet.service;
+package com.rllc.spreadsheet.service
 
-import com.google.gdata.data.spreadsheet.*;
-import com.google.gdata.util.ServiceException;
-import com.rllc.spreadsheet.domain.Sermon;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
+import com.google.gdata.data.spreadsheet.*
+import com.google.gdata.util.ServiceException
+import com.rllc.spreadsheet.domain.Sermon
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.Value
 
 /**
- * Created by Steven McAdams on 3/7/15.
+ * Created by Steven McAdams on 4/25/15.
  */
-@Component
-public class SpreadsheetService {
+class SpreadsheetServiceImpl implements SpreadsheetService {
+
+    private static final Logger logger = LoggerFactory.getLogger(SpreadsheetServiceImpl.class);
+
 
     private static final String MINISTER = "minister";
     private static final String BIBLE_TEXT = "bibletext";
     private static final String DATE = "date";
     private static final String TIME = "time";
 
-    private static final Logger logger = LoggerFactory.getLogger(SpreadsheetService.class);
-
-    public static final String RLLC_ARCHIVED_SERMONS = "RLLC Archived Sermons";
-
-    public static final String S3_BUCKET = "https://s3-us-west-2.amazonaws.com/rllc-archives/";
-
+    @Value("\${google.username}")
+    String username;
+    @Value("\${google.password}")
+    String password;
     @Autowired
     private Mp3DiscoveryService mp3DiscoveryService;
+    @Value("\${google.spreadsheet}")
+    private String googleSpreadsheet;
+    @Value("\${aws.bucket}")
+    private String awsBucket;
 
-    @Value("${google.username}")
-    String username;
-
-    @Value("${google.password}")
-    String password;
-
-    public void updateSpreadsheet() throws IOException, ServiceException {
+    @Override
+    def updateSpreadsheet() throws IOException, ServiceException {
         updateSpreadsheet(mp3DiscoveryService.getMp3s());
     }
 
-    private void updateSpreadsheet(List<Sermon> sermons) throws ServiceException, IOException {
+    def updateSpreadsheet(List<Sermon> sermons) throws ServiceException, IOException {
 
         logger.info("========= UPDATING SPREADSHEET =========");
 
@@ -57,19 +50,19 @@ public class SpreadsheetService {
                 SpreadsheetFeed.class);
         List<SpreadsheetEntry> spreadsheets = feed.getEntries();
         if (spreadsheets.size() == 0) {
-            logger.info(RLLC_ARCHIVED_SERMONS + " spreadsheet not found, exiting.");
+            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.");
             System.exit(1);
         }
 
         SpreadsheetEntry rllcSpreadsheet = null;
         for (SpreadsheetEntry spreadsheetEntry : spreadsheets) {
-            if (RLLC_ARCHIVED_SERMONS.equals(spreadsheetEntry.getTitle().getPlainText())) {
+            if (googleSpreadsheet.equals(spreadsheetEntry.getTitle().getPlainText())) {
                 rllcSpreadsheet = spreadsheetEntry;
             }
         }
 
         if (rllcSpreadsheet == null) {
-            logger.info(RLLC_ARCHIVED_SERMONS + " spreadsheet not found, exiting.");
+            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.");
             System.exit(1);
         }
 
@@ -100,7 +93,7 @@ public class SpreadsheetService {
                 row.getCustomElements().setValueLocal("date", sermon.getDate());
                 row.getCustomElements().setValueLocal("time", sermon.getTime());
                 row.getCustomElements().setValueLocal("notes", sermon.getNotes());
-                row.getCustomElements().setValueLocal("filelocation", S3_BUCKET + sermon.getFileName());
+                row.getCustomElements().setValueLocal("filelocation", awsBucket + sermon.getFileName());
 
                 // Send the new row to the API for insertion.
                 row = service.insert(listFeedUrl, row);
@@ -115,29 +108,29 @@ public class SpreadsheetService {
 
         logger.info("> [{}] adding mp3 meta data if spreadsheet cells are blank", sermon.getFileName());
 
-        if (StringUtils.isEmpty(row.getCustomElements().getValue(MINISTER)) &&
-                !StringUtils.isEmpty(sermon.getMinister())) {
+        if (row.customElements.getValue(MINISTER)?.isEmpty() &&
+                !sermon.minister?.isEmpty()) {
             logger.info("> setting {} to {}", MINISTER, sermon.getMinister());
             row.getCustomElements().setValueLocal(MINISTER, sermon.getMinister());
             updateRequired = true;
         }
 
-        if (StringUtils.isEmpty(row.getCustomElements().getValue(BIBLE_TEXT)) &&
-                !StringUtils.isEmpty(sermon.getBibleText())) {
+        if (row.customElements.getValue(BIBLE_TEXT)?.isEmpty() &&
+                !sermon.bibleText?.isEmpty()) {
             logger.info("> setting {} to {}", BIBLE_TEXT, sermon.getBibleText());
             row.getCustomElements().setValueLocal(BIBLE_TEXT, sermon.getBibleText());
             updateRequired = true;
         }
 
-        if (StringUtils.isEmpty(row.getCustomElements().getValue(DATE)) &&
-                !StringUtils.isEmpty(sermon.getDate())) {
+        if (row.customElements.getValue(DATE)?.isEmpty() &&
+                !sermon.getDate()?.isEmpty()) {
             logger.info("> setting {} to {}", DATE, sermon.getDate());
             row.getCustomElements().setValueLocal(DATE, sermon.getDate());
             updateRequired = true;
         }
 
-        if (StringUtils.isEmpty(row.getCustomElements().getValue(TIME)) &&
-                !StringUtils.isEmpty(sermon.getTime())) {
+        if (row.customElements.getValue(TIME)?.isEmpty() &&
+                !sermon.getTime()?.isEmpty()) {
             logger.info("> setting {} to {}", TIME, sermon.getTime());
             row.getCustomElements().setValueLocal(TIME, sermon.getTime());
             updateRequired = true;
@@ -156,6 +149,4 @@ public class SpreadsheetService {
             logger.info("> no updates required.");
         }
     }
-
 }
-

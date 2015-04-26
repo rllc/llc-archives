@@ -7,11 +7,13 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
+apply plugin: "groovy"
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 sourceCompatibility = 1.7
+def groovyVersion = '2.4.3'
+def spockVersion = '1.0-groovy-2.4'
 
 repositories {
     mavenCentral()
@@ -26,12 +28,12 @@ dependencies {
     compile 'org.slf4j:slf4j-api:1.7.5'
     compile 'com.google.gdata:core:1.47.1'
     compile 'com.mpatric:mp3agic:0.8.3'
-    compile 'org.apache.commons:commons-lang3:3.0'
-    compile 'commons-io:commons-io:2.4'
+    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
 
     testCompile "junit:junit:4.11"
+    testCompile "org.spockframework:spock-core:${spockVersion}"
 }
 
 task wrapper(type: Wrapper) {
