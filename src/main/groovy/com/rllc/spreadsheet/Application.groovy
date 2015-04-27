@@ -1,8 +1,8 @@
 package com.rllc.spreadsheet
 
 import com.google.gdata.util.ServiceException
-import com.rllc.spreadsheet.service.SpreadsheetService
-import com.rllc.spreadsheet.service.SpreadsheetServiceImpl
+import com.rllc.spreadsheet.service.ArchivedSermonsService
+import com.rllc.spreadsheet.service.ArchivedSermonsServiceImpl
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.context.ApplicationContext
@@ -13,7 +13,7 @@ public class Application {
     public static void main(String[] args)
             throws IOException, ServiceException {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
-        SpreadsheetService spreadsheetService = ctx.getBean(SpreadsheetServiceImpl.class);
+        ArchivedSermonsService spreadsheetService = ctx.getBean(ArchivedSermonsServiceImpl.class);
         spreadsheetService.updateSpreadsheet();
     }
 }
