@@ -1,7 +1,5 @@
 package com.rllc.spreadsheet.service
 
-import com.google.gdata.data.spreadsheet.ListEntry
-import com.google.gdata.util.ServiceException
 import com.rllc.spreadsheet.dao.SermonDAO
 import com.rllc.spreadsheet.domain.Column
 import com.rllc.spreadsheet.domain.Sermon
@@ -23,16 +21,16 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     private Mp3DiscoveryService mp3DiscoveryService;
 
     @Override
-    def updateSpreadsheet() throws IOException, ServiceException {
+    def updateSpreadsheet() {
         updateSpreadsheet(mp3DiscoveryService.getMp3s());
     }
 
     def updateSpreadsheet(List<Sermon> sermons) {
         logger.info("========= UPDATING SPREADSHEET =========");
         sermons.each { sermon ->
-            logger.info "> sermon : ${sermon.fileName}"
+            logger.info "> sermon : ${sermon.filelocation}"
             // if the sermon already exists
-            def existingSermon = sermonDAO.get(sermon.fileName)
+            def existingSermon = sermonDAO.get(sermon.filelocation)
             if (existingSermon) {
                 Column.values().each { column ->
                     if (existingSermon[column.value].isEmpty() && !sermon[column.value].isEmpty()) {

@@ -45,25 +45,25 @@ class Mp3DiscoveryServiceImplTest extends Specification {
         sermons.each { sermon ->
             switch (sermon.minister) {
                 case "Nathan Muhonen":
-                    assert sermon.bibleText == "Luke 2:1-20"
+                    assert sermon.bibletext == "Luke 2:1-20"
                     assert sermon.date == "12/24/2012"
                     assert sermon.time == "10:30"
                     assert sermon.notes == ""
-                    assert sermon.fileName == 'sermons/rockford/2014/20141224_NMuhonen.mp3'
+                    assert sermon.filelocation == 'sermons/rockford/2014/20141224_NMuhonen.mp3'
                     break;
                 case "Jon Bloomquist":
-                    assert sermon.bibleText == "Deuteronomy 5:1-4"
+                    assert sermon.bibletext == "Deuteronomy 5:1-4"
                     assert sermon.date == "03/15/2015"
                     assert sermon.time == "18:30"
                     assert sermon.notes == ""
-                    assert sermon.fileName == 'sermons/rockford/2015/20150315_JBloomquist.mp3'
+                    assert sermon.filelocation == 'sermons/rockford/2015/20150315_JBloomquist.mp3'
                     break;
                 case "Rick Nevala":
-                    assert sermon.bibleText == "Acts 8:9-20"
+                    assert sermon.bibletext == "Acts 8:9-20"
                     assert sermon.date == "03/15/2015"
                     assert sermon.time == ""
                     assert sermon.notes == ""
-                    assert sermon.fileName == 'sermons/rockford/2015/20150315_RNevala.mp3'
+                    assert sermon.filelocation == 'sermons/rockford/2015/20150315_RNevala.mp3'
                     break;
             }
         }

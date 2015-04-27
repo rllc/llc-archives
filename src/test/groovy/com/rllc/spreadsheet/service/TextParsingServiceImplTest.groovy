@@ -17,7 +17,7 @@ class TextParsingServiceImplTest extends Specification {
     }
 
     def "ParseFilename"() {
-        when: "filename is parsed"
+        when: "filelocation is parsed"
         def filename = textParsingService.parseFilename("$mp3Directory\\$mp3File")
 
         then: "base mp3 directory is stripped"
@@ -76,32 +76,32 @@ class TextParsingServiceImplTest extends Specification {
     def "ParseDate"() {
         def filename = '20150405_CKumpula.mp3'
 
-        when: "date is empty, filename is empty"
+        when: "date is empty, filelocation is empty"
         def date = textParsingService.parseDate('', '')
 
         then: "no date is parsed"
         date == ''
 
-        when: "date is empty, filename in non standard format"
+        when: "date is empty, filelocation in non standard format"
         date = textParsingService.parseDate('', 'CKumpula_20150405')
 
         then: "date is empty, no exception thrown"
         date == ''
         noExceptionThrown()
 
-        when: 'date is empty, filename in standard format'
+        when: 'date is empty, filelocation in standard format'
         date = textParsingService.parseDate('', filename)
 
-        then: 'date is populated from filename'
+        then: 'date is populated from filelocation'
         date == '04/05/2015'
 
-        when: 'date is invalid, filename in standard format'
+        when: 'date is invalid, filelocation in standard format'
         date = textParsingService.parseDate('04/2015', filename)
 
-        then: 'date is populated from filename'
+        then: 'date is populated from filelocation'
         date == '04/05/2015'
 
-        when: 'date is valid, filename in standard format'
+        when: 'date is valid, filelocation in standard format'
         date = textParsingService.parseDate('04/04/2015', filename)
 
         then: 'date is populated from metadata'

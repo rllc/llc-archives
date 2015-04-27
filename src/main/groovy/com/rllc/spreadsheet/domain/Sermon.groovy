@@ -8,8 +8,8 @@ class Sermon {
     String date = ''
     String time = ''
     String minister = ''
-    String bibleText = ''
+    String bibletext = ''
     String notes = ''
-    String fileName = ''
+    String filelocation = ''
 
 }

@@ -17,23 +17,23 @@ import javax.annotation.PostConstruct
 @Component
 class GoogleSpreadsheetSermonDAO implements SermonDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(GoogleSpreadsheetSermonDAO.class);
+    private static final Logger logger = LoggerFactory.getLogger(GoogleSpreadsheetSermonDAO.class)
 
-    private static final String MINISTER = "minister";
-    private static final String BIBLE_TEXT = "bibletext";
-    private static final String DATE = "date";
-    private static final String TIME = "time";
-    private static final String NOTES = "notes";
-    private static final String FILE_LOCATION = "filelocation";
+    private static final String MINISTER = "minister"
+    private static final String BIBLE_TEXT = "bibletext"
+    private static final String DATE = "date"
+    private static final String TIME = "time"
+    private static final String NOTES = "notes"
+    private static final String FILE_LOCATION = "filelocation"
 
     @Value("\${google.username}")
-    String username;
+    String username
     @Value("\${google.password}")
-    String password;
+    String password
     @Value("\${google.spreadsheet}")
-    String googleSpreadsheet;
+    String googleSpreadsheet
     @Value("\${aws.bucket}")
-    String awsBucket;
+    String awsBucket
 
     SpreadsheetService spreadsheetService
     URL listFeedUrl
@@ -41,38 +41,38 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
 
     @PostConstruct
     init() {
-        spreadsheetService = new SpreadsheetService("Application-v1");
-        spreadsheetService.setUserCredentials(username, password);
+        spreadsheetService = new SpreadsheetService("Application-v1")
+        spreadsheetService.setUserCredentials(username, password)
         URL spreadsheetFeedUrl = new URL(
-                "https://spreadsheets.google.com/feeds/spreadsheets/private/full");
+                "https://spreadsheets.google.com/feeds/spreadsheets/private/full")
         SpreadsheetFeed feed = spreadsheetService.getFeed(spreadsheetFeedUrl,
-                SpreadsheetFeed.class);
-        List<SpreadsheetEntry> spreadsheets = feed.getEntries();
+                SpreadsheetFeed.class)
+        List<SpreadsheetEntry> spreadsheets = feed.entries
         if (spreadsheets.size() == 0) {
-            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.");
-            System.exit(1);
+            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.")
+            System.exit(1)
         }
 
         SpreadsheetEntry spreadsheetEntry
         for (SpreadsheetEntry spreadsheet : spreadsheets) {
-            if (googleSpreadsheet.equals(spreadsheet.getTitle().getPlainText())) {
-                spreadsheetEntry = spreadsheet;
+            if (googleSpreadsheet.equals(spreadsheet.title.plainText)) {
+                spreadsheetEntry = spreadsheet
             }
         }
 
         if (spreadsheetEntry == null) {
-            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.");
-            System.exit(1);
+            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.")
+            System.exit(1)
         }
 
         WorksheetFeed worksheetFeed = spreadsheetService.getFeed(
-                spreadsheetEntry.getWorksheetFeedUrl(), WorksheetFeed.class);
-        List<WorksheetEntry> worksheets = worksheetFeed.getEntries();
+                spreadsheetEntry.getWorksheetFeedUrl(), WorksheetFeed.class)
+        List<WorksheetEntry> worksheets = worksheetFeed.entries
         // TODO : look up worksheet by configurable name
-        WorksheetEntry worksheet = worksheets.get(0);
+        WorksheetEntry worksheet = worksheets.get(0)
 
-        listFeedUrl = worksheet.getListFeedUrl();
-        listFeed = spreadsheetService.getFeed(listFeedUrl, ListFeed.class);
+        listFeedUrl = worksheet.listFeedUrl
+        listFeed = spreadsheetService.getFeed(listFeedUrl, ListFeed.class)
     }
 
     @Override
@@ -81,11 +81,11 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
             if (row.customElements.getValue(FILE_LOCATION).contains(filename)) {
                 return new Sermon(
                         minister: row.customElements.getValue(MINISTER),
-                        bibleText: row.customElements.getValue(BIBLE_TEXT),
+                        bibletext: row.customElements.getValue(BIBLE_TEXT),
                         date: row.customElements.getValue(DATE),
                         time: row.customElements.getValue(TIME),
                         notes: row.customElements.getValue(NOTES),
-                        fileName: filename
+                        filelocation: filename
                 )
             }
         }
@@ -93,9 +93,9 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
 
     @Override
     void create(Sermon sermon) {
-        logger.info("Creating a new entry in spreadsheet for [" + sermon.getFileName() + "]");
+        logger.info("Creating a new entry in spreadsheet for [${sermon.filelocation}]")
 
-        ListEntry row = new ListEntry();
+        ListEntry row = new ListEntry()
         setRowValues(row, sermon)
 
         tryCatch({ spreadsheetService.insert(listFeedUrl, row) }, { e -> e.printStackTrace() })
@@ -104,7 +104,7 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
     @Override
     void update(Sermon sermon) {
         for (ListEntry row : listFeed.entries) {
-            if (row.customElements.getValue(FILE_LOCATION).contains(sermon.fileName)) {
+            if (row.customElements.getValue(FILE_LOCATION).contains(sermon.filelocation)) {
                 setRowValues(row, sermon)
                 tryCatch({ row.update() }, { e -> e.printStackTrace() })
             }
@@ -114,19 +114,19 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
     @Override
     void delete(Sermon sermon) {
         for (ListEntry row : listFeed.entries) {
-            if (row.customElements.getValue(FILE_LOCATION).contains(sermon.fileName)) {
+            if (row.customElements.getValue(FILE_LOCATION).contains(sermon.filelocation)) {
                 tryCatch({ row.delete() }, { e -> e.printStackTrace() })
             }
         }
     }
 
     private void setRowValues(ListEntry row, Sermon sermon) {
-        row.customElements.setValueLocal(MINISTER, sermon.minister);
-        row.customElements.setValueLocal(BIBLE_TEXT, sermon.bibleText);
-        row.customElements.setValueLocal(DATE, sermon.date);
-        row.customElements.setValueLocal(TIME, sermon.time);
-        row.customElements.setValueLocal(NOTES, sermon.notes);
-        row.customElements.setValueLocal(FILE_LOCATION, awsBucket + sermon.getFileName());
+        row.customElements.setValueLocal(MINISTER, sermon.minister)
+        row.customElements.setValueLocal(BIBLE_TEXT, sermon.bibletext)
+        row.customElements.setValueLocal(DATE, sermon.date)
+        row.customElements.setValueLocal(TIME, sermon.time)
+        row.customElements.setValueLocal(NOTES, sermon.notes)
+        row.customElements.setValueLocal(FILE_LOCATION, awsBucket + sermon.getFilelocation())
     }
 
     def tryCatch = { Closure operation, Closure defHandler = { null } ->

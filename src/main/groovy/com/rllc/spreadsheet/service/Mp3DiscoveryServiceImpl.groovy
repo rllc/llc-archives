@@ -70,10 +70,10 @@ class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
     @Override
     Sermon extractId3v1TagData(File mp3FileHandle, ID3v1 id3v1Tag) {
         new Sermon(
-                fileName: textParsingService.parseFilename(mp3FileHandle.absolutePath),
+                filelocation: textParsingService.parseFilename(mp3FileHandle.absolutePath),
                 date: textParsingService.parseDate(id3v1Tag.title, mp3FileHandle.name),
                 time: textParsingService.parseTime(id3v1Tag.title),
-                bibleText: textParsingService.parseBibleText(id3v1Tag.album),
+                bibletext: textParsingService.parseBibleText(id3v1Tag.album),
                 minister: textParsingService.parseMinister(id3v1Tag.artist)
         )
     }
