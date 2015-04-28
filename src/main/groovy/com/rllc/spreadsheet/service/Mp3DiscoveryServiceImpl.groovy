@@ -9,12 +9,14 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.stereotype.Component
 
 import javax.annotation.PostConstruct
 
 /**
  * Created by Steven McAdams on 4/25/15.
  */
+@Component
 class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
 
     private static final Logger logger = LoggerFactory.getLogger(Mp3DiscoveryServiceImpl.class);

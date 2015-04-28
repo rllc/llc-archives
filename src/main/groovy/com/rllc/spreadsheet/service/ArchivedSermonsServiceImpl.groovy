@@ -6,10 +6,12 @@ import com.rllc.spreadsheet.domain.Sermon
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
 /**
  * Created by Steven McAdams on 4/25/15.
  */
+@Component
 class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
     private static final Logger logger = LoggerFactory.getLogger(ArchivedSermonsServiceImpl.class);
