@@ -126,4 +126,9 @@ class TextParsingServiceImpl implements com.rllc.spreadsheet.service.TextParsing
         date = dateFormat.format(calendar.getTime())
         return date
     }
+
+    @Override
+    String parseNotes(String comment) {
+        return comment.isEmpty() ? "" : comment
+    }
 }

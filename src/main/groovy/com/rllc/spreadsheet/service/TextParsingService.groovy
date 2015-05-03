@@ -11,5 +11,6 @@ interface TextParsingService {
     String parseTime(String title)
     String parseDate(String title, String name)
     String formatDate(int month, int day, int year)
+    String parseNotes(String comment)
 
 }
