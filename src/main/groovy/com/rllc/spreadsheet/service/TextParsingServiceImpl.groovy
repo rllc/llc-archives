@@ -129,6 +129,9 @@ class TextParsingServiceImpl implements com.rllc.spreadsheet.service.TextParsing
 
     @Override
     String parseNotes(String comment) {
-        return comment.isEmpty() ? "" : comment
+        if (comment == null || comment.isEmpty()) {
+            return "";
+        }
+        return comment;
     }
 }

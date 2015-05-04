@@ -117,4 +117,24 @@ class TextParsingServiceImplTest extends Specification {
         date == "12/12/2014"
 
     }
+
+    def "parseNotes"() {
+        when: 'notes is null'
+        def notes = textParsingService.parseNotes(null);
+
+        then: 'no notes are parsed'
+        notes == '';
+
+        when: 'notes is empty'
+        notes = textParsingService.parseNotes('');
+
+        then: 'no notes are parsed'
+        notes == '';
+
+        when: 'notes exists'
+        notes = textParsingService.parseNotes('Christmas Eve Service')
+
+        then: 'notes are parsed'
+        notes == 'Christmas Eve Service'
+    }
 }

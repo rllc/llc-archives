@@ -48,7 +48,7 @@ class Mp3DiscoveryServiceImplTest extends Specification {
                     assert sermon.bibletext == "Luke 2:1-20"
                     assert sermon.date == "12/24/2012"
                     assert sermon.time == "10:30"
-                    assert sermon.notes == ""
+                    assert sermon.notes == "Christmas Eve Service"
                     assert sermon.filelocation == 'sermons/rockford/2014/20141224_NMuhonen.mp3'
                     break;
                 case "Jon Bloomquist":
