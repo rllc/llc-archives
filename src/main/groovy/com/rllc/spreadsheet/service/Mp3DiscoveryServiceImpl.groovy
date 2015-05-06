@@ -76,7 +76,8 @@ class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
                 date: textParsingService.parseDate(id3v1Tag.title, mp3FileHandle.name),
                 time: textParsingService.parseTime(id3v1Tag.title),
                 bibletext: textParsingService.parseBibleText(id3v1Tag.album),
-                minister: textParsingService.parseMinister(id3v1Tag.artist)
+                minister: textParsingService.parseMinister(id3v1Tag.artist),
+                notes: textParsingService.parseNotes(id3v1Tag.comment)
         )
     }
 }
