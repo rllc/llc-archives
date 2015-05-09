@@ -15,6 +15,26 @@ class TextParsingServiceImpl implements TextParsingService {
 
     private static final Logger logger = LoggerFactory.getLogger(TextParsingServiceImpl.class)
 
+    private static final List<String> ministers = new ArrayList<String>() {{
+        add("Craig Kumpula");
+        add("Joe Lehtola");
+        add("John Lehtola");
+        add("Jon Bloomquist");
+        add("Jouko Haapsaari");
+        add("Keith Waaraniemi");
+        add("Mark Lee");
+        add("Markus Lohi");
+        add("Nathan Muhonen");
+        add("Randy Haapala");
+        add("Randy Herrala");
+        add("Ray Waaraniemi");
+        add("Rick Nevala");
+        add("Rocky Sorvala");
+        add("Rod Nikula");
+        add("Ron Honga");
+        add("Sam Roiko");
+    }}
+
     @Value("\${mp3.directory}")
     String mp3Directory;
 
@@ -31,7 +51,12 @@ class TextParsingServiceImpl implements TextParsingService {
 
     @Override
     String parseMinister(String artist) {
-        return artist.toLowerCase().tokenize().collect { it.capitalize() }.join(' ')
+        String minister = artist.toLowerCase().tokenize().collect { it.capitalize() }.join(' ')
+        List<String> similarMinisters = CosineSimilarityService.mostSimilar(minister, ministers, 0.4)
+        if (similarMinisters.size() > 0) {
+            minister = similarMinisters.get(0);
+        }
+        return minister
     }
 
     @Override

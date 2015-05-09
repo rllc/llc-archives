@@ -31,6 +31,24 @@ class TextParsingServiceImplSpec extends Specification {
 
         then: "minister is cased appropriately"
         minister == "Craig Kumpula"
+
+        when: "minister is misspelled"
+        minister = textParsingService.parseMinister("Rd Niklua")
+
+        then: "minister is auto-corrected"
+        minister == "Rod Nikula"
+
+        when: "minister is misspelled 2"
+        minister = textParsingService.parseMinister("Joko Hapsorry")
+
+        then: "minister is auto-corrected"
+        minister == "Jouko Haapsaari"
+
+        when: "a new minister is used"
+        minister = textParsingService.parseMinister("Antti Paananen")
+
+        then: "minister is not auto-corrected"
+        minister == "Antti Paananen"
     }
 
     def "ParseBibleText"() {
