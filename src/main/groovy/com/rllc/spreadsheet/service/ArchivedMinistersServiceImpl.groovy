@@ -2,10 +2,9 @@ package com.rllc.spreadsheet.service
 
 import com.rllc.spreadsheet.dao.MinisterDAO
 import com.rllc.spreadsheet.domain.Minister
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-
-import java.util.logging.Logger
 
 /**
  * Created by Robert on 5/10/2015.
@@ -19,8 +18,8 @@ class ArchivedMinistersServiceImpl implements ArchivedMinistersService {
     @Override
     void updateSpreadsheet(List<Minister> ministers) {
         logger.info("========= UPDATING SPREADSHEET =========");
-        for (String minister : ministers) {
-            if(!ministerDAO.ministerExists(minister)) {
+        for (Minister minister : ministers) {
+            if(!ministerDAO.ministerExists(minister.name)) {
                 ministerDAO.create(minister)
             }
         }

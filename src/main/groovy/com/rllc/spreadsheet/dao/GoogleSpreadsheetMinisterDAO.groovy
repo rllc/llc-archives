@@ -44,9 +44,9 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
     }
 
     @Override
-    boolean ministerExists(Minister minister) {
+    boolean ministerExists(String name) {
         for (ListEntry row : listFeed.entries) {
-            if (row.customElements.getValue(MINISTER).equals(minister.name)) {
+            if (row.customElements.getValue(MINISTER).equals(name)) {
                 return true
             }
         }

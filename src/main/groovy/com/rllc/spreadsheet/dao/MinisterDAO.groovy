@@ -7,7 +7,7 @@ import com.rllc.spreadsheet.domain.Minister
  */
 interface MinisterDAO {
     List<Minister> getMinisters()
-    boolean ministerExists(Minister minister)
+    boolean ministerExists(String name)
     void create(Minister minister)
     void delete(Minister minister)
 }
