@@ -1,6 +1,5 @@
 package com.rllc.spreadsheet.dao
 
-import com.google.gdata.client.spreadsheet.SpreadsheetService
 import com.google.gdata.data.spreadsheet.*
 import com.rllc.spreadsheet.domain.Sermon
 import org.slf4j.Logger
@@ -8,14 +7,12 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
-import javax.annotation.PostConstruct
-
 /**
  * Created by Steven McAdams on 4/26/15.
  */
 
 @Component
-class GoogleSpreadsheetSermonDAO implements SermonDAO {
+class GoogleSpreadsheetSermonDAO extends AbstractGoogleSpreadsheetDAO implements SermonDAO  {
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleSpreadsheetSermonDAO.class)
 
@@ -26,53 +23,13 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
     private static final String NOTES = "notes"
     private static final String FILE_LOCATION = "filelocation"
 
-    @Value("\${google.username}")
-    String username
-    @Value("\${google.password}")
-    String password
     @Value("\${google.spreadsheet}")
     String googleSpreadsheet
     @Value("\${aws.bucket}")
     String awsBucket
 
-    SpreadsheetService spreadsheetService
-    URL listFeedUrl
-    ListFeed listFeed
-
-    @PostConstruct
-    init() {
-        spreadsheetService = new SpreadsheetService("Application-v1")
-        spreadsheetService.setUserCredentials(username, password)
-        URL spreadsheetFeedUrl = new URL(
-                "https://spreadsheets.google.com/feeds/spreadsheets/private/full")
-        SpreadsheetFeed feed = spreadsheetService.getFeed(spreadsheetFeedUrl,
-                SpreadsheetFeed.class)
-        List<SpreadsheetEntry> spreadsheets = feed.entries
-        if (spreadsheets.size() == 0) {
-            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.")
-            System.exit(1)
-        }
-
-        SpreadsheetEntry spreadsheetEntry
-        for (SpreadsheetEntry spreadsheet : spreadsheets) {
-            if (googleSpreadsheet.equals(spreadsheet.title.plainText)) {
-                spreadsheetEntry = spreadsheet
-            }
-        }
-
-        if (spreadsheetEntry == null) {
-            logger.info(googleSpreadsheet + " spreadsheet not found, exiting.")
-            System.exit(1)
-        }
-
-        WorksheetFeed worksheetFeed = spreadsheetService.getFeed(
-                spreadsheetEntry.getWorksheetFeedUrl(), WorksheetFeed.class)
-        List<WorksheetEntry> worksheets = worksheetFeed.entries
-        // TODO : look up worksheet by configurable name
-        WorksheetEntry worksheet = worksheets.get(0)
-
-        listFeedUrl = worksheet.listFeedUrl
-        listFeed = spreadsheetService.getFeed(listFeedUrl, ListFeed.class)
+    public String getGoogleSpreadsheet() {
+        return this.googleSpreadsheet
     }
 
     @Override
@@ -127,13 +84,5 @@ class GoogleSpreadsheetSermonDAO implements SermonDAO {
         row.customElements.setValueLocal(TIME, sermon.time)
         row.customElements.setValueLocal(NOTES, sermon.notes)
         row.customElements.setValueLocal(FILE_LOCATION, awsBucket + sermon.getFilelocation())
-    }
-
-    def tryCatch = { Closure operation, Closure defHandler = { null } ->
-        try {
-            operation()
-        } catch (e) {
-            defHandler(e)
-        }
     }
 }

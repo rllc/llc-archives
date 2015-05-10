@@ -5,15 +5,19 @@ import spock.lang.Specification
 /**
  * Created by Steven McAdams on 4/25/15.
  */
-class TextParsingServiceImplSpec extends Specification {
+class TextParsingServiceImplTest extends Specification {
+
+    def archivedMinistersService = Mock(ArchivedMinistersService)
     TextParsingService textParsingService
 
     def mp3Directory = "C:\\example\\archives\\rockford"
     def mp3File = "2015\\20150405_CKumpula.mp3"
 
     void setup() {
-        textParsingService = new TextParsingServiceImpl()
-        textParsingService.mp3Directory = mp3Directory
+        textParsingService = new TextParsingServiceImpl(
+                ministersService: archivedMinistersService,
+                mp3Directory: mp3Directory
+        )
     }
 
     def "ParseFilename"() {
@@ -25,6 +29,28 @@ class TextParsingServiceImplSpec extends Specification {
     }
 
     def "ParseMinister"() {
+        given:
+        def ministers = []
+
+        ministers.add("Craig Kumpula")
+        ministers.add("Joe Lehtola")
+        ministers.add("John Lehtola")
+        ministers.add("Jon Bloomquist")
+        ministers.add("Jouko Haapsaari")
+        ministers.add("Keith Waaraniemi")
+        ministers.add("Mark Lee")
+        ministers.add("Markus Lohi")
+        ministers.add("Nathan Muhonen")
+        ministers.add("Randy Haapala")
+        ministers.add("Randy Herrala")
+        ministers.add("Ray Waaraniemi")
+        ministers.add("Rick Nevala")
+        ministers.add("Rocky Sorvala")
+        ministers.add("Rod Nikula")
+        ministers.add("Ron Honga")
+        ministers.add("Sam Roiko")
+
+        archivedMinistersService.getMinisters() >> {v -> return ministers}
 
         when: "minister is parsed"
         def minister = textParsingService.parseMinister("CRAIG kuMPula")
