@@ -20,7 +20,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
 
     private static final String MINISTER = "minister"
 
-    @Value("\${google.spreadsheet}")
+    @Value("\${google.ministerSpreadsheet}")
     String googleSpreadsheet
 
     SpreadsheetService spreadsheetService
