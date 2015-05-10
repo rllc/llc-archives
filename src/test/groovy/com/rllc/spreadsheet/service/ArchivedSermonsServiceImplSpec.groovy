@@ -5,9 +5,9 @@ import com.rllc.spreadsheet.domain.Sermon
 import spock.lang.Specification
 
 /**
- * Created by z0019yw on 4/27/15.
+ * Created by Steven McAdams on 4/27/15.
  */
-class ArchivedSermonsServiceImplTest extends Specification {
+class ArchivedSermonsServiceImplSpec extends Specification {
 
     def sermonDAO = Mock(SermonDAO)
     ArchivedSermonsService archivedSermonsService
@@ -23,26 +23,26 @@ class ArchivedSermonsServiceImplTest extends Specification {
         def mp3Sermons = []
 
         storedSermons << new Sermon(
-                date : '01/01/2014',
+                date: '01/01/2014',
                 notes: 'notes',
                 filelocation: '20140101_TestCase.mp3'
         )
         mp3Sermons << new Sermon(
-                date : '01/01/2014',
-                time : '10:30',
+                date: '01/01/2014',
+                time: '10:30',
                 minister: 'test case',
                 filelocation: '20140101_TestCase.mp3'
         )
         mp3Sermons << new Sermon(
-                date : '01/02/2014',
-                time : '10:30',
+                date: '01/02/2014',
+                time: '10:30',
                 minister: 'test case2',
                 bibletext: 'bibletext',
                 notes: 'notes',
                 filelocation: '20140102_TestCase.mp3'
         )
-        sermonDAO.get('20140101_TestCase.mp3') >> {v -> return storedSermons[0]}
-        sermonDAO.get('20140102_TestCase.mp3') >> {v -> return }
+        sermonDAO.get('20140101_TestCase.mp3') >> { v -> return storedSermons[0] }
+        sermonDAO.get('20140102_TestCase.mp3') >> { v -> return }
 
         when: "update spreadsheet is called with updated items"
         archivedSermonsService.updateSpreadsheet(mp3Sermons)

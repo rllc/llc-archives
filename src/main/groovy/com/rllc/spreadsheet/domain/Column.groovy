@@ -1,7 +1,7 @@
 package com.rllc.spreadsheet.domain
 
 /**
- * Created by z0019yw on 4/27/15.
+ * Created by Steven McAdams on 4/27/15.
  */
 enum Column {
     MINISTER(value: 'minister'),
