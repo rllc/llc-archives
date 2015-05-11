@@ -1,12 +1,14 @@
 package com.rllc.spreadsheet.service
 
-import com.rllc.spreadsheet.dao.SermonDAO
 import com.rllc.spreadsheet.domain.Column
 import com.rllc.spreadsheet.domain.Sermon
+import com.rllc.spreadsheet.dao.SermonDAO
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
+
+import javax.annotation.Resource
 
 /**
  * Created by Steven McAdams on 4/25/15.
@@ -20,6 +22,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     SermonDAO sermonDAO
 
     @Autowired
+    @Resource(name = "localMp3DiscoveryService")
     private Mp3DiscoveryService mp3DiscoveryService;
 
     @Override

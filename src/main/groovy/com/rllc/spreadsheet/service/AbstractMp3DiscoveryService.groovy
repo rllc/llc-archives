@@ -8,29 +8,18 @@ import com.rllc.spreadsheet.domain.Sermon
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
-import javax.annotation.PostConstruct
-
 /**
- * Created by Steven McAdams on 4/25/15.
+ * Created by Steven McAdams on 5/5/15.
  */
 @Component
-class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
+abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(Mp3DiscoveryServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractMp3DiscoveryService.class);
 
     @Autowired
     TextParsingService textParsingService
-
-    @Value("\${mp3.directory}")
-    String mp3Directory;
-
-    @PostConstruct
-    public void init() {
-        logger.info("scanning mp3 directory [{}]", mp3Directory);
-    }
 
     @Override
     List<Sermon> getMp3s() {
@@ -38,16 +27,7 @@ class Mp3DiscoveryServiceImpl implements Mp3DiscoveryService {
         processMp3Files(mp3Files)
     }
 
-    @Override
-    List<File> findMp3Files() {
-        def mp3Files = []
-        new File(mp3Directory).eachDirRecurse() { dir ->
-            dir.eachFileMatch(~/.*.mp3/) { file ->
-                mp3Files << file
-            }
-        }
-        mp3Files
-    }
+    abstract List<File> findMp3Files()
 
     @Override
     List<Sermon> processMp3Files(List mp3Files) {

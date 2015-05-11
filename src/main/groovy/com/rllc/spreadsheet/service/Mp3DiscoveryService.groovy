@@ -8,7 +8,10 @@ import com.rllc.spreadsheet.domain.Sermon
  */
 interface Mp3DiscoveryService {
     List<Sermon> getMp3s()
+
     List<File> findMp3Files()
-    List<Sermon> processMp3Files(List mp3Files)
+
+    List<Sermon> processMp3Files(List<File> mp3Files)
+
     Sermon extractId3v1TagData(File mp3FileHandle, ID3v1 id3v1Tag)
 }
