@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat
  * Created by Steven McAdams on 4/25/15.
  */
 @Component
-class TextParsingServiceImpl implements com.rllc.spreadsheet.service.TextParsingService {
+class TextParsingServiceImpl implements TextParsingService {
 
     private static final Logger logger = LoggerFactory.getLogger(TextParsingServiceImpl.class)
 
@@ -106,8 +106,7 @@ class TextParsingServiceImpl implements com.rllc.spreadsheet.service.TextParsing
 
         if (date.isEmpty()) {
             logger.info("No date field detected in [$title] or [$name]. Expected form MM/dd/yyyy")
-        }
-        else {
+        } else {
             logger.info("Found date [$date]")
         }
 
