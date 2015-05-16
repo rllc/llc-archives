@@ -1,12 +1,15 @@
 package com.rllc.spreadsheet.dao
 
 import com.google.gdata.client.spreadsheet.SpreadsheetService
-import com.google.gdata.data.spreadsheet.*
+import com.google.gdata.data.spreadsheet.ListEntry
+import com.google.gdata.data.spreadsheet.ListFeed
 import com.rllc.spreadsheet.domain.Minister
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+
+import static com.rllc.spreadsheet.domain.Column.MINISTER
 
 /**
  * Created by Robert on 5/9/15.
@@ -17,9 +20,6 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
 
     private static final Logger logger = LoggerFactory.getLogger(GoogleSpreadsheetMinisterDAO.class)
 
-
-    private static final String MINISTER = "minister"
-
     @Value("\${google.ministerSpreadsheet}")
     String googleSpreadsheet
 
@@ -27,30 +27,21 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
     URL listFeedUrl
     ListFeed listFeed
 
-
-    public String getGoogleSpreadsheet() {
-        return this.googleSpreadsheet
-    }
-
     @Override
     List<Minister> getMinisters() {
-        List<Minister> ministers = new ArrayList<>()
-        for (ListEntry row : listFeed.entries) {
-            ministers.add(new Minister(
-                    name: row.customElements.getValue(MINISTER)
-            ));
+        listFeed.entries.collect { row ->
+            new Minister(
+                    name: row.customElements.getValue(MINISTER.value)
+            )
         }
-        return ministers
     }
 
     @Override
     boolean ministerExists(String name) {
-        for (ListEntry row : listFeed.entries) {
-            if (row.customElements.getValue(MINISTER).equals(name)) {
-                return true
-            }
+        def minister = listFeed.entries.find { row ->
+            row.customElements.getValue(MINISTER.value).equals(name)
         }
-        return false
+        return minister != null
     }
 
     @Override
@@ -58,7 +49,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
         logger.info("Creating a new entry in spreadsheet for [${minister}]")
 
         ListEntry row = new ListEntry()
-        row.customElements.setValueLocal(MINISTER, minister.name)
+        row.customElements.setValueLocal(MINISTER.value, minister.name)
 
         tryCatch({ spreadsheetService.insert(listFeedUrl, row) }, { e -> e.printStackTrace() })
     }
@@ -66,7 +57,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
     @Override
     void delete(Minister minister) {
         for (ListEntry row : listFeed.entries) {
-            if (row.customElements.getValue(MINISTER).contains(minister.name)) {
+            if (row.customElements.getValue(MINISTER.value).contains(minister.name)) {
                 tryCatch({ row.delete() }, { e -> e.printStackTrace() })
             }
         }
