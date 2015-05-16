@@ -5,7 +5,7 @@ import spock.lang.Specification
 /**
  * Created by Steven McAdams on 4/25/15.
  */
-class TextParsingServiceImplTest extends Specification {
+class TextParsingServiceImplSpec extends Specification {
     TextParsingService textParsingService
 
     def mp3Directory = "C:\\example\\archives\\rockford"

@@ -14,6 +14,7 @@ apply plugin: 'spring-boot'
 sourceCompatibility = 1.7
 def groovyVersion = '2.4.3'
 def spockVersion = '1.0-groovy-2.4'
+def springVersion = '4.1.6.RELEASE'
 
 repositories {
     mavenCentral()
@@ -21,7 +22,7 @@ repositories {
 
 jar {
     baseName = 'rllc-spreadsheet'
-    version =  '0.1.0'
+    version = '0.1.0'
 }
 
 dependencies {
@@ -36,6 +37,7 @@ dependencies {
     testCompile 'cglib:cglib-nodep:3.1'
     testCompile 'commons-io:commons-io:2.4'
     testCompile "org.spockframework:spock-core:${spockVersion}"
+    testCompile "org.springframework:spring-test:${springVersion}"
 }
 
 task wrapper(type: Wrapper) {
