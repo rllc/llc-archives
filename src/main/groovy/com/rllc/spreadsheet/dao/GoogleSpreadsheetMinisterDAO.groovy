@@ -31,7 +31,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
     List<Minister> getMinisters() {
         listFeed.entries.collect { row ->
             new Minister(
-                    name: row.customElements.getValue(MINISTER.value)
+                    name: row.customElements.getValue(MINISTER.label)
             )
         }
     }
@@ -39,7 +39,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
     @Override
     boolean ministerExists(String name) {
         def minister = listFeed.entries.find { row ->
-            row.customElements.getValue(MINISTER.value).equals(name)
+            row.customElements.getValue(MINISTER.label).equals(name)
         }
         return minister != null
     }
@@ -49,7 +49,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
         logger.info("Creating a new entry in spreadsheet for [${minister}]")
 
         ListEntry row = new ListEntry()
-        row.customElements.setValueLocal(MINISTER.value, minister.name)
+        row.customElements.setValueLocal(MINISTER.label, minister.name)
 
         tryCatch({ spreadsheetService.insert(listFeedUrl, row) }, { e -> e.printStackTrace() })
     }
@@ -57,7 +57,7 @@ class GoogleSpreadsheetMinisterDAO extends AbstractGoogleSpreadsheetDAO implemen
     @Override
     void delete(Minister minister) {
         for (ListEntry row : listFeed.entries) {
-            if (row.customElements.getValue(MINISTER.value).contains(minister.name)) {
+            if (row.customElements.getValue(MINISTER.label).contains(minister.name)) {
                 tryCatch({ row.delete() }, { e -> e.printStackTrace() })
             }
         }
