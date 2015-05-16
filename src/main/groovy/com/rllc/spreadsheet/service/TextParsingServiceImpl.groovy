@@ -2,6 +2,7 @@ package com.rllc.spreadsheet.service
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
@@ -14,6 +15,9 @@ import java.text.SimpleDateFormat
 class TextParsingServiceImpl implements TextParsingService {
 
     private static final Logger logger = LoggerFactory.getLogger(TextParsingServiceImpl.class)
+
+    @Autowired
+    ArchivedMinistersService ministersService
 
     @Value("\${mp3.directory}")
     String mp3Directory;
@@ -31,7 +35,13 @@ class TextParsingServiceImpl implements TextParsingService {
 
     @Override
     String parseMinister(String artist) {
-        return artist.toLowerCase().tokenize().collect { it.capitalize() }.join(' ')
+        List<String> ministers = ministersService.getMinisters()
+        String minister = artist.toLowerCase().tokenize().collect { it.capitalize() }.join(' ')
+        List<String> similarMinisters = CosineSimilarityService.mostSimilar(minister, ministers, 0.4)
+        if (similarMinisters.size() > 0) {
+            minister = similarMinisters.get(0);
+        }
+        return minister
     }
 
     @Override

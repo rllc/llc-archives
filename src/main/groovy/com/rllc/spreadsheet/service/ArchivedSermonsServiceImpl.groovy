@@ -38,9 +38,9 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
             def existingSermon = sermonDAO.get(sermon.filelocation)
             if (existingSermon) {
                 Column.values().each { column ->
-                    if (existingSermon[column.value].isEmpty() && !sermon[column.value].isEmpty()) {
-                        logger.info("> setting {} to {}", column.value, sermon[column.value]);
-                        existingSermon[column.value] = sermon[column.value]
+                    if (existingSermon[column.label].isEmpty() && !sermon[column.label].isEmpty()) {
+                        logger.info("> setting {} to {}", column.label, sermon[column.label]);
+                        existingSermon[column.label] = sermon[column.label]
                     }
                 }
                 sermonDAO.update(existingSermon)

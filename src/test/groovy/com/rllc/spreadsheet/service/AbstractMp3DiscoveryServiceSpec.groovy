@@ -11,6 +11,7 @@ abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
 
     TextParsingService textParsingService
     Mp3DiscoveryService mp3DiscoveryService
+    def archivedMinistersService = Mock(ArchivedMinistersService)
 
     @Rule
     public TemporaryFolder mp3Directory = new TemporaryFolder();
@@ -23,7 +24,8 @@ abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
 
     void setup() {
         textParsingService = new TextParsingServiceImpl(
-                mp3Directory: mp3Directory.root
+                mp3Directory: mp3Directory.root,
+                ministersService: archivedMinistersService
         )
         initializeFiles()
         mp3DiscoveryService = setupMp3DiscoveryService()
