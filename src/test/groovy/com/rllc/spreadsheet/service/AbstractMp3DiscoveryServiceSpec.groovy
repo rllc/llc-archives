@@ -10,7 +10,7 @@ import spock.lang.Specification
 abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
 
     TextParsingService textParsingService
-    Mp3DiscoveryService mp3DiscoverService
+    Mp3DiscoveryService mp3DiscoveryService
     def archivedMinistersService = Mock(ArchivedMinistersService)
 
     @Rule
