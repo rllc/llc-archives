@@ -52,8 +52,8 @@ class CongregationPropertyLoader {
                             worksheet: env.getProperty("llc.${congregation}.google.worksheet")
                     ),
                     awsCredentials: new AmazonCredentials(
-                            id: env.getProperty("llc.${congregation}.aws.key.id"),
-                            token: env.getProperty("llc.${congregation}.aws.key.token"),
+                            accessKey: env.getProperty("llc.${congregation}.aws.accessKey"),
+                            secretKey: env.getProperty("llc.${congregation}.aws.secretKey"),
                             bucket: env.getProperty("llc.${congregation}.aws.bucket")
                     )
             )

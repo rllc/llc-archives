@@ -7,7 +7,7 @@ import spock.lang.Specification
 /**
  * Created by Robert on 5/10/2015.
  */
-class ArchivedMinistersServiceImplTest extends Specification {
+class ArchivedMinistersServiceImplSpec extends Specification {
     def ministerDAO = Mock(MinisterDAO)
     ArchivedMinistersService archivedMinistersService
 

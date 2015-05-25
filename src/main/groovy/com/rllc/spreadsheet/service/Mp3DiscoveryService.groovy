@@ -1,6 +1,7 @@
 package com.rllc.spreadsheet.service
 
 import com.mpatric.mp3agic.ID3v1
+import com.rllc.spreadsheet.domain.Congregation
 import com.rllc.spreadsheet.domain.Sermon
 
 /**
@@ -9,7 +10,7 @@ import com.rllc.spreadsheet.domain.Sermon
 interface Mp3DiscoveryService {
     List<Sermon> getMp3s()
 
-    List<File> findMp3Files()
+    List<File> findMp3Files(Congregation congregation)
 
     List<Sermon> processMp3Files(List<File> mp3Files)
 

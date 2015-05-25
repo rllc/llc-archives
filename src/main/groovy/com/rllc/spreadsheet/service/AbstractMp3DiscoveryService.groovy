@@ -4,6 +4,7 @@ import com.mpatric.mp3agic.ID3v1
 import com.mpatric.mp3agic.InvalidDataException
 import com.mpatric.mp3agic.Mp3File
 import com.mpatric.mp3agic.UnsupportedTagException
+import com.rllc.spreadsheet.domain.Congregation
 import com.rllc.spreadsheet.domain.Sermon
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -27,7 +28,7 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
         processMp3Files(mp3Files)
     }
 
-    abstract List<File> findMp3Files()
+    abstract List<File> findMp3Files(Congregation congregation)
 
     @Override
     List<Sermon> processMp3Files(List mp3Files) {

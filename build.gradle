@@ -30,6 +30,7 @@ dependencies {
     compile 'com.google.gdata:core:1.47.1'
     compile 'com.mpatric:mp3agic:0.8.3'
     compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
+    compile 'com.amazonaws:aws-java-sdk-s3:1.9.35'
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
 

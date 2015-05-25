@@ -1,5 +1,6 @@
 package com.rllc.spreadsheet.service
 
+import com.rllc.spreadsheet.domain.Congregation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Value
@@ -23,7 +24,7 @@ class LocalMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
         logger.info("scanning mp3 directory [{}]", mp3Directory);
     }
 
-    List<File> findMp3Files() {
+    List<File> findMp3Files(Congregation congregation) {
         def mp3Files = []
         new File(mp3Directory).eachDirRecurse() { dir ->
             dir.eachFileMatch(~/.*.mp3/) { file ->

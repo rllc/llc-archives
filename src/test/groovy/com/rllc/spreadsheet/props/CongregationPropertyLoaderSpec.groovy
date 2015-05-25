@@ -21,8 +21,8 @@ class CongregationPropertyLoaderSpec extends Specification {
         env.withProperty('llc.rockford.longName', 'Rockford Laestadian Lutheran Church')
         env.withProperty('llc.rockford.aws.username', 'aws-username')
         env.withProperty('llc.rockford.aws.bucket', 'aws-bucket')
-        env.withProperty('llc.rockford.aws.key.id', 'aws-id')
-        env.withProperty('llc.rockford.aws.key.token', 'aws-token')
+        env.withProperty('llc.rockford.aws.key.id', 'aws-accessKey')
+        env.withProperty('llc.rockford.aws.key.token', 'aws-secretKey')
         env.withProperty('llc.rockford.google.username', 'google-username')
         env.withProperty('llc.rockford.google.password', 'google-password')
         env.withProperty('llc.rockford.google.spreadsheet', 'google-spreadsheet')
@@ -31,8 +31,8 @@ class CongregationPropertyLoaderSpec extends Specification {
         env.withProperty('llc.minneapolis.longName', 'Minneapolis Laestadian Lutheran Church')
         env.withProperty('llc.minneapolis.aws.username', 'mllc-aws-username')
         env.withProperty('llc.minneapolis.aws.bucket', 'mllc-aws-bucket')
-        env.withProperty('llc.minneapolis.aws.key.id', 'mllc-aws-id')
-        env.withProperty('llc.minneapolis.aws.key.token', 'mllc-aws-token')
+        env.withProperty('llc.minneapolis.aws.key.id', 'mllc-aws-accessKey')
+        env.withProperty('llc.minneapolis.aws.key.token', 'mllc-aws-secretKey')
         env.withProperty('llc.minneapolis.google.username', 'mllc-google-username')
         env.withProperty('llc.minneapolis.google.password', 'mllc-google-password')
         env.withProperty('llc.minneapolis.google.spreadsheet', 'mllc-google-spreadsheet')
@@ -57,8 +57,8 @@ class CongregationPropertyLoaderSpec extends Specification {
         rockford.shortName == 'RLLC'
         rockford.longName == 'Rockford Laestadian Lutheran Church'
         rockford.awsCredentials.bucket == 'aws-bucket'
-        rockford.awsCredentials.id == 'aws-id'
-        rockford.awsCredentials.token == 'aws-token'
+        rockford.awsCredentials.accessKey == 'aws-accessKey'
+        rockford.awsCredentials.secretKey == 'aws-secretKey'
         rockford.googleCredentials.username == 'google-username'
         rockford.googleCredentials.password == 'google-password'
         rockford.googleCredentials.spreadsheet == 'google-spreadsheet'
@@ -71,8 +71,8 @@ class CongregationPropertyLoaderSpec extends Specification {
         minneapolis.shortName == 'MLLC'
         minneapolis.longName == 'Minneapolis Laestadian Lutheran Church'
         minneapolis.awsCredentials.bucket == 'mllc-aws-bucket'
-        minneapolis.awsCredentials.id == 'mllc-aws-id'
-        minneapolis.awsCredentials.token == 'mllc-aws-token'
+        minneapolis.awsCredentials.accessKey == 'mllc-aws-accessKey'
+        minneapolis.awsCredentials.secretKey == 'mllc-aws-secretKey'
         minneapolis.googleCredentials.username == 'mllc-google-username'
         minneapolis.googleCredentials.password == 'mllc-google-password'
         minneapolis.googleCredentials.spreadsheet == 'mllc-google-spreadsheet'
