@@ -12,18 +12,19 @@ class RemoteMp3DiscoveryServiceImplSpec extends AbstractMp3DiscoveryServiceSpec 
 
     @Override
     def setupMp3DiscoveryService() {
-        new RemoteMp3DiscoveryServiceImpl(
-                amazonService: amazonService,
-                textParsingService: textParsingService
-        )
         def amazonCredentials = new AmazonCredentials(
                 accessKey: 'rllc-key',
                 secretKey: 'rllc-secret',
                 bucket: 'rllc-archives'
         )
 
-        amazonService.listFiles(amazonCredentials) >> { v -> return sermonFiles }
-        amazonService.downloadMetadata(sermonFiles, amazonCredentials) >> { v -> sermonFiles.collect { new File("${mp3Directory.root}${it}") } }
+        amazonService.listFiles(_) >> { v -> return sermonFiles }
+        amazonService.downloadMetadata(_, _) >> { v -> sermonFiles.collect { new File("${mp3Directory.root}${it}") } }
+
+        new RemoteMp3DiscoveryServiceImpl(
+                amazonService: amazonService,
+                textParsingService: textParsingService
+        )
     }
 
     @Override

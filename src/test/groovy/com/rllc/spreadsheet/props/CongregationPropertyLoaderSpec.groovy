@@ -19,20 +19,22 @@ class CongregationPropertyLoaderSpec extends Specification {
 
         env.withProperty('llc.rockford.shortName', 'RLLC')
         env.withProperty('llc.rockford.longName', 'Rockford Laestadian Lutheran Church')
+        env.withProperty('llc.rockford.mp3Directory', '/rllc/sermons')
         env.withProperty('llc.rockford.aws.username', 'aws-username')
         env.withProperty('llc.rockford.aws.bucket', 'aws-bucket')
-        env.withProperty('llc.rockford.aws.key.id', 'aws-accessKey')
-        env.withProperty('llc.rockford.aws.key.token', 'aws-secretKey')
+        env.withProperty('llc.rockford.aws.accessKey', 'aws-accessKey')
+        env.withProperty('llc.rockford.aws.secretKey', 'aws-secretKey')
         env.withProperty('llc.rockford.google.username', 'google-username')
         env.withProperty('llc.rockford.google.password', 'google-password')
         env.withProperty('llc.rockford.google.spreadsheet', 'google-spreadsheet')
         env.withProperty('llc.rockford.google.worksheet', 'google-worksheet')
         env.withProperty('llc.minneapolis.shortName', 'MLLC')
+        env.withProperty('llc.minneapolis.mp3Directory', '/mllc/sermons')
         env.withProperty('llc.minneapolis.longName', 'Minneapolis Laestadian Lutheran Church')
         env.withProperty('llc.minneapolis.aws.username', 'mllc-aws-username')
         env.withProperty('llc.minneapolis.aws.bucket', 'mllc-aws-bucket')
-        env.withProperty('llc.minneapolis.aws.key.id', 'mllc-aws-accessKey')
-        env.withProperty('llc.minneapolis.aws.key.token', 'mllc-aws-secretKey')
+        env.withProperty('llc.minneapolis.aws.accessKey', 'mllc-aws-accessKey')
+        env.withProperty('llc.minneapolis.aws.secretKey', 'mllc-aws-secretKey')
         env.withProperty('llc.minneapolis.google.username', 'mllc-google-username')
         env.withProperty('llc.minneapolis.google.password', 'mllc-google-password')
         env.withProperty('llc.minneapolis.google.spreadsheet', 'mllc-google-spreadsheet')
@@ -56,6 +58,7 @@ class CongregationPropertyLoaderSpec extends Specification {
         then: "rockford properties are loaded"
         rockford.shortName == 'RLLC'
         rockford.longName == 'Rockford Laestadian Lutheran Church'
+        rockford.mp3Directory == '/rllc/sermons'
         rockford.awsCredentials.bucket == 'aws-bucket'
         rockford.awsCredentials.accessKey == 'aws-accessKey'
         rockford.awsCredentials.secretKey == 'aws-secretKey'
@@ -70,6 +73,7 @@ class CongregationPropertyLoaderSpec extends Specification {
         then: "minneapolis properties are loaded"
         minneapolis.shortName == 'MLLC'
         minneapolis.longName == 'Minneapolis Laestadian Lutheran Church'
+        minneapolis.mp3Directory == '/mllc/sermons'
         minneapolis.awsCredentials.bucket == 'mllc-aws-bucket'
         minneapolis.awsCredentials.accessKey == 'mllc-aws-accessKey'
         minneapolis.awsCredentials.secretKey == 'mllc-aws-secretKey'

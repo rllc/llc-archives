@@ -45,6 +45,7 @@ class CongregationPropertyLoader {
             congregations[congregation] = new Congregation(
                     shortName: env.getProperty("llc.${congregation}.shortName"),
                     longName: env.getProperty("llc.${congregation}.longName"),
+                    mp3Directory: env.getProperty("llc.${congregation}.mp3Directory"),
                     googleCredentials: new GoogleCredentials(
                             username: env.getProperty("llc.${congregation}.google.username"),
                             password: env.getProperty("llc.${congregation}.google.password"),

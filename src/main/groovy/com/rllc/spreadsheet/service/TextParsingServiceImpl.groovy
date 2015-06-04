@@ -3,7 +3,6 @@ package com.rllc.spreadsheet.service
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 
 import java.text.SimpleDateFormat
@@ -19,11 +18,8 @@ class TextParsingServiceImpl implements TextParsingService {
     @Autowired
     ArchivedMinistersService ministersService
 
-    @Value("\${mp3.directory}")
-    String mp3Directory;
-
     @Override
-    String parseFilename(String absoluteFilePath) {
+    String parseFilename(String mp3Directory, String absoluteFilePath) {
         def filename = absoluteFilePath
                 .replace(mp3Directory, "")
                 .replace("\\", "/")

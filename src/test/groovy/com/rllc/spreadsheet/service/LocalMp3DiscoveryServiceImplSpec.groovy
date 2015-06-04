@@ -10,7 +10,6 @@ class LocalMp3DiscoveryServiceImplSpec extends AbstractMp3DiscoveryServiceSpec {
     @Override
     def setupMp3DiscoveryService() {
         new LocalMp3DiscoveryServiceImpl(
-                mp3Directory: mp3Directory.root,
                 textParsingService: textParsingService
         )
     }

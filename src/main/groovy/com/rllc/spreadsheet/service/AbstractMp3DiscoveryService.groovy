@@ -22,23 +22,18 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
     @Autowired
     TextParsingService textParsingService
 
-    @Override
-    List<Sermon> getMp3s() {
-        List mp3Files = findMp3Files()
-        processMp3Files(mp3Files)
-    }
-
     abstract List<File> findMp3Files(Congregation congregation)
 
     @Override
-    List<Sermon> processMp3Files(List mp3Files) {
+    List<Sermon> processMp3Files(Congregation congregation) {
         def sermonList = []
+        List mp3Files = findMp3Files(congregation)
         mp3Files.each { mp3FileHandle ->
             logger.debug "> ${mp3FileHandle.name}"
             try {
                 def mp3file = new Mp3File(mp3FileHandle.absolutePath);
                 def id3v1Tag = mp3file.hasId3v1Tag() ? mp3file.id3v1Tag : mp3file.id3v2Tag
-                sermonList << extractId3v1TagData(mp3FileHandle, id3v1Tag)
+                sermonList << extractId3v1TagData(congregation.mp3Directory, mp3FileHandle, id3v1Tag)
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (UnsupportedTagException e) {
@@ -51,9 +46,9 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
     }
 
     @Override
-    Sermon extractId3v1TagData(File mp3FileHandle, ID3v1 id3v1Tag) {
+    Sermon extractId3v1TagData(String mp3Directory, File mp3FileHandle, ID3v1 id3v1Tag) {
         new Sermon(
-                filelocation: textParsingService.parseFilename(mp3FileHandle.absolutePath),
+                filelocation: textParsingService.parseFilename(mp3Directory, mp3FileHandle.absolutePath),
                 date: textParsingService.parseDate(id3v1Tag.title, mp3FileHandle.name),
                 time: textParsingService.parseTime(id3v1Tag.title),
                 bibletext: textParsingService.parseBibleText(id3v1Tag.album),

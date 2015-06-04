@@ -15,14 +15,13 @@ class TextParsingServiceImplSpec extends Specification {
 
     void setup() {
         textParsingService = new TextParsingServiceImpl(
-                ministersService: archivedMinistersService,
-                mp3Directory: mp3Directory
+                ministersService: archivedMinistersService
         )
     }
 
     def "ParseFilename"() {
         when: "filelocation is parsed"
-        def filename = textParsingService.parseFilename("$mp3Directory\\$mp3File")
+        def filename = textParsingService.parseFilename(mp3Directory, "$mp3Directory\\$mp3File")
 
         then: "base mp3 directory is stripped"
         filename == '2015/20150405_CKumpula.mp3'

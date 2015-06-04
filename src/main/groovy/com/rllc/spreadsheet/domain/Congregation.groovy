@@ -5,6 +5,7 @@ package com.rllc.spreadsheet.domain
 class Congregation {
     String shortName
     String longName
+    String mp3Directory
     AmazonCredentials awsCredentials
     GoogleCredentials googleCredentials
 }
