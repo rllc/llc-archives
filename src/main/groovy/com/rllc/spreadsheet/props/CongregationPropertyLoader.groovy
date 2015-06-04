@@ -45,6 +45,7 @@ class CongregationPropertyLoader {
             congregations[congregation] = new Congregation(
                     shortName: env.getProperty("llc.${congregation}.shortName"),
                     longName: env.getProperty("llc.${congregation}.longName"),
+                    mp3Directory: env.getProperty("llc.${congregation}.mp3Directory"),
                     googleCredentials: new GoogleCredentials(
                             username: env.getProperty("llc.${congregation}.google.username"),
                             password: env.getProperty("llc.${congregation}.google.password"),
@@ -52,8 +53,8 @@ class CongregationPropertyLoader {
                             worksheet: env.getProperty("llc.${congregation}.google.worksheet")
                     ),
                     awsCredentials: new AmazonCredentials(
-                            id: env.getProperty("llc.${congregation}.aws.key.id"),
-                            token: env.getProperty("llc.${congregation}.aws.key.token"),
+                            accessKey: env.getProperty("llc.${congregation}.aws.accessKey"),
+                            secretKey: env.getProperty("llc.${congregation}.aws.secretKey"),
                             bucket: env.getProperty("llc.${congregation}.aws.bucket")
                     )
             )
