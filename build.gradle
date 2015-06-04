@@ -7,7 +7,8 @@ buildscript {
     }
 }
 
-apply plugin: "groovy"
+apply plugin: 'application'
+apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
@@ -15,6 +16,9 @@ sourceCompatibility = 1.7
 def groovyVersion = '2.4.3'
 def spockVersion = '1.0-groovy-2.4'
 def springVersion = '4.1.6.RELEASE'
+
+mainClassName = "Application"
+applicationName = "llc-spreadsheet-updater"
 
 repositories {
     mavenCentral()
@@ -40,6 +44,8 @@ dependencies {
     testCompile "org.spockframework:spock-core:${spockVersion}"
     testCompile "org.springframework:spring-test:${springVersion}"
 }
+
+task stage(dependsOn: ['clean', 'installApp'])
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
