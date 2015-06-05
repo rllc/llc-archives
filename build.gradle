@@ -8,11 +8,12 @@ buildscript {
 }
 
 apply plugin: 'application'
+apply plugin: 'distribution'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 def groovyVersion = '2.4.3'
 def spockVersion = '1.0-groovy-2.4'
 def springVersion = '4.1.6.RELEASE'
@@ -25,7 +26,7 @@ repositories {
 }
 
 jar {
-    baseName = 'rllc-spreadsheet'
+    baseName = 'llc-spreadsheet-appender'
     version = '0.1.0'
 }
 
@@ -49,7 +50,7 @@ dependencies {
     testCompile "org.springframework:spring-test:${springVersion}"
 }
 
-task stage(dependsOn: ['clean', 'bootRepackage', 'installApp'])
+task stage(dependsOn: ['clean', 'bootRepackage', 'installDist'])
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
