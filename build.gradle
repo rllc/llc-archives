@@ -29,6 +29,10 @@ jar {
     version = '0.1.0'
 }
 
+bootRepackage {
+    mainClass = 'com.rllc.spreadsheet.Application'
+}
+
 dependencies {
     compile 'org.slf4j:slf4j-api:1.7.12'
     compile 'com.google.gdata:core:1.47.1'
@@ -45,7 +49,7 @@ dependencies {
     testCompile "org.springframework:spring-test:${springVersion}"
 }
 
-task stage(dependsOn: ['clean', 'installApp'])
+task stage(dependsOn: ['clean', 'bootRepackage', 'installApp'])
 
 task wrapper(type: Wrapper) {
     gradleVersion = '2.3'
