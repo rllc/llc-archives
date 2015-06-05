@@ -1,8 +1,9 @@
 package com.rllc.spreadsheet.service
 
+import com.rllc.spreadsheet.dao.SermonDAO
 import com.rllc.spreadsheet.domain.Column
 import com.rllc.spreadsheet.domain.Sermon
-import com.rllc.spreadsheet.dao.SermonDAO
+import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,12 +23,17 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     SermonDAO sermonDAO
 
     @Autowired
+    CongregationPropertyLoader congregationPropertyLoader
+
+    @Autowired
     @Resource(name = "localMp3DiscoveryService")
     private Mp3DiscoveryService mp3DiscoveryService;
 
     @Override
     def updateSpreadsheet() {
-        updateSpreadsheet(mp3DiscoveryService.getMp3s());
+        congregationPropertyLoader.congregations.each { congregation ->
+            updateSpreadsheet(mp3DiscoveryService.processMp3Files(congregation));
+        }
     }
 
     def updateSpreadsheet(List<Sermon> sermons) {
