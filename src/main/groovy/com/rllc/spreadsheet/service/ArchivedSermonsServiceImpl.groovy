@@ -31,13 +31,14 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
     @Override
     def updateSpreadsheet() {
+        logger.info("> updating all LLC spreadsheets");
         congregationPropertyLoader.congregations.each { congregation ->
+            logger.info("========= ${congregation.longName} =========");
             updateSpreadsheet(mp3DiscoveryService.processMp3Files(congregation));
         }
     }
 
     def updateSpreadsheet(List<Sermon> sermons) {
-        logger.info("========= UPDATING SPREADSHEET =========");
         sermons.each { sermon ->
             logger.info "> sermon : ${sermon.filelocation}"
             // if the sermon already exists
