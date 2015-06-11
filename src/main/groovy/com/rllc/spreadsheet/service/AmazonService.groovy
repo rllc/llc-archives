@@ -1,6 +1,5 @@
 package com.rllc.spreadsheet.service
 
-import com.amazonaws.services.s3.AmazonS3
 import com.rllc.spreadsheet.domain.AmazonCredentials
 
 /**

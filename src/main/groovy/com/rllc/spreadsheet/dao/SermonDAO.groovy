@@ -9,6 +9,8 @@ interface SermonDAO {
 
     Sermon get(String filename)
 
+    List<Sermon> list()
+
     void create(Sermon sermon)
 
     void update(Sermon sermon)

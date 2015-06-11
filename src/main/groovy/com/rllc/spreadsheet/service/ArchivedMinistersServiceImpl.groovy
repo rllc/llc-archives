@@ -5,10 +5,12 @@ import com.rllc.spreadsheet.domain.Minister
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Component
 
 /**
  * Created by Robert on 5/10/2015.
  */
+@Component
 class ArchivedMinistersServiceImpl implements ArchivedMinistersService {
     private static final Logger logger = LoggerFactory.getLogger(ArchivedMinistersServiceImpl.class);
 
@@ -16,8 +18,7 @@ class ArchivedMinistersServiceImpl implements ArchivedMinistersService {
     MinisterDAO ministerDAO
 
     @Override
-    void updateSpreadsheet(List<Minister> ministers) {
-        logger.info("========= UPDATING SPREADSHEET =========");
+    void update(List<Minister> ministers) {
         for (Minister minister : ministers) {
             if(!ministerDAO.ministerExists(minister.name)) {
                 ministerDAO.create(minister)
@@ -35,7 +36,7 @@ class ArchivedMinistersServiceImpl implements ArchivedMinistersService {
     }
 
     @Override
-    void deleteMinister(Minister minister) {
+    void delete(Minister minister) {
         ministerDAO.delete(minister)
     }
 }

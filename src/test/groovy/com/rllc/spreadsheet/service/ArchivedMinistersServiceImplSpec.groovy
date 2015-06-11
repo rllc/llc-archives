@@ -34,7 +34,7 @@ class ArchivedMinistersServiceImplSpec extends Specification {
         ministerDAO.ministerExists('Joe Lehtola') >> {v -> return false}
 
         when: "update spreadsheet is called with updated items"
-        archivedMinistersService.updateSpreadsheet(newMinisters)
+        archivedMinistersService.update(newMinisters)
 
         then: "only new ministers are added"
         1 * ministerDAO.create(_ as Minister) >> { Minister minister ->

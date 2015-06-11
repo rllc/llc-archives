@@ -5,6 +5,7 @@ package com.rllc.spreadsheet.domain
  */
 class Sermon {
 
+    String id = ''
     String date = ''
     String time = ''
     String minister = ''
