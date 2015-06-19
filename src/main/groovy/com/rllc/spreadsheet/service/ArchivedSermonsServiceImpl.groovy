@@ -1,9 +1,8 @@
 package com.rllc.spreadsheet.service
 
-import com.rllc.spreadsheet.dao.SermonDAO
-import com.rllc.spreadsheet.domain.Column
-import com.rllc.spreadsheet.domain.Sermon
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
+import com.rllc.spreadsheet.rest.domain.Sermon
+import com.rllc.spreadsheet.rest.repository.SermonCrudRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +19,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     private static final Logger logger = LoggerFactory.getLogger(ArchivedSermonsServiceImpl.class);
 
     @Autowired
-    SermonDAO sermonDAO
+    SermonCrudRepository sermonCrudRepository
 
     @Autowired
     CongregationPropertyLoader congregationPropertyLoader
@@ -30,30 +29,18 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     private Mp3DiscoveryService mp3DiscoveryService;
 
     @Override
-    def updateSpreadsheet() {
-        logger.info("> updating all LLC spreadsheets");
+    def updateDatastore() {
+        logger.info("> refreshing LLC sermon database");
         congregationPropertyLoader.congregations.each { congregation ->
             logger.info("========= ${congregation.longName} =========");
-            updateSpreadsheet(mp3DiscoveryService.processMp3Files(congregation));
+            updateDatastore(mp3DiscoveryService.processMp3Files(congregation));
         }
     }
 
-    def updateSpreadsheet(List<Sermon> sermons) {
+    def updateDatastore(List<Sermon> sermons) {
         sermons.each { sermon ->
-            logger.info "> sermon : ${sermon.filelocation}"
-            // if the sermon already exists
-            def existingSermon = sermonDAO.get(sermon.filelocation)
-            if (existingSermon) {
-                Column.values().each { column ->
-                    if (existingSermon[column.label].isEmpty() && !sermon[column.label].isEmpty()) {
-                        logger.info("> setting {} to {}", column.label, sermon[column.label]);
-                        existingSermon[column.label] = sermon[column.label]
-                    }
-                }
-                sermonDAO.update(existingSermon)
-            } else {
-                sermonDAO.create(sermon)
-            }
+            logger.info "> sermon : ${sermon.fileUrl}"
+            sermonCrudRepository.save(sermons)
         }
     }
 }

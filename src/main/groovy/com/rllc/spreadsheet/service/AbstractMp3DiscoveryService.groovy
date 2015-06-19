@@ -4,8 +4,8 @@ import com.mpatric.mp3agic.ID3v1
 import com.mpatric.mp3agic.InvalidDataException
 import com.mpatric.mp3agic.Mp3File
 import com.mpatric.mp3agic.UnsupportedTagException
-import com.rllc.spreadsheet.domain.Congregation
-import com.rllc.spreadsheet.domain.Sermon
+import com.rllc.spreadsheet.rest.domain.Congregation
+import com.rllc.spreadsheet.rest.domain.Sermon
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

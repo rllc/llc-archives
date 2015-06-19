@@ -2,7 +2,7 @@ package com.rllc.spreadsheet.service
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.AmazonServiceException
-import com.rllc.spreadsheet.domain.Congregation
+import com.rllc.spreadsheet.rest.domain.Congregation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

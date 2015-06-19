@@ -1,8 +1,8 @@
 package com.rllc.spreadsheet.service
 
 import com.mpatric.mp3agic.ID3v1
-import com.rllc.spreadsheet.domain.Congregation
-import com.rllc.spreadsheet.domain.Sermon
+import com.rllc.spreadsheet.rest.domain.Congregation
+import com.rllc.spreadsheet.rest.domain.Sermon
 
 /**
  * Created by Steven McAdams on 4/25/15.

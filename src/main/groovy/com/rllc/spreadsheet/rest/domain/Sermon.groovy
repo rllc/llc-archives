@@ -1,12 +1,16 @@
 package com.rllc.spreadsheet.rest.domain
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder
+
 import javax.persistence.*
 
 /**
  * Created by Steven McAdams on 6/10/15.
  */
 @Entity
-class Sermon {
+@JsonPropertyOrder(value = ["id", "congregation", "minister", "bibleText", "comments"])
+class Sermon implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,14 +22,16 @@ class Sermon {
     Congregation congregation
 
     @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "minister_id", nullable = false)
+    @JoinColumn(name = "minister_id", nullable = true)
     Minister minister
     Date date
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "bible_text_id", nullable = false)
-    BibleText bibleText
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "sermon", orphanRemoval = false)
+    List<BibleText> bibleText
 
     String comments
+
+//    @Column(unique = true, nullable = false)
+    String fileUrl
 
 }

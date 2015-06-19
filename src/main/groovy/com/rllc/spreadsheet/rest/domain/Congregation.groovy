@@ -18,4 +18,7 @@ class Congregation {
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "congregation", orphanRemoval = true)
     List<Sermon> sermons
+
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    AmazonCredentials amazonCredentials
 }

@@ -1,6 +1,7 @@
 package com.rllc.spreadsheet.service
 
-import com.rllc.spreadsheet.domain.Minister
+import com.rllc.spreadsheet.rest.domain.Minister
+
 
 /**
  * Created by Robert on 5/10/2015.

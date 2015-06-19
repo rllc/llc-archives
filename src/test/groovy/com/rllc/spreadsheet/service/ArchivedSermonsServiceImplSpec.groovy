@@ -45,7 +45,7 @@ class ArchivedSermonsServiceImplSpec extends Specification {
         sermonDAO.get('20140102_TestCase.mp3') >> { v -> return }
 
         when: "update spreadsheet is called with updated items"
-        archivedSermonsService.updateSpreadsheet(mp3Sermons)
+        archivedSermonsService.updateDatastore(mp3Sermons)
 
         then: "existing spreadsheet items are updated, new items are created"
         1 * sermonDAO.update(_ as Sermon) >> { Sermon sermon ->

@@ -15,4 +15,8 @@ class Minister {
     String firstName
     String middleName
     String lastName
+
+    def getFullName() {
+        return "$lastName, $firstName, $middleName"
+    }
 }
