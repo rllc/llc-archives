@@ -5,8 +5,10 @@ import com.amazonaws.services.s3.AmazonS3
 import com.amazonaws.services.s3.AmazonS3Client
 import com.amazonaws.services.s3.model.*
 import com.rllc.spreadsheet.domain.AmazonCredentials
+import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 /**
@@ -17,8 +19,12 @@ class AmazonServiceImpl implements AmazonService {
 
     private static final Logger logger = LoggerFactory.getLogger(AmazonServiceImpl.class);
 
+    @Autowired
+    CongregationPropertyLoader congregationPropertyLoader
+
     @Override
-    List<File> downloadMetadata(List<String> fileNames, AmazonCredentials amazonCredentials) {
+    List<File> downloadMetadata(List<String> fileNames, String congregationKey) {
+        AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey]
         AmazonS3 amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
         def mp3Files = []
         def mp3Dir = File.createTempDir()
@@ -45,11 +51,11 @@ class AmazonServiceImpl implements AmazonService {
     }
 
     @Override
-    List<String> listFiles(AmazonCredentials amazonCredentials) {
+    List<String> listFiles(String congregationKey) {
+        AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey]
         AmazonS3 amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
 
         def files = []
-
         ListObjectsRequest listObjectsRequest = new ListObjectsRequest()
                 .withBucketName(amazonCredentials.bucket)
 

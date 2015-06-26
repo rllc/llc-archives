@@ -1,6 +1,6 @@
 package com.rllc.spreadsheet.security
 
-import com.rllc.spreadsheet.domain.Congregation
+import com.rllc.spreadsheet.domain.CongregationCredentials
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
@@ -30,8 +30,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
      */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        congregationPropertyLoader.congregations.each { String name, Congregation congregation ->
-            auth.inMemoryAuthentication().withUser(name).password(name).roles('USER')
+        congregationPropertyLoader.credentials.each { String name, CongregationCredentials credential ->
+            auth.inMemoryAuthentication().withUser(name).password(credential.password).roles('USER')
         }
     }
 
@@ -39,13 +39,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity
                 .ignoring()
-                .antMatchers("/dist/**")
-                .antMatchers(HttpMethod.GET, "/")
-                .antMatchers(HttpMethod.GET, "/congregations/**")
-                .antMatchers(HttpMethod.GET, "/sermons/**")
-                .antMatchers(HttpMethod.GET, "/books/**")
-                .antMatchers(HttpMethod.GET, "/bibletext/**")
-                .antMatchers(HttpMethod.GET, "/ministers/**");
+                .antMatchers(HttpMethod.GET, "/**")
     }
 
     @Override

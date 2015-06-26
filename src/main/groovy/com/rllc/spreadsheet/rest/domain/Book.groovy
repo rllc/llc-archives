@@ -17,7 +17,4 @@ class Book {
     String abbreviation
     String testament
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "bible_text_id", nullable = true)
-    private BibleText bibleText;
 }

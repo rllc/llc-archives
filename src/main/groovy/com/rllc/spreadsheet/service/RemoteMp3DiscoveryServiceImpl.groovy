@@ -2,7 +2,6 @@ package com.rllc.spreadsheet.service
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.AmazonServiceException
-import com.rllc.spreadsheet.rest.domain.Congregation
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,13 +19,11 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
     AmazonService amazonService
 
     @Override
-    List<File> findMp3Files(Congregation congregation) {
-
-        def amazonCredentials = congregation.awsCredentials
+    List<File> findMp3Files(String congregationKey) {
 
         try {
-            List<String> s3Files = amazonService.listFiles(amazonCredentials)
-            List<File> mp3Files = amazonService.downloadMetadata(s3Files, amazonCredentials)
+            List<String> s3Files = amazonService.listFiles(congregationKey)
+            List<File> mp3Files = amazonService.downloadMetadata(s3Files, congregationKey)
             return mp3Files
         } catch (AmazonServiceException ase) {
             logger.info("Caught an AmazonServiceException, which" +

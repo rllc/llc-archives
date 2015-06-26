@@ -31,9 +31,9 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     @Override
     def updateDatastore() {
         logger.info("> refreshing LLC sermon database");
-        congregationPropertyLoader.congregations.each { congregation ->
-            logger.info("========= ${congregation.longName} =========");
-            updateDatastore(mp3DiscoveryService.processMp3Files(congregation));
+        congregationPropertyLoader.credentials.each { name, creds ->
+            logger.info("========= ${name} =========");
+            updateDatastore(mp3DiscoveryService.processMp3Files(creds));
         }
     }
 

@@ -17,16 +17,15 @@ class AmazonCredentials implements Serializable {
     @Column(name = "amazon_credentials_id")
     private long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @PrimaryKeyJoinColumn()
     private Congregation congregation
-
 
     @JsonIgnore
     String accessKey
     @JsonIgnore
     String secretKey
-
+    @JsonIgnore
     String bucket
 
 }

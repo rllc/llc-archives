@@ -1,9 +1,10 @@
 package com.rllc.spreadsheet.security
 
-import com.rllc.spreadsheet.domain.Congregation
+import com.rllc.spreadsheet.domain.CongregationCredentials
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import groovy.util.logging.Log
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
@@ -21,12 +22,15 @@ public class CongregationUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info("loadUserByUsername : {}", username)
-        Congregation congregation = congregationPropertyLoader.congregations[username]
-        log.info("congregation : {}", congregationd)
+        log.info "loadUserByUsername : $username"
+        CongregationCredentials congregation = congregationPropertyLoader.credentials[username]
+        log.info "congregation : $congregation"
         if (congregation == null) {
-            throw new UsernameNotFoundException("Congregation " + username + " not found ");
+            throw new UsernameNotFoundException("CongregationCredentials " + username + " not found ");
         }
-        return new User(congregation.shortName, congregation.shortName, ['ROLE_ADMIN', 'ROLE_BASIC']);
+        return new User(username, congregation.password, [
+                new SimpleGrantedAuthority('ROLE_ADMIN'),
+                new SimpleGrantedAuthority('ROLE_BASIC'),
+        ])
     }
 }

@@ -26,12 +26,10 @@ class Sermon implements Serializable {
     Minister minister
     Date date
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "sermon", orphanRemoval = false)
-    List<BibleText> bibleText
-
+    String bibleText
     String comments
 
-//    @Column(unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     String fileUrl
 
 }
