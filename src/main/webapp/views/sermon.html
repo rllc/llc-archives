@@ -1,11 +1,20 @@
-<div class="container">
-
-    <p>
-        {{processedResponse}}
-    </p>
-
-    <p>
-        {{availableResources}}
-    </p>
-
-</div>
+<table class="pure-table">
+    <thead>
+    <tr>
+        <th>Date</th>
+        <th>Minister</th>
+        <th>Bible Text</th>
+        <th>Comments</th>
+        <th>Link</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="sermon in sermons">
+        <td>{{sermon.date}}</td>
+        <td>{{sermon.minister}}</td>
+        <td>{{sermon.bibletext}}</td>
+        <td>{{sermon.comments}}</td>
+        <td><a class="pure-button" href="{{sermon.fileUrl}}">Listen</a></td>
+    </tr>
+    </tbody>
+</table>

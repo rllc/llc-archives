@@ -23,7 +23,7 @@ angular
                 templateUrl: 'views/main.html',
                 controller: 'MainCtrl'
             })
-            .when('/sermon', {
+            .when('/congregations/:name', {
                 templateUrl: 'views/sermon.html',
                 controller: 'SermonCtrl'
             })

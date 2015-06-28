@@ -10,7 +10,7 @@
     <tr ng-repeat="congregation in congregations">
         <td>{{congregation.name}}</td>
         <td>{{congregation.fullName}}</td>
-        <td><a class="pure-button" href="{{congregation['_links']['sermons']['href']}}">Listen</a></td>
+        <td><a class="pure-button" href="#/congregations/{{congregation.name}}">Listen</a></td>
     </tr>
     </tbody>
 </table>

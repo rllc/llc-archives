@@ -13,4 +13,6 @@ interface CongregationRepository extends PagingAndSortingRepository<Congregation
 
     List<Congregation> findById(@Param("id") long id);
 
+    List<Congregation> findByName(@Param("name") String name);
+
 }

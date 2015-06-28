@@ -8,13 +8,15 @@
  * Controller of the llcArchivesApp
  */
 angular.module('llcArchivesApp')
-    .controller('SermonCtrl', function ($scope, $http, SpringDataRestAdapter) {
-        var httpPromise = $http.get('api/sermons').success(function (response) {
-            $scope.response = angular.toJson(response, true);
-        });
-
-        SpringDataRestAdapter.process(httpPromise).then(function (processedResponse) {
-            $scope.processedResponse = angular.toJson(processedResponse, true);
-            $scope.availableResources = angular.toJson(processedResponse._resources(), true);
-        });
+    .controller('SermonCtrl', function ($scope, $http, $routeParams, SpringDataRestAdapter) {
+        $scope.name = $routeParams.name;
+        SpringDataRestAdapter.process(
+            $http.get('api/congregations/search/findByName?name=' + $scope.name)
+        ).then(function (processedResponse) {
+                SpringDataRestAdapter.process(
+                    $http.get(processedResponse._embeddedItems[0]._links.sermons.href)
+                ).then(function (sermonResponse) {
+                        $scope.sermons = sermonResponse;
+                    });
+            });
     });
