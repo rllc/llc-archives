@@ -19,7 +19,11 @@ class RemoteMp3DiscoveryServiceImplSpec extends AbstractMp3DiscoveryServiceSpec 
         )
 
         amazonService.listFiles(_) >> { v -> return sermonFiles }
-        amazonService.downloadMetadata(_, _) >> { v -> sermonFiles.collect { new File("${mp3Directory.root}${it}") } }
+        amazonService.downloadMetadata(_, _) >> { v ->
+            [root: mp3Directory.root.absolutePath, files: sermonFiles.collect {
+                new File("${mp3Directory.root}${it}")
+            }]
+        }
 
         new RemoteMp3DiscoveryServiceImpl(
                 amazonService: amazonService,

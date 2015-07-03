@@ -71,7 +71,7 @@ abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
 
     def "FindMp3Files"() {
         when: "mp3 directory is scanned for files"
-        def files = mp3DiscoveryService.findMp3Files('rllc')
+        def files = mp3DiscoveryService.findMp3Files('rllc').files
 
         then: "all sermons are found"
         sermonFiles.each { sermon ->

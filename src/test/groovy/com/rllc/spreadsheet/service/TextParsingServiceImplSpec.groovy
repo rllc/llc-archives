@@ -12,6 +12,7 @@ class TextParsingServiceImplSpec extends Specification {
     def ministerCrudRepository = Mock(MinisterCrudRepository)
     TextParsingService textParsingService
 
+    def mp3Directory = "C:\\example\\archives\\rockford"
     def mp3File = "2015\\20150405_CKumpula.mp3"
 
     void setup() {
@@ -22,7 +23,7 @@ class TextParsingServiceImplSpec extends Specification {
 
     def "ParseFilename"() {
         when: "filelocation is parsed"
-        def filename = textParsingService.parseFilename(mp3File)
+        def filename = textParsingService.parseFilename(mp3Directory, mp3File)
 
         then: "base mp3 directory is stripped"
         filename == '2015/20150405_CKumpula.mp3'
