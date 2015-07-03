@@ -1,8 +1,7 @@
 package com.rllc.spreadsheet.props
 
 import com.rllc.spreadsheet.domain.AmazonCredentials
-import com.rllc.spreadsheet.domain.Congregation
-import com.rllc.spreadsheet.domain.GoogleCredentials
+import com.rllc.spreadsheet.domain.CongregationCredentials
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +22,7 @@ class CongregationPropertyLoader {
     @Autowired
     Environment env;
 
-    Map<String, Congregation> congregations = [:]
+    Map<String, CongregationCredentials> credentials = [:]
 
     @PostConstruct
     def init() {
@@ -42,17 +41,9 @@ class CongregationPropertyLoader {
 
         }
         props.groupBy { prop -> prop.split("\\.")[1] }.each { congregation, value ->
-            congregations[congregation] = new Congregation(
-                    shortName: env.getProperty("llc.${congregation}.shortName"),
-                    longName: env.getProperty("llc.${congregation}.longName"),
-                    mp3Directory: env.getProperty("llc.${congregation}.mp3Directory"),
-                    googleCredentials: new GoogleCredentials(
-                            username: env.getProperty("llc.${congregation}.google.username"),
-                            password: env.getProperty("llc.${congregation}.google.password"),
-                            spreadsheet: env.getProperty("llc.${congregation}.google.spreadsheet"),
-                            worksheet: env.getProperty("llc.${congregation}.google.worksheet")
-                    ),
-                    awsCredentials: new AmazonCredentials(
+            credentials[congregation] = new CongregationCredentials(
+                    password: env.getProperty("llc.${congregation}.password"),
+                    amazonCredentials: new AmazonCredentials(
                             accessKey: env.getProperty("llc.${congregation}.aws.accessKey"),
                             secretKey: env.getProperty("llc.${congregation}.aws.secretKey"),
                             bucket: env.getProperty("llc.${congregation}.aws.bucket")
@@ -60,7 +51,7 @@ class CongregationPropertyLoader {
             )
         }
 
-        logger.info "found congregations : ${congregations.collect { it.key }}"
+        logger.info "found credentials : ${credentials.collect { it.key }}"
     }
 
 }

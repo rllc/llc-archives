@@ -1,0 +1,16 @@
+<table class="pure-table">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Long Name</th>
+        <th>Sermons</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="congregation in congregations">
+        <td>{{congregation.name}}</td>
+        <td>{{congregation.fullName}}</td>
+        <td><a class="pure-button" href="#/congregations/{{congregation.name}}">Listen</a></td>
+    </tr>
+    </tbody>
+</table>

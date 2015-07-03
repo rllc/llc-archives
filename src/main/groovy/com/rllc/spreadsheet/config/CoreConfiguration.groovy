@@ -1,4 +1,4 @@
-package com.rllc.spreadsheet
+package com.rllc.spreadsheet.config
 
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
@@ -9,5 +9,6 @@ import org.springframework.context.annotation.PropertySource
 
 @Configuration
 @PropertySource("classpath:spreadsheet.properties")
-public class Config {
+public class CoreConfiguration {
+
 }

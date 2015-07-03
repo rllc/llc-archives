@@ -1,5 +1,7 @@
 package com.rllc.spreadsheet.service
 
+import com.rllc.spreadsheet.rest.domain.Minister
+import com.rllc.spreadsheet.rest.repository.MinisterCrudRepository
 import spock.lang.Specification
 
 /**
@@ -7,7 +9,7 @@ import spock.lang.Specification
  */
 class TextParsingServiceImplSpec extends Specification {
 
-    def archivedMinistersService = Mock(ArchivedMinistersService)
+    def ministerCrudRepository = Mock(MinisterCrudRepository)
     TextParsingService textParsingService
 
     def mp3Directory = "C:\\example\\archives\\rockford"
@@ -15,13 +17,13 @@ class TextParsingServiceImplSpec extends Specification {
 
     void setup() {
         textParsingService = new TextParsingServiceImpl(
-                ministersService: archivedMinistersService
+                ministerCrudRepository: ministerCrudRepository
         )
     }
 
     def "ParseFilename"() {
         when: "filelocation is parsed"
-        def filename = textParsingService.parseFilename(mp3Directory, "$mp3Directory\\$mp3File")
+        def filename = textParsingService.parseFilename(mp3Directory, mp3File)
 
         then: "base mp3 directory is stripped"
         filename == '2015/20150405_CKumpula.mp3'
@@ -49,7 +51,12 @@ class TextParsingServiceImplSpec extends Specification {
         ministers.add("Ron Honga")
         ministers.add("Sam Roiko")
 
-        archivedMinistersService.getMinisters() >> {v -> return ministers}
+        ministerCrudRepository.findAll() >> { v ->
+            return ministers.collect { m ->
+                def tokens = m.split()
+                new Minister(firstName: tokens[0], lastName: tokens[1])
+            }
+        }
 
         when: "minister is parsed"
         def minister = textParsingService.parseMinister("CRAIG kuMPula")
@@ -162,22 +169,22 @@ class TextParsingServiceImplSpec extends Specification {
     }
 
     def "parseNotes"() {
-        when: 'notes is null'
+        when: 'comments is null'
         def notes = textParsingService.parseNotes(null);
 
-        then: 'no notes are parsed'
+        then: 'no comments are parsed'
         notes == '';
 
-        when: 'notes is empty'
+        when: 'comments is empty'
         notes = textParsingService.parseNotes('');
 
-        then: 'no notes are parsed'
+        then: 'no comments are parsed'
         notes == '';
 
-        when: 'notes exists'
+        when: 'comments exists'
         notes = textParsingService.parseNotes('Christmas Eve Service')
 
-        then: 'notes are parsed'
+        then: 'comments are parsed'
         notes == 'Christmas Eve Service'
     }
 }

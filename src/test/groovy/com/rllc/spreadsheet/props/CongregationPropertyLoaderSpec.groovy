@@ -17,28 +17,14 @@ class CongregationPropertyLoaderSpec extends Specification {
     def setup() {
         env = new MockEnvironment()
 
-        env.withProperty('llc.rockford.shortName', 'RLLC')
-        env.withProperty('llc.rockford.longName', 'Rockford Laestadian Lutheran Church')
-        env.withProperty('llc.rockford.mp3Directory', '/rllc/sermons')
-        env.withProperty('llc.rockford.aws.username', 'aws-username')
+        env.withProperty('llc.rockford.password', 'rllc-password')
         env.withProperty('llc.rockford.aws.bucket', 'aws-bucket')
         env.withProperty('llc.rockford.aws.accessKey', 'aws-accessKey')
         env.withProperty('llc.rockford.aws.secretKey', 'aws-secretKey')
-        env.withProperty('llc.rockford.google.username', 'google-username')
-        env.withProperty('llc.rockford.google.password', 'google-password')
-        env.withProperty('llc.rockford.google.spreadsheet', 'google-spreadsheet')
-        env.withProperty('llc.rockford.google.worksheet', 'google-worksheet')
-        env.withProperty('llc.minneapolis.shortName', 'MLLC')
-        env.withProperty('llc.minneapolis.mp3Directory', '/mllc/sermons')
-        env.withProperty('llc.minneapolis.longName', 'Minneapolis Laestadian Lutheran Church')
-        env.withProperty('llc.minneapolis.aws.username', 'mllc-aws-username')
+        env.withProperty('llc.minneapolis.password', 'mllc-password')
         env.withProperty('llc.minneapolis.aws.bucket', 'mllc-aws-bucket')
         env.withProperty('llc.minneapolis.aws.accessKey', 'mllc-aws-accessKey')
         env.withProperty('llc.minneapolis.aws.secretKey', 'mllc-aws-secretKey')
-        env.withProperty('llc.minneapolis.google.username', 'mllc-google-username')
-        env.withProperty('llc.minneapolis.google.password', 'mllc-google-password')
-        env.withProperty('llc.minneapolis.google.spreadsheet', 'mllc-google-spreadsheet')
-        env.withProperty('llc.minneapolis.google.worksheet', 'mllc-google-worksheet')
 
         congregationPropertyLoader = new CongregationPropertyLoader()
         congregationPropertyLoader.env = env
@@ -49,38 +35,26 @@ class CongregationPropertyLoaderSpec extends Specification {
         when: "spring application context is initialized"
         congregationPropertyLoader.init()
 
-        then: "configuration for multiple congregations are loaded"
-        congregationPropertyLoader.congregations.size() == 2
+        then: "configuration for multiple credentials are loaded"
+        congregationPropertyLoader.credentials.size() == 2
 
         when: "rockford properties are retrieved"
-        def rockford = congregationPropertyLoader.congregations['rockford']
+        def rockford = congregationPropertyLoader.credentials['rockford']
 
         then: "rockford properties are loaded"
-        rockford.shortName == 'RLLC'
-        rockford.longName == 'Rockford Laestadian Lutheran Church'
-        rockford.mp3Directory == '/rllc/sermons'
-        rockford.awsCredentials.bucket == 'aws-bucket'
-        rockford.awsCredentials.accessKey == 'aws-accessKey'
-        rockford.awsCredentials.secretKey == 'aws-secretKey'
-        rockford.googleCredentials.username == 'google-username'
-        rockford.googleCredentials.password == 'google-password'
-        rockford.googleCredentials.spreadsheet == 'google-spreadsheet'
-        rockford.googleCredentials.worksheet == 'google-worksheet'
+        rockford.password == 'rllc-password'
+        rockford.amazonCredentials.bucket == 'aws-bucket'
+        rockford.amazonCredentials.accessKey == 'aws-accessKey'
+        rockford.amazonCredentials.secretKey == 'aws-secretKey'
 
         when: "minneapolis properties are retrieved"
-        def minneapolis = congregationPropertyLoader.congregations['minneapolis']
+        def minneapolis = congregationPropertyLoader.credentials['minneapolis']
 
         then: "minneapolis properties are loaded"
-        minneapolis.shortName == 'MLLC'
-        minneapolis.longName == 'Minneapolis Laestadian Lutheran Church'
-        minneapolis.mp3Directory == '/mllc/sermons'
-        minneapolis.awsCredentials.bucket == 'mllc-aws-bucket'
-        minneapolis.awsCredentials.accessKey == 'mllc-aws-accessKey'
-        minneapolis.awsCredentials.secretKey == 'mllc-aws-secretKey'
-        minneapolis.googleCredentials.username == 'mllc-google-username'
-        minneapolis.googleCredentials.password == 'mllc-google-password'
-        minneapolis.googleCredentials.spreadsheet == 'mllc-google-spreadsheet'
-        minneapolis.googleCredentials.worksheet == 'mllc-google-worksheet'
+        minneapolis.password == 'mllc-password'
+        minneapolis.amazonCredentials.bucket == 'mllc-aws-bucket'
+        minneapolis.amazonCredentials.accessKey == 'mllc-aws-accessKey'
+        minneapolis.amazonCredentials.secretKey == 'mllc-aws-secretKey'
 
     }
 

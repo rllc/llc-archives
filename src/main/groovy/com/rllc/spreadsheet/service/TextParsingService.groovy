@@ -5,7 +5,7 @@ package com.rllc.spreadsheet.service
  */
 interface TextParsingService {
 
-    String parseFilename(String mp3Directory, String absoluteFilePath)
+    String parseFilename(String basePath, String absoluteFilePath)
 
     String parseMinister(String artist)
 
