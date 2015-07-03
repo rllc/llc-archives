@@ -8,9 +8,9 @@ import com.rllc.spreadsheet.domain.Mp3SermonFile
  */
 interface Mp3DiscoveryService {
 
-    List<File> findMp3Files(String congregationKey)
+    def findMp3Files(String congregationKey)
 
     List<Mp3SermonFile> processMp3Files(String congregationKey)
 
-    Mp3SermonFile extractId3v1TagData(File mp3FileHandle, ID3v1 id3v1Tag)
+    Mp3SermonFile extractId3v1TagData(String basePath, File mp3FileHandle, ID3v1 id3v1Tag)
 }

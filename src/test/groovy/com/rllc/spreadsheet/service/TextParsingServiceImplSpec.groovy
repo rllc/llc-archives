@@ -168,22 +168,22 @@ class TextParsingServiceImplSpec extends Specification {
     }
 
     def "parseNotes"() {
-        when: 'notes is null'
+        when: 'comments is null'
         def notes = textParsingService.parseNotes(null);
 
-        then: 'no notes are parsed'
+        then: 'no comments are parsed'
         notes == '';
 
-        when: 'notes is empty'
+        when: 'comments is empty'
         notes = textParsingService.parseNotes('');
 
-        then: 'no notes are parsed'
+        then: 'no comments are parsed'
         notes == '';
 
-        when: 'notes exists'
+        when: 'comments exists'
         notes = textParsingService.parseNotes('Christmas Eve Service')
 
-        then: 'notes are parsed'
+        then: 'comments are parsed'
         notes == 'Christmas Eve Service'
     }
 }

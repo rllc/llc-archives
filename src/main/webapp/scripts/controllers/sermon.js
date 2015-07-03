@@ -16,7 +16,7 @@ angular.module('llcArchivesApp')
                 SpringDataRestAdapter.process(
                     $http.get(processedResponse._embeddedItems[0]._links.sermons.href)
                 ).then(function (sermonResponse) {
-                        $scope.sermons = sermonResponse;
+                        $scope.sermons = sermonResponse._embeddedItems;
                     });
             });
     });

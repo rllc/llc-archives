@@ -31,7 +31,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         congregationPropertyLoader.credentials.each { String name, CongregationCredentials credential ->
-            auth.inMemoryAuthentication().withUser(name).password(credential.password).roles('USER')
+            auth.inMemoryAuthentication().withUser(name).password(credential.password).roles('USER', 'ADMIN')
         }
     }
 
@@ -48,7 +48,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .httpBasic().and()
                 .authorizeRequests()
                 .anyRequest().fullyAuthenticated().and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED).and()
                 .csrf().disable();
     }
 }

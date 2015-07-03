@@ -20,9 +20,10 @@ class TextParsingServiceImpl implements TextParsingService {
     MinisterCrudRepository ministerCrudRepository
 
     @Override
-    String parseFilename(String absoluteFilePath) {
+    String parseFilename(String basePath, String absoluteFilePath) {
         def filename = absoluteFilePath
                 .replace("\\", "/")
+                .replace(basePath, "")
         if (filename.startsWith("/")) {
             filename = filename.substring(1)
         }
@@ -42,7 +43,7 @@ class TextParsingServiceImpl implements TextParsingService {
 
     @Override
     String parseBibleText(String album) {
-        return album.isEmpty() ? "" : album
+        return album ?: ""
     }
 
     @Override

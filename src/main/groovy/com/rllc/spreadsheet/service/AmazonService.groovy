@@ -4,7 +4,7 @@ package com.rllc.spreadsheet.service
  */
 interface AmazonService {
 
-    List<File> downloadMetadata(List<String> fileNames, String congregationKey)
+    def downloadMetadata(List<String> fileNames, String congregationKey)
 
     List<String> listFiles(String congregationKey)
 

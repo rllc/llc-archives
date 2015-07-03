@@ -50,19 +50,19 @@ abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
                 case "Nathan Muhonen":
                     assert sermon.bibletext == "Luke 2:1-20"
                     assert sermon.date == "12/24/2012"
-                    assert sermon.notes == "Christmas Eve Service"
+                    assert sermon.comments == "Christmas Eve Service"
                     assert sermon.file.contains('sermons/rockford/2014/20141224_NMuhonen.mp3')
                     break;
                 case "Jon Bloomquist":
                     assert sermon.bibletext == "Deuteronomy 5:1-4"
                     assert sermon.date == "03/15/2015"
-                    assert sermon.notes == ""
+                    assert sermon.comments == ""
                     assert sermon.file.contains('sermons/rockford/2015/20150315_JBloomquist.mp3')
                     break;
                 case "Rick Nevala":
                     assert sermon.bibletext == "Acts 8:9-20"
                     assert sermon.date == "03/15/2015"
-                    assert sermon.notes == ""
+                    assert sermon.comments == ""
                     assert sermon.file.contains('sermons/rockford/2015/20150315_RNevala.mp3')
                     break;
             }

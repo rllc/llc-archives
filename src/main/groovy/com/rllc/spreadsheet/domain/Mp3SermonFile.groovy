@@ -8,5 +8,5 @@ class Mp3SermonFile {
     String date
     String bibletext
     String minister
-    String notes
+    String comments
 }

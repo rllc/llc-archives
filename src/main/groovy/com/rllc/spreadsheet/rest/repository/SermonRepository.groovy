@@ -12,4 +12,6 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource
 interface SermonRepository extends PagingAndSortingRepository<Sermon, Long> {
 
     List<Sermon> findById(@Param("id") long id);
+
+    List<Sermon> findByFileUrlEndingWith(@Param("file") String file);
 }

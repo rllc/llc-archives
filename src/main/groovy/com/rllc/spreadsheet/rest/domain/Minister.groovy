@@ -19,4 +19,8 @@ class Minister {
     def getFullName() {
         return "$lastName, $firstName, $middleName"
     }
+
+    def getNaturalName() {
+        "$firstName $lastName"
+    }
 }

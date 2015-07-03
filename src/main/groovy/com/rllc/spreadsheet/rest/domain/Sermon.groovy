@@ -21,11 +21,9 @@ class Sermon implements Serializable {
     @JoinColumn(name = "congregation_id", nullable = false)
     Congregation congregation
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "minister_id", nullable = true)
-    Minister minister
     Date date
 
+    String minister
     String bibleText
     String comments
 
