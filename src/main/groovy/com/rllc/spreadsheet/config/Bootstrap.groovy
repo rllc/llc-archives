@@ -1,7 +1,6 @@
 package com.rllc.spreadsheet.config
 
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
-import com.rllc.spreadsheet.rest.domain.AmazonCredentials
 import com.rllc.spreadsheet.rest.domain.Book
 import com.rllc.spreadsheet.rest.domain.Congregation
 import com.rllc.spreadsheet.rest.domain.Sermon
@@ -74,11 +73,6 @@ class Bootstrap {
                     new Congregation(
                             name: 'rllc',
                             fullName: 'Rockford',
-                            amazonCredentials: new AmazonCredentials(
-                                    accessKey: 'access-key',
-                                    secretKey: 'secret-key',
-                                    bucket: 'aws-bucket'
-                            ),
                             sermons: [
                                     new Sermon(
                                             minister: ministerRepository.findByFirstName('Jouko'),

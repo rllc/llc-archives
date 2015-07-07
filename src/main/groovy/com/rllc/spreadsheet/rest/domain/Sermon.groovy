@@ -18,7 +18,7 @@ class Sermon implements Serializable {
     private long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "congregation_id", nullable = false)
+    @JoinColumn(name = "congregation_id")
     Congregation congregation
 
     Date date
