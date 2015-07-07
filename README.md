@@ -12,7 +12,7 @@ cd spreadsheet-updater
 ./gradlew clean test
 ./gradlew bootRun
 ```
-open a browser to http://localhost:8080
+open a browser to [http://localhost:8080](http://localhost:8080)
 
 
 # architecture
