@@ -10,7 +10,9 @@ Sync google spreadsheet with local MP3 files
 git clone git@github.com:rllc/spreadsheet-updater.git
 cd spreadsheet-updater
 ./gradlew clean test
+./gradlew bootRun
 ```
+open a browser to http://localhost:8080
 
 
 # architecture
