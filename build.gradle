@@ -64,8 +64,6 @@ dependencies {
 }
 
 task stage(type: Copy, dependsOn: [clean, build]) {
-    logging.captureStandardOutput LogLevel.DEBUG
-
     from jar.archivePath
     into project.rootDir
     rename {
