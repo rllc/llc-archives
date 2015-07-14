@@ -28,19 +28,20 @@ public class CoreConfiguration {
             if (dbProperty != null) {
                 dbUri = new URI(dbProperty);
 
-                username = dbUri.getUserInfo().split(":")[0];
-                password = dbUri.getUserInfo().split(":")[1];
+                username = dbUri.userInfo.split(":")[0];
+                password = dbUri.userInfo.split(":")[1];
                 url = "jdbc:postgresql://" + dbUri.getHost() + ':' + dbUri.getPort() + dbUri.getPath();
             }
 
             BasicDataSource basicDataSource = new BasicDataSource();
-            basicDataSource.setUrl(url);
-            basicDataSource.setUsername(username);
-            basicDataSource.setPassword(password);
+            basicDataSource.url = url
+            basicDataSource.username = username
+            basicDataSource.password = password
             return basicDataSource;
 
         } catch (URISyntaxException e) {
             //Deal with errors here.
+            e.printStackTrace()
         }
     }
 
