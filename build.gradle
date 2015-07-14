@@ -64,7 +64,7 @@ dependencies {
 }
 
 task stage(type: Copy, dependsOn: [clean, build]) {
-    logging.level = LogLevel.DEBUG
+    logging.captureStandardOutput LogLevel.DEBUG
 
     from jar.archivePath
     into project.rootDir
