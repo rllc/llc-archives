@@ -52,9 +52,9 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile('org.springframework.boot:spring-boot-starter-jdbc')
 
-    compile("com.h2database:h2")
-//    compile 'org.apache.commons:commons-dbcp2:2.1'
-//    compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+//    compile("com.h2database:h2")
+    compile 'org.apache.commons:commons-dbcp2:2.1'
+    compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
     testCompile "junit:junit:4.12"
     testCompile 'cglib:cglib-nodep:3.1'
