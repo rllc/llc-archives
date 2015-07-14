@@ -6,18 +6,19 @@ import com.rllc.spreadsheet.rest.domain.Congregation
 import com.rllc.spreadsheet.rest.domain.Sermon
 import com.rllc.spreadsheet.rest.repository.*
 import com.rllc.spreadsheet.security.CongregationUserDetailsService
+import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 
 /**
  * Created by Steven McAdams on 6/22/15.
  */
-@Component
-class Bootstrap {
+@Service
+class Bootstrap implements InitializingBean {
 
     @Autowired
     AuthenticationManager authenticationManager
@@ -166,5 +167,10 @@ class Bootstrap {
         if (ministerRepository.findAll().size() == 0) {
 
         }
+    }
+
+    @Override
+    void afterPropertiesSet() throws Exception {
+        execute()
     }
 }
