@@ -28,7 +28,7 @@ public class CoreConfiguration {
             String username = "username";
             String password = "password";
             String url = "jdbc:postgresql://localhost/llc";
-            String dbProperty = System.getProperty("DATABASE_URL");
+            String dbProperty = System.getProperty("database.url")
             logger.info "dbProperty : $dbProperty"
 
 
