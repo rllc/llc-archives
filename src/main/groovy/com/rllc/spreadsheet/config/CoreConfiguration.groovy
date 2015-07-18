@@ -25,14 +25,14 @@ public class CoreConfiguration {
 
         URI dbUri;
         try {
-            String username = "username";
-            String password = "password";
-            String url = "jdbc:postgresql://localhost/llc";
+            String username;
+            String password;
+            String url = "jdbc:postgresql:llc";
             String dbProperty = System.getProperty("database.url")
             logger.info "dbProperty : $dbProperty"
 
 
-            if (dbProperty != null) {
+            if (dbProperty) {
                 dbUri = new URI(dbProperty);
 
                 username = dbUri.userInfo.split(":")[0];
