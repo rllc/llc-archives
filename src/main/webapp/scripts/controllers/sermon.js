@@ -19,4 +19,15 @@ angular.module('llcArchivesApp')
                         $scope.sermons = sermonResponse._embeddedItems;
                     });
             });
+
+
+        $scope.orderByDate = function (item) {
+            console.log(item);
+            if (item.date) {
+                return Date.parse(item.date);
+            }
+
+            return '';
+        };
+
     });

@@ -9,8 +9,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr ng-repeat="sermon in sermons">
-        <td>{{sermon.date}}</td>
+    <tr ng-repeat="sermon in sermons | orderBy: orderByDate" class="pure-table-{{ $odd ? 'odd' : 'even'}}">
+        <td>{{sermon.date | date:'MMM d, y HH:mm'}}</td>
         <td>{{sermon.minister}}</td>
         <td>{{sermon.bibleText}}</td>
         <td>{{sermon.comments}}</td>
@@ -18,3 +18,4 @@
     </tr>
     </tbody>
 </table>
+
