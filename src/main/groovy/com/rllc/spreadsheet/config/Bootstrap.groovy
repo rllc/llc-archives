@@ -171,6 +171,6 @@ class Bootstrap implements InitializingBean {
 
     @Override
     void afterPropertiesSet() throws Exception {
-        execute()
+//        execute()
     }
 }

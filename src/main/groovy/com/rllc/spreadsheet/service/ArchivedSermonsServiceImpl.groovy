@@ -54,10 +54,14 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
             def minister = null
             if (sermon.minister) {
+                logger.info "> minister : ${sermon.minister}"
                 def tokens = sermon.minister.split()
-                def firstName = tokens[0]
-                def lastName = tokens[1]
-                minister = ministerRepository.findByFirstNameAndLastNameLike(firstName, lastName)[0]
+                logger.info "> tokens : $tokens, tokens.size : ${tokens.size()}"
+                if (tokens.size() == 2) {
+                    def firstName = tokens[0]
+                    def lastName = tokens[1]
+                    minister = ministerRepository.findByFirstNameAndLastNameLike(firstName, lastName)[0]
+                }
             }
             def existingSermons = sermonRepository.findByFileUrlEndingWith(sermon.file)
             if (existingSermons.size() > 0) {

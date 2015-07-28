@@ -22,7 +22,7 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
     def findMp3Files(String congregationKey) {
 
         try {
-            List<String> s3Files = amazonService.listFiles(congregationKey)
+            List<String> s3Files = amazonService.listFiles(congregationKey).findAll { it.endsWith('.mp3') }
             return amazonService.downloadMetadata(s3Files, congregationKey)
         } catch (AmazonServiceException ase) {
             logger.info("Caught an AmazonServiceException, which" +

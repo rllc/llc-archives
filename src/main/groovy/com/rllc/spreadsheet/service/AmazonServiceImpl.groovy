@@ -50,6 +50,9 @@ class AmazonServiceImpl implements AmazonService {
             mp3Files << targetFile
         }
 
+        logger.info "> files : $mp3Files"
+        logger.info "> root : $mp3Dir.absolutePath"
+
         return [files: mp3Files, root: mp3Dir.absolutePath]
     }
 
