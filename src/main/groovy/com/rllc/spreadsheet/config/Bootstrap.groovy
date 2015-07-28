@@ -3,7 +3,6 @@ package com.rllc.spreadsheet.config
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import com.rllc.spreadsheet.rest.domain.Book
 import com.rllc.spreadsheet.rest.domain.Congregation
-import com.rllc.spreadsheet.rest.domain.Sermon
 import com.rllc.spreadsheet.rest.repository.*
 import com.rllc.spreadsheet.security.CongregationUserDetailsService
 import org.springframework.beans.factory.InitializingBean
@@ -74,19 +73,9 @@ class Bootstrap implements InitializingBean {
                     new Congregation(
                             name: 'rllc',
                             fullName: 'Rockford',
-                            sermons: [
-                                    new Sermon(
-                                            minister: ministerRepository.findByFirstName('Jouko'),
-                                            date: new Date(),
-                                            bibleText: 'Matthew 6:27-34',
-                                            fileUrl: 'aws-bucket/sermon.mp3'
-                                    )
-                            ]
-
+                            sermons: []
                     )
             )
-
-
         }
     }
 
