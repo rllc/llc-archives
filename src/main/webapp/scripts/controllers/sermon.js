@@ -13,6 +13,7 @@ angular.module('llcArchivesApp')
         SpringDataRestAdapter.process(
             $http.get('api/congregations/search/findByName?name=' + $scope.name)
         ).then(function (processedResponse) {
+                $scope.fullName = processedResponse._embeddedItems[0].fullName;
                 SpringDataRestAdapter.process(
                     $http.get(processedResponse._embeddedItems[0]._links.sermons.href)
                 ).then(function (sermonResponse) {
@@ -22,11 +23,9 @@ angular.module('llcArchivesApp')
 
 
         $scope.orderByDate = function (item) {
-            console.log(item);
             if (item.date) {
                 return Date.parse(item.date);
             }
-
             return '';
         };
 
