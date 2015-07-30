@@ -12,7 +12,7 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_1_7
 def groovyVersion = '2.4.3'
 def spockVersion = '1.0-groovy-2.4'
 def springVersion = '4.1.6.RELEASE'
