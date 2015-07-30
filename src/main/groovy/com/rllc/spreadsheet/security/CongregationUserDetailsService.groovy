@@ -24,7 +24,6 @@ public class CongregationUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         log.info "loadUserByUsername : $username"
         CongregationCredentials congregation = congregationPropertyLoader.credentials[username]
-        log.info "congregation : $congregation"
         if (congregation == null) {
             throw new UsernameNotFoundException("CongregationCredentials " + username + " not found ");
         }

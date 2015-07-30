@@ -1,6 +1,5 @@
 package com.rllc.spreadsheet.security
 
-import com.rllc.spreadsheet.domain.CongregationCredentials
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Configuration
@@ -24,15 +23,16 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Autowired
     private CongregationPropertyLoader congregationPropertyLoader
 
+    @Autowired
+    CongregationUserDetailsService congregationUserDetailsService
+
     /**
      * This section defines the user accounts which can be used for
      * authentication as well as the roles each user has.
      */
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
-        congregationPropertyLoader.credentials.each { String name, CongregationCredentials credential ->
-            auth.inMemoryAuthentication().withUser(name).password(credential.password).roles('USER', 'ADMIN')
-        }
+        auth.userDetailsService(congregationUserDetailsService)
     }
 
     @Override
