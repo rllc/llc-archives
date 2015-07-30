@@ -1,7 +1,7 @@
 package com.rllc.spreadsheet.service
 
 import com.rllc.spreadsheet.rest.domain.Minister
-import com.rllc.spreadsheet.rest.repository.MinisterCrudRepository
+import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import spock.lang.Specification
 
 /**
@@ -9,7 +9,7 @@ import spock.lang.Specification
  */
 class TextParsingServiceImplSpec extends Specification {
 
-    def ministerCrudRepository = Mock(MinisterCrudRepository)
+    def ministerRepository = Mock(MinisterRepository)
     TextParsingService textParsingService
 
     def mp3Directory = "C:\\example\\archives\\rockford"
@@ -17,7 +17,7 @@ class TextParsingServiceImplSpec extends Specification {
 
     void setup() {
         textParsingService = new TextParsingServiceImpl(
-                ministerCrudRepository: ministerCrudRepository
+                ministerRepository: ministerRepository
         )
     }
 
@@ -51,7 +51,7 @@ class TextParsingServiceImplSpec extends Specification {
         ministers.add("Ron Honga")
         ministers.add("Sam Roiko")
 
-        ministerCrudRepository.findAll() >> { v ->
+        ministerRepository.findAll() >> { v ->
             return ministers.collect { m ->
                 def tokens = m.split()
                 new Minister(firstName: tokens[0], lastName: tokens[1])

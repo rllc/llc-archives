@@ -1,6 +1,6 @@
 package com.rllc.spreadsheet.service
 
-import com.rllc.spreadsheet.rest.repository.MinisterCrudRepository
+import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,7 +17,7 @@ class TextParsingServiceImpl implements TextParsingService {
     private static final Logger logger = LoggerFactory.getLogger(TextParsingServiceImpl.class)
 
     @Autowired
-    MinisterCrudRepository ministerCrudRepository
+    MinisterRepository ministerRepository
 
     @Override
     String parseFilename(String basePath, String absoluteFilePath) {
@@ -32,7 +32,7 @@ class TextParsingServiceImpl implements TextParsingService {
 
     @Override
     String parseMinister(String artist) {
-        List<String> ministers = ministerCrudRepository.findAll().collect { "${it.firstName} ${it.lastName}" }
+        List<String> ministers = ministerRepository.findAll().collect { "${it.firstName} ${it.lastName}" }
         String minister = artist.toLowerCase().split().collect { it.capitalize() }.join(' ')
         List<String> similarMinisters = CosineSimilarityService.mostSimilar(minister, ministers, 0.4)
         if (similarMinisters.size() > 0) {

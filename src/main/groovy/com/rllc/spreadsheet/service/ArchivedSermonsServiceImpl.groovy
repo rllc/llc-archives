@@ -5,7 +5,6 @@ import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import com.rllc.spreadsheet.rest.domain.Sermon
 import com.rllc.spreadsheet.rest.repository.CongregationRepository
 import com.rllc.spreadsheet.rest.repository.MinisterRepository
-import com.rllc.spreadsheet.rest.repository.SermonCrudRepository
 import com.rllc.spreadsheet.rest.repository.SermonRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -19,9 +18,6 @@ import org.springframework.stereotype.Component
 class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
     private static final Logger logger = LoggerFactory.getLogger(ArchivedSermonsServiceImpl.class);
-
-    @Autowired
-    SermonCrudRepository sermonCrudRepository
 
     @Autowired
     SermonRepository sermonRepository
@@ -72,7 +68,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                 existingSermon.date = sermon.date
                 existingSermon.fileUrl = "https://s3-us-west-2.amazonaws.com/${bucket}/${sermon.file}"
                 existingSermon.minister = minister ? minister.naturalName : ''
-                sermonCrudRepository.save(existingSermon)
+                sermonRepository.save(existingSermon)
             } else {
 
                 Sermon newSermon = new Sermon(

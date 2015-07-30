@@ -1,6 +1,6 @@
 package com.rllc.spreadsheet.service
 
-import com.rllc.spreadsheet.rest.repository.MinisterCrudRepository
+import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.slf4j.Logger
@@ -16,7 +16,7 @@ abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
 
     TextParsingService textParsingService
     Mp3DiscoveryService mp3DiscoveryService
-    def ministerCrudRepository = Mock(MinisterCrudRepository)
+    def ministerRepository = Mock(MinisterRepository)
 
     @Rule
     public TemporaryFolder mp3Directory = new TemporaryFolder();
@@ -29,7 +29,7 @@ abstract class AbstractMp3DiscoveryServiceSpec extends Specification {
 
     void setup() {
         textParsingService = new TextParsingServiceImpl(
-                ministerCrudRepository: ministerCrudRepository
+                ministerRepository: ministerRepository
         )
         initializeFiles()
         mp3DiscoveryService = setupMp3DiscoveryService()
