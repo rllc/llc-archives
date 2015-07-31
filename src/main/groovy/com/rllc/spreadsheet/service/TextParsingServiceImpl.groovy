@@ -38,6 +38,8 @@ class TextParsingServiceImpl implements TextParsingService {
         if (similarMinisters.size() > 0) {
             minister = similarMinisters.get(0);
         }
+
+        logger.info "{} -> {}", artist, minister
         return minister
     }
 
