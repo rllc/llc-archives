@@ -79,7 +79,7 @@ class TextParsingServiceImpl implements TextParsingService {
     String parseDate(String title, String name) {
         String date = ""
 
-        String[] tokens = title.split("\\s+")
+        String[] tokens = title.trim().split("\\s+")
         if (tokens.length > 0) {
             String dateString = tokens[0]
             String[] dateTokens = dateString.split("\\/")
