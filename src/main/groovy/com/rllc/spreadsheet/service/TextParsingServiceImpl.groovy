@@ -39,7 +39,9 @@ class TextParsingServiceImpl implements TextParsingService {
             minister = similarMinisters.get(0);
         }
 
-        logger.info "{} -> {}", artist, minister
+        if (artist != minister) {
+            logger.info "{} -> {}", artist, minister
+        }
         return minister
     }
 
