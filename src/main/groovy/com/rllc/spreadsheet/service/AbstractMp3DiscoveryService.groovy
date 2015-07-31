@@ -34,7 +34,7 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
                 def id3v1Tag = mp3file.hasId3v1Tag() ? mp3file.id3v1Tag : mp3file.id3v2Tag
                 sermonList << extractId3v1TagData(root, mp3FileHandle, id3v1Tag)
             } catch (all) {
-                all.printStackTrace()
+                logger.warn "> ${mp3FileHandle.name} : ${all.message}"
                 sermonList << new Mp3SermonFile(
                         file: textParsingService.parseFilename(root, mp3FileHandle.absolutePath)
                 )
