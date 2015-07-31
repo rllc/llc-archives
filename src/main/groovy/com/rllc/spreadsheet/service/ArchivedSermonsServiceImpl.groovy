@@ -52,7 +52,6 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
             if (sermon.minister) {
                 logger.info "> minister : ${sermon.minister}"
                 def tokens = sermon.minister.split()
-                logger.info "> tokens : $tokens, tokens.size : ${tokens.size()}"
                 if (tokens.size() == 2) {
                     def firstName = tokens[0]
                     def lastName = tokens[1]
@@ -65,7 +64,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                 existingSermon.bibleText = sermon.bibletext
                 existingSermon.comments = sermon.comments
                 existingSermon.congregation = congregationRepository.findByName(name)[0]
-                existingSermon.date = sermon.date
+                existingSermon.date = sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null
                 existingSermon.fileUrl = "https://s3-us-west-2.amazonaws.com/${bucket}/${sermon.file}"
                 existingSermon.minister = minister ? minister.naturalName : ''
                 sermonRepository.save(existingSermon)
@@ -79,7 +78,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                         congregation: congregationRepository.findByName(name)[0],
                         fileUrl: "https://s3-us-west-2.amazonaws.com/${bucket}/${sermon.file}"
                 )
-                sermonCrudRepository.save(newSermon)
+                sermonRepository.save(newSermon)
             }
 
 
