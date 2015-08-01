@@ -12,8 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
-
-import javax.servlet.http.HttpServletRequest
+import org.springframework.web.bind.annotation.RequestParam
 
 /**
  * Created by Steven McAdams on 6/28/15.
@@ -37,9 +36,10 @@ class AdminController {
     AuthenticationManager authenticationManager
 
     @RequestMapping(value = '/refresh', method = RequestMethod.POST)
-    public ResponseEntity refreshSermons(HttpServletRequest request) {
+    public ResponseEntity refreshSermons(
+            @RequestParam(value = "all", defaultValue = 'false', required = false) final Boolean all) {
         logger.info("principal : {}", SecurityContextHolder.context.authentication.principal)
-        archivedSermonsService.updateDatastore()
+        archivedSermonsService.updateDatastore(all)
         return ResponseEntity.ok().build()
     }
 }

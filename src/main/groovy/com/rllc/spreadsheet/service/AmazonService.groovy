@@ -1,11 +1,14 @@
 package com.rllc.spreadsheet.service
+
+import com.rllc.spreadsheet.domain.RemoteFiles
+
 /**
  * Created by Steven McAdams on 5/25/15.
  */
 interface AmazonService {
 
-    def downloadMetadata(List<String> fileNames, String congregationKey)
+    RemoteFiles downloadMetadata(List<String> fileNames, String congregationKey)
 
-    List<String> listFiles(String congregationKey)
+    List<String> listFiles(boolean refreshAll, String congregationKey)
 
 }

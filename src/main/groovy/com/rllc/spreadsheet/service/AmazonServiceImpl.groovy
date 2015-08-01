@@ -9,7 +9,9 @@ import com.amazonaws.services.s3.model.S3Object
 import com.amazonaws.services.s3.model.S3ObjectSummary
 import com.google.common.io.ByteStreams
 import com.rllc.spreadsheet.domain.AmazonCredentials
+import com.rllc.spreadsheet.domain.RemoteFiles
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
+import com.rllc.spreadsheet.rest.repository.SyncExecutionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -26,8 +28,11 @@ class AmazonServiceImpl implements AmazonService {
     @Autowired
     CongregationPropertyLoader congregationPropertyLoader
 
+    @Autowired
+    SyncExecutionRepository syncExecutionRepository
+
     @Override
-    def downloadMetadata(List<String> fileNames, String congregationKey) {
+    RemoteFiles downloadMetadata(List<String> fileNames, String congregationKey) {
         logger.info("downloadMetadata $congregationKey")
         AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey].amazonCredentials
         AmazonS3 amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
@@ -53,21 +58,26 @@ class AmazonServiceImpl implements AmazonService {
         logger.info "> files : $mp3Files"
         logger.info "> root : $mp3Dir.absolutePath"
 
-        return [files: mp3Files, root: mp3Dir.absolutePath]
+        return new RemoteFiles(files: mp3Files, root: mp3Dir.absolutePath)
     }
 
     @Override
-    List<String> listFiles(String congregationKey) {
+    List<String> listFiles(boolean refreshAll, String congregationKey) {
+        Date lastExecution = syncExecutionRepository.findTop1ByOrderByDateDesc()[0]?.date ?: new Date(2000, 0, 1)
+        logger.info "> lastExecution : ${lastExecution}"
         AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey].amazonCredentials
         AmazonS3 amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
 
         def files = []
-        ObjectListing listing = amazonS3Client.listObjects(amazonCredentials.bucket, '2015');
+        ObjectListing listing = amazonS3Client.listObjects(amazonCredentials.bucket);
         while (true) {
             List<S3ObjectSummary> summaries = listing.getObjectSummaries();
             summaries.each { summary ->
-                logger.info "> ${summary.key} (size = ${summary.size})"
-                files << summary.key
+                logger.info "> ${summary.key} (size = ${summary.size}, lastModified = ${summary.lastModified})"
+                if (summary.key.endsWith(".mp3") &&
+                        (refreshAll || summary.lastModified > lastExecution)) {
+                    files << summary.key
+                }
             }
             listing = amazonS3Client.listNextBatchOfObjects(listing);
             if (!listing.truncated) {

@@ -3,12 +3,15 @@ package com.rllc.spreadsheet.service
 import com.rllc.spreadsheet.domain.Mp3SermonFile
 import com.rllc.spreadsheet.props.CongregationPropertyLoader
 import com.rllc.spreadsheet.rest.domain.Sermon
+import com.rllc.spreadsheet.rest.domain.SyncExecution
 import com.rllc.spreadsheet.rest.repository.CongregationRepository
 import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import com.rllc.spreadsheet.rest.repository.SermonRepository
+import com.rllc.spreadsheet.rest.repository.SyncExecutionRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
 
 /**
@@ -29,18 +32,31 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     MinisterRepository ministerRepository
 
     @Autowired
+    SyncExecutionRepository syncExecutionRepository
+
+    @Autowired
     CongregationPropertyLoader congregationPropertyLoader
 
     @Autowired
     private Mp3DiscoveryService mp3DiscoveryService;
 
     @Override
-    def updateDatastore() {
+    def updateDatastore(boolean refreshAll) {
         logger.info("> refreshing LLC sermon database");
+        def start = System.currentTimeMillis()
         congregationPropertyLoader.credentials.each { name, creds ->
             logger.info("========= ${name} =========");
-            updateDatastore(name, mp3DiscoveryService.processMp3Files(name));
+            updateDatastore(name, mp3DiscoveryService.processMp3Files(refreshAll, name));
         }
+        def now = System.currentTimeMillis()
+        def duration = now - start
+        syncExecutionRepository.save(
+                new SyncExecution(
+                        username: SecurityContextHolder.context.authentication.principal,
+                        date: new Date(),
+                        executionTimeMs: duration
+                )
+        )
     }
 
     def updateDatastore(String name, List<Mp3SermonFile> sermons) {
