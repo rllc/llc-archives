@@ -74,7 +74,7 @@ class AmazonServiceImpl implements AmazonService {
             List<S3ObjectSummary> summaries = listing.getObjectSummaries();
             summaries.each { summary ->
                 logger.info "> ${summary.key} (size = ${summary.size}, lastModified = ${summary.lastModified})"
-                logger.info "> $summary after $lastExecution ? ${summary.lastModified.after(lastExecution)}"
+                logger.info "> ${summary.lastModified} after $lastExecution ? ${summary.lastModified.after(lastExecution)}"
                 if (summary.key.endsWith(".mp3") &&
                         (refreshAll || summary.lastModified.after(lastExecution))) {
                     files << summary.key
