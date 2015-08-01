@@ -1,28 +1,53 @@
 package com.rllc.spreadsheet.service
 
-import com.rllc.spreadsheet.domain.AmazonCredentials
+import com.rllc.spreadsheet.domain.RemoteFiles
+import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import org.apache.commons.io.FileUtils
+import org.junit.Rule
+import org.junit.rules.TemporaryFolder
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
+import spock.lang.Specification
 
 /**
  * Created by Steven McAdams on 4/26/15.
  */
-class RemoteMp3DiscoveryServiceImplSpec extends AbstractMp3DiscoveryServiceSpec {
+class RemoteMp3DiscoveryServiceImplSpec extends Specification {
 
-    def amazonService = Mock(AmazonService.class)
+    private static final Logger logger = LoggerFactory.getLogger(RemoteMp3DiscoveryServiceImplSpec.class);
 
-    @Override
-    def setupMp3DiscoveryService() {
-        def amazonCredentials = new AmazonCredentials(
-                accessKey: 'rllc-key',
-                secretKey: 'rllc-secret',
-                bucket: 'rllc-archives'
+    AmazonService amazonService = Mock(AmazonService.class)
+
+    TextParsingService textParsingService
+    Mp3DiscoveryService mp3DiscoveryService
+    MinisterRepository ministerRepository = Mock(MinisterRepository)
+
+    @Rule
+    public TemporaryFolder mp3Directory = new TemporaryFolder();
+
+    def sermonFiles = [
+            '/sermons/rockford/2014/20141224_NMuhonen.mp3',
+            '/sermons/rockford/2015/20150315_JBloomquist.mp3',
+            '/sermons/rockford/2015/20150315_RNevala.mp3'
+    ]
+
+    void setup() {
+        textParsingService = new TextParsingServiceImpl(
+                ministerRepository: ministerRepository
         )
+        initializeFiles()
+        mp3DiscoveryService = setupMp3DiscoveryService()
+    }
 
-        amazonService.listFiles(_) >> { v -> return sermonFiles }
+
+    def setupMp3DiscoveryService() {
+        amazonService.listFiles(_, _) >> { v -> return sermonFiles }
         amazonService.downloadMetadata(_, _) >> { v ->
-            [root: mp3Directory.root.absolutePath, files: sermonFiles.collect {
-                new File("${mp3Directory.root}${it}")
-            }]
+            new RemoteFiles(
+                    root: mp3Directory.root.absolutePath,
+                    files: sermonFiles.collect {
+                        new File("${mp3Directory.root}${it}")
+                    })
         }
 
         new RemoteMp3DiscoveryServiceImpl(
@@ -31,12 +56,61 @@ class RemoteMp3DiscoveryServiceImplSpec extends AbstractMp3DiscoveryServiceSpec 
         )
     }
 
-    @Override
     def initializeFiles() {
         sermonFiles.each { filePath ->
             URL inputUrl = getClass().getResource(filePath);
             File dest = new File("${mp3Directory.root}${filePath}");
             FileUtils.copyURLToFile(inputUrl, dest);
+        }
+    }
+
+
+    def "GetMp3s"() {
+        when: "mp3 files are found and processed"
+        def sermons = mp3DiscoveryService.processMp3Files(false, 'rllc')
+
+        then: "sermons are parsed from files"
+        sermons.each { sermon ->
+            switch (sermon.minister) {
+                case "Nathan Muhonen":
+                    assert sermon.bibletext == "Luke 2:1-20"
+                    assert sermon.date == "12/24/2012"
+                    assert sermon.comments == "Christmas Eve Service"
+                    assert sermon.file.contains('sermons/rockford/2014/20141224_NMuhonen.mp3')
+                    break;
+                case "Jon Bloomquist":
+                    assert sermon.bibletext == "Deuteronomy 5:1-4"
+                    assert sermon.date == "03/15/2015"
+                    assert sermon.comments == ""
+                    assert sermon.file.contains('sermons/rockford/2015/20150315_JBloomquist.mp3')
+                    break;
+                case "Rick Nevala":
+                    assert sermon.bibletext == "Acts 8:9-20"
+                    assert sermon.date == "03/15/2015"
+                    assert sermon.comments == ""
+                    assert sermon.file.contains('sermons/rockford/2015/20150315_RNevala.mp3')
+                    break;
+            }
+        }
+    }
+
+    def "FindMp3Files"() {
+        when: "mp3 directory is scanned for files"
+        RemoteFiles remoteFiles = mp3DiscoveryService.findMp3Files(false, 'rllc')
+        logger.info "remoteFiles : $remoteFiles"
+        def files = remoteFiles.files
+
+        then: "all sermons are found"
+        sermonFiles.each { sermon ->
+            logger.info "> verifying $sermon was found.."
+            def found = false
+            files.each { mp3File ->
+                logger.info mp3File.absolutePath
+                if (mp3File.absolutePath.contains(sermon)) {
+                    found = true
+                }
+            }
+            assert found == true
         }
     }
 

@@ -24,8 +24,8 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
 
         try {
             List<String> s3Files = amazonService.listFiles(refreshAll, congregationKey)
-
-            return amazonService.downloadMetadata(s3Files, congregationKey)
+            RemoteFiles remoteFiles = amazonService.downloadMetadata(s3Files, congregationKey)
+            return remoteFiles
         } catch (AmazonServiceException ase) {
             logger.info("Caught an AmazonServiceException, which" +
                     " means your request made it " +
@@ -36,6 +36,7 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
             logger.info("AWS Error Code:   " + ase.getErrorCode())
             logger.info("Error Type:       " + ase.getErrorType())
             logger.info("Request ID:       " + ase.getRequestId())
+            return new RemoteFiles()
         } catch (AmazonClientException ace) {
             logger.info("Caught an AmazonClientException, which means" +
                     " the client encountered " +
@@ -43,8 +44,6 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
                     "communicate with S3, " +
                     "such as not being able to access the network.")
             logger.info("Error Message: " + ace.getMessage())
-        }
-        finally {
             return new RemoteFiles()
         }
     }
