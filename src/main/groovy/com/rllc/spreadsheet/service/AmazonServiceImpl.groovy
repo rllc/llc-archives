@@ -63,7 +63,7 @@ class AmazonServiceImpl implements AmazonService {
 
     @Override
     List<String> listFiles(boolean refreshAll, String congregationKey) {
-        Date lastExecution = syncExecutionRepository.findTop1ByOrderByDateDesc()[0]?.date ?: new Date(2000, 0, 1)
+        Date lastExecution = syncExecutionRepository.findTop1ByOrderByDateDesc()[0]?.date ?: new Date().parse("MM/dd/yyyy", "01/01/2000")
         logger.info "> lastExecution : ${lastExecution}"
         AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey].amazonCredentials
         AmazonS3 amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
