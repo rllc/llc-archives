@@ -52,7 +52,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
         def duration = now - start
         syncExecutionRepository.save(
                 new SyncExecution(
-                        username: SecurityContextHolder.context.authentication.principal,
+                        username: SecurityContextHolder.context.authentication.principal.username,
                         date: new Date(),
                         executionTimeMs: duration
                 )

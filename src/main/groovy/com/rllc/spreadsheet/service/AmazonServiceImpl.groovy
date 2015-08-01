@@ -75,7 +75,7 @@ class AmazonServiceImpl implements AmazonService {
             summaries.each { summary ->
                 logger.info "> ${summary.key} (size = ${summary.size}, lastModified = ${summary.lastModified})"
                 if (summary.key.endsWith(".mp3") &&
-                        (refreshAll || summary.lastModified > lastExecution)) {
+                        (refreshAll || summary.lastModified.after(lastExecution))) {
                     files << summary.key
                 }
             }
