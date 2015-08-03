@@ -38,6 +38,8 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
                 } catch (all) {
                     logger.warn "> ${mp3FileHandle.name} : ${all.message}"
                     sermonList << new Mp3SermonFile(
+                            date: textParsingService.parseDateFromFilename(mp3FileHandle.name),
+                            minister: textParsingService.parseMinisterFromFilename(mp3FileHandle.name),
                             file: textParsingService.parseFilename(root, mp3FileHandle.absolutePath)
                     )
                 }

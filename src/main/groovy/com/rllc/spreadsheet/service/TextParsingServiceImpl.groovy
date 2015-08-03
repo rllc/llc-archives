@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
+import java.text.ParseException
 import java.text.SimpleDateFormat
 
 /**
@@ -43,6 +44,23 @@ class TextParsingServiceImpl implements TextParsingService {
             logger.info "{} -> {}", artist, minister
         }
         return minister
+    }
+
+    @Override
+    String parseMinisterFromFilename(String filename) {
+
+        def tokens = filename.split("_")
+        if (tokens.size() == 2) {
+            def name = tokens[1].substring(0, tokens[1].length() - 4)
+
+            def firstName = name[0]
+            def lastName = name.substring(1, name.length())
+            def naturalName = "$firstName $lastName"
+
+            logger.info "> naturalName : $naturalName"
+            return parseMinister(naturalName)
+        }
+
     }
 
     @Override
@@ -102,17 +120,7 @@ class TextParsingServiceImpl implements TextParsingService {
 
         if (date.isEmpty()) {
             logger.info("No date field found in [$title].. inspecting [$name]")
-            if (name.length() > 8) {
-                try {
-                    int year = Integer.parseInt(name[0..3])
-                    int month = Integer.parseInt(name[4..5])
-                    int day = Integer.parseInt(name[6..7])
-                    date = formatDate(month, day, year)
-                }
-                catch (NumberFormatException e) {
-                    logger.info("Invalid date format [$name]. Expected form MM/dd/yyyy")
-                }
-            }
+            date = parseDateFromFilename(name)
         }
 
         if (date.isEmpty()) {
@@ -122,6 +130,24 @@ class TextParsingServiceImpl implements TextParsingService {
         }
 
         return date
+    }
+
+    @Override
+    String parseDateFromFilename(String filename) {
+        def date = ''
+        if (filename) {
+            def dateString = filename[0..7]
+            try {
+                date = new Date().parse("yyyyMMdd", dateString).format("MM/dd/yyyy")
+                return date
+            }
+            catch (ParseException e) {
+                logger.warn("Invalid date format [$date]. Expected form yyyyMMdd")
+                return date
+            }
+        }
+        return date
+
     }
 
     @Override

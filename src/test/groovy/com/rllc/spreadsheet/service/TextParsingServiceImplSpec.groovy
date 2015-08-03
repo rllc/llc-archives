@@ -83,6 +83,38 @@ class TextParsingServiceImplSpec extends Specification {
         minister == "Antti Paananen"
     }
 
+    def "ParseMinisterFromFilename"() {
+        given:
+        def ministers = []
+        ministers.add("Craig Kumpula")
+        ministers.add("Jouko Haapsaari")
+        ministerRepository.findAll() >> { v ->
+            return ministers.collect { m ->
+                def tokens = m.split()
+                new Minister(firstName: tokens[0], lastName: tokens[1])
+            }
+        }
+
+        when: "filename is not properly formatted"
+        def minister = textParsingService.parseMinisterFromFilename("20150621-JHaapsaari.mp3")
+
+        then: "minister name is empty"
+        !minister
+
+        when: "JHaapsaari is parsed"
+        minister = textParsingService.parseMinisterFromFilename("20150621_JHaapsaari.mp3")
+
+        then: "minister is autocorrected appropriately"
+        minister == "Jouko Haapsaari"
+
+        when: "CKumpala is parsed"
+        minister = textParsingService.parseMinisterFromFilename("20130321_CKumpala.mp3")
+
+        then: "minister is autocorrected appropriately"
+        minister == "Craig Kumpula"
+    }
+
+
     def "ParseBibleText"() {
         when: "bible text is parsed"
         def bibleText = textParsingService.parseBibleText("Acts 2:1-12")
