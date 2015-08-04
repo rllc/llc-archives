@@ -62,11 +62,11 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     def updateDatastore(String name, List<Mp3SermonFile> sermons) {
         def bucket = congregationPropertyLoader.credentials[name].amazonCredentials.bucket
         sermons.each { sermon ->
-            logger.info "> sermon : ${sermon.file}"
+            logger.debug "> sermon : ${sermon.file}"
 
             def minister = null
             if (sermon.minister) {
-                logger.info "> minister : ${sermon.minister}"
+                logger.debug "> minister : ${sermon.minister}"
                 def tokens = sermon.minister.split()
                 if (tokens.size() == 2) {
                     def firstName = tokens[0]
