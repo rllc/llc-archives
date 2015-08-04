@@ -210,6 +210,12 @@ class TextParsingServiceImplSpec extends Specification {
 
         then: 'date is populated from metadata'
         date == '07/26/2015'
+
+        when: 'date is in the format MM/dd/yy'
+        date = textParsingService.parseDate('3/16/14 2 pm', filename)
+
+        then: 'date is populated from metadata'
+        date == '03/16/2014'
     }
 
     def "FormatDate"() {

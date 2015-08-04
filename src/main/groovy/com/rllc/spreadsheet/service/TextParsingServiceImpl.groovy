@@ -114,7 +114,12 @@ class TextParsingServiceImpl implements TextParsingService {
                 try {
                     int month = Integer.parseInt(dateTokens[0])
                     int day = Integer.parseInt(dateTokens[1])
-                    int year = Integer.parseInt(dateTokens[2])
+                    int year
+                    if (dateTokens[2].size() == 2) {
+                        year = 2000 + Integer.parseInt(dateTokens[2])
+                    } else {
+                        year = Integer.parseInt(dateTokens[2])
+                    }
                     date = formatDate(month, day, year)
                 }
                 catch (NumberFormatException e) {
