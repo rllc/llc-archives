@@ -7,8 +7,8 @@ Sync google spreadsheet with local MP3 files
 
 # getting started
 ```shell
-git clone git@github.com:rllc/spreadsheet-updater.git
-cd spreadsheet-updater
+git clone git@github.com:rllc/llc-archives.git
+cd llc-archives
 ./gradlew clean test
 ./gradlew bootRun
 ```
