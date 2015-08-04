@@ -1,5 +1,6 @@
 package com.rllc.spreadsheet.service
 
+import com.rllc.spreadsheet.rest.domain.Minister
 import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -57,8 +58,12 @@ class TextParsingServiceImpl implements TextParsingService {
             def lastName = name.substring(1, name.length())
             def naturalName = "$firstName $lastName"
 
-            logger.info "> naturalName : $naturalName"
-            return parseMinister(naturalName)
+            List<Minister> ministers = ministerRepository.findByLastName(lastName)
+            if (ministers.size() == 1) {
+                return ministers[0].naturalName
+            } else {
+                return parseMinister(naturalName)
+            }
         }
 
     }

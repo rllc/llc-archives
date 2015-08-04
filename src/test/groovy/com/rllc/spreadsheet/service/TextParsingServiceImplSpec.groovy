@@ -88,8 +88,18 @@ class TextParsingServiceImplSpec extends Specification {
         def ministers = []
         ministers.add("Craig Kumpula")
         ministers.add("Jouko Haapsaari")
+        ministers.add("Nathan Muhonen")
         ministerRepository.findAll() >> { v ->
             return ministers.collect { m ->
+                def tokens = m.split()
+                new Minister(firstName: tokens[0], lastName: tokens[1])
+            }
+        }
+
+        ministerRepository.findByLastName(_) >> { v ->
+            return ministers.findAll { m ->
+                m.split()[1] == v
+            }.collect { m ->
                 def tokens = m.split()
                 new Minister(firstName: tokens[0], lastName: tokens[1])
             }
@@ -112,6 +122,12 @@ class TextParsingServiceImplSpec extends Specification {
 
         then: "minister is autocorrected appropriately"
         minister == "Craig Kumpula"
+
+        when: "NMuonen is parsed"
+        minister = textParsingService.parseMinisterFromFilename("20130321_NMuonen.mp3")
+
+        then: "minister is autocorrected appropriately"
+        minister == "Nathan Muhonen"
     }
 
 
