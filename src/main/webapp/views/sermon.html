@@ -5,15 +5,15 @@
             <th colspan="5" class="text-center"><h4>{{fullName}} Archived Sermons</h4></th>
         </tr>
         <tr>
-            <th>Date</th>
-            <th>Minister</th>
-            <th>Bible Text</th>
-            <th>Comments</th>
-            <th>Link</th>
+            <th><a href="" ng-click="sort('date')">Date</a></th>
+            <th><a href="" ng-click="sort('minister')">Minister</a></th>
+            <th><a href="" ng-click="sort('bibleText')">Bible Text</a></th>
+            <th><a href="" ng-click="sort('comments')">Comments</a></th>
+            <th><a href="" ng-click="sort('fileUrl')">Link</a></th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="sermon in sermons | orderBy: orderByDate" class="pure-table-{{ $odd ? 'odd' : 'even'}}">
+        <tr ng-repeat="sermon in sermons | orderBy:predicate:reverse" class="pure-table-{{ $odd ? 'odd' : 'even'}}">
             <td>{{sermon.date | date:'MM/dd/yyyy HH:mm'}}</td>
             <td>{{sermon.minister}}</td>
             <td>{{sermon.bibleText}}</td>

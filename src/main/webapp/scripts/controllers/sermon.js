@@ -9,6 +9,9 @@
  */
 angular.module('llcArchivesApp')
     .controller('SermonCtrl', function ($scope, $http, $routeParams, SpringDataRestAdapter) {
+        $scope.predicate = 'date';
+        $scope.reverse = false;
+
         $scope.name = $routeParams.name;
         SpringDataRestAdapter.process(
             $http.get('api/congregations/search/findByName?name=' + $scope.name)
@@ -28,5 +31,12 @@ angular.module('llcArchivesApp')
             }
             return '';
         };
+
+        $scope.sort = function (predicate) {
+            if ($scope.predicate === predicate) {
+                $scope.reverse = !$scope.reverse;
+            }
+            $scope.predicate = predicate;
+        }
 
     });
