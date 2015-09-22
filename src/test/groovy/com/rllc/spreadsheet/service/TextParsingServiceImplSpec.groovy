@@ -3,6 +3,7 @@ package com.rllc.spreadsheet.service
 import com.rllc.spreadsheet.rest.domain.Minister
 import com.rllc.spreadsheet.rest.repository.MinisterRepository
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created by Steven McAdams on 4/25/15.
@@ -12,24 +13,28 @@ class TextParsingServiceImplSpec extends Specification {
     def ministerRepository = Mock(MinisterRepository)
     TextParsingService textParsingService
 
-    def mp3Directory = "C:\\example\\archives\\rockford"
-    def mp3File = "2015\\20150405_CKumpula.mp3"
-
     void setup() {
         textParsingService = new TextParsingServiceImpl(
                 ministerRepository: ministerRepository
         )
     }
 
-    def "ParseFilename"() {
+    @Unroll
+    def "parse filename #mp3File"() {
         when: "filelocation is parsed"
         def filename = textParsingService.parseFilename(mp3Directory, mp3File)
 
         then: "base mp3 directory is stripped"
-        filename == '2015/20150405_CKumpula.mp3'
+        filename == parsedFilename
+
+        where:
+        mp3Directory                      | mp3File                       || parsedFilename
+        'C:\\example\\archives\\rockford' | '2015\\20150405_CKumpula.mp3' || '2015/20150405_CKumpula.mp3'
+
     }
 
-    def "ParseMinister"() {
+    @Unroll
+    def "Parse Minister #input"() {
         given:
         def ministers = []
 
@@ -59,31 +64,22 @@ class TextParsingServiceImplSpec extends Specification {
         }
 
         when: "minister is parsed"
-        def minister = textParsingService.parseMinister("CRAIG kuMPula")
+        def minister = textParsingService.parseMinister(input)
 
-        then: "minister is cased appropriately"
-        minister == "Craig Kumpula"
+        then: "minister is spelled correctly"
+        minister == output
 
-        when: "minister is misspelled"
-        minister = textParsingService.parseMinister("Rd Niklua")
+        where:
+        input            || output
+        'CRAIG kuMPula'  || 'Craig Kumpula'
+        'Rd Niklua'      || 'Rod Nikula'
+        'Joko Hapsorry'  || 'Jouko Haapsaari'
+        'Antti Paananen' || 'Antti Paananen'
 
-        then: "minister is auto-corrected"
-        minister == "Rod Nikula"
-
-        when: "minister is misspelled 2"
-        minister = textParsingService.parseMinister("Joko Hapsorry")
-
-        then: "minister is auto-corrected"
-        minister == "Jouko Haapsaari"
-
-        when: "a new minister is used"
-        minister = textParsingService.parseMinister("Antti Paananen")
-
-        then: "minister is not auto-corrected"
-        minister == "Antti Paananen"
     }
 
-    def "ParseMinisterFromFilename"() {
+    @Unroll
+    def "Parse Minister From Filename #input"() {
         given:
         def ministers = []
         ministers.add("Craig Kumpula")
@@ -105,145 +101,101 @@ class TextParsingServiceImplSpec extends Specification {
             }
         }
 
-        when: "filename is not properly formatted"
-        def minister = textParsingService.parseMinisterFromFilename("20150621-JHaapsaari.mp3")
+        when: "filename is not parsed"
+        def minister = textParsingService.parseMinisterFromFilename(input)
 
-        then: "minister name is empty"
-        !minister
+        then: "minister name is returned"
+        minister == output
 
-        when: "JHaapsaari is parsed"
-        minister = textParsingService.parseMinisterFromFilename("20150621_JHaapsaari.mp3")
-
-        then: "minister is autocorrected appropriately"
-        minister == "Jouko Haapsaari"
-
-        when: "CKumpala is parsed"
-        minister = textParsingService.parseMinisterFromFilename("20130321_CKumpala.mp3")
-
-        then: "minister is autocorrected appropriately"
-        minister == "Craig Kumpula"
-
-        when: "NMuonen is parsed"
-        minister = textParsingService.parseMinisterFromFilename("20130321_NMuonen.mp3")
-
-        then: "minister is autocorrected appropriately"
-        minister == "Nathan Muhonen"
+        where:
+        input                     || output
+        '20150621-JHaapsaari.mp3' || null
+        '20150621_JHaapsaari.mp3' || 'Jouko Haapsaari'
+        '20130321_CKumpala.mp3'   || 'Craig Kumpula'
+        '20130321_NMuonen.mp3'    || 'Nathan Muhonen'
     }
 
-
-    def "ParseBibleText"() {
+    @Unroll
+    def "parse bible text #input"() {
         when: "bible text is parsed"
-        def bibleText = textParsingService.parseBibleText("Acts 2:1-12")
+        def bibleText = textParsingService.parseBibleText(input)
 
         then: "bible text is returned"
-        bibleText == "Acts 2:1-12"
+        bibleText == output
+
+        where:
+        input         || output
+        null          || ''
+        ''            || ''
+        'Acts 2:1-12' || 'Acts 2:1-12'
+
     }
 
-    def "ParseTime"() {
-        when: "date + time is empty"
-        def time = textParsingService.parseTime("")
+    @Unroll
+    def "Parse Time #input"() {
+        when: "date + time parsed"
+        def time = textParsingService.parseTime(input)
 
-        then: "no time is parsed"
-        time == ""
+        then: "time is returned"
+        time == output
 
-        when: "time is empty"
-        time = textParsingService.parseTime("01/01/2014")
+        where:
+        input                 || output
+        ''                    || ''
+        '01/01/2014'          || ''
+        '01/01/2014 10:30'    || '10:30'
+        '01/01/2014 10:30 am' || '10:30'
+        '01/01/2014 10:30 pm' || '22:30'
 
-        then: "no time is parsed"
-        time == ""
-
-        when: "time is dd/mm/yyyy HH:mm"
-        time = textParsingService.parseTime("01/01/2014 10:30")
-
-        then: "time is parsed"
-        time == "10:30"
-
-        when: "time is dd/mm/yyyy HH:mm am"
-        time = textParsingService.parseTime("01/01/2014 10:30 am")
-
-        then: "time is parsed"
-        time == "10:30"
-
-        when: "time is dd/mm/yyyy HH:mm pm"
-        time = textParsingService.parseTime("01/01/2014 10:30 pm")
-
-        then: "time is parsed and adjusted"
-        time == "22:30"
     }
 
-    def "ParseDate"() {
-        def filename = '20150405_CKumpula.mp3'
+    @Unroll
+    def "parse date (#inputDate, #fileLocation)"() {
+        when: "date is parsed"
+        def date = textParsingService.parseDate(inputDate, fileLocation)
 
-        when: "date is empty, filelocation is empty"
-        def date = textParsingService.parseDate('', '')
+        then: "date is returned"
+        date == parsedDate
 
-        then: "no date is parsed"
-        date == ''
+        where:
+        inputDate           | fileLocation            || parsedDate
+        ''                  | ''                      || ''
+        ''                  | 'CKumpula_20150405'     || ''
+        ''                  | '20150405_CKumpula.mp3' || '04/05/2015'
+        '04/2015'           | '20150405_CKumpula.mp3' || '04/05/2015'
+        '04/04/2015'        | '20150405_CKumpula.mp3' || '04/04/2015'
+        ' 07/26/2015 10:30' | '20150405_CKumpula.mp3' || '07/26/2015'
+        '3/16/14 2 pm'      | '20150405_CKumpula.mp3' || '03/16/2014'
 
-        when: "date is empty, filelocation in non standard format"
-        date = textParsingService.parseDate('', 'CKumpula_20150405')
-
-        then: "date is empty, no exception thrown"
-        date == ''
-        noExceptionThrown()
-
-        when: 'date is empty, filelocation in standard format'
-        date = textParsingService.parseDate('', filename)
-
-        then: 'date is populated from filelocation'
-        date == '04/05/2015'
-
-        when: 'date is invalid, filelocation in standard format'
-        date = textParsingService.parseDate('04/2015', filename)
-
-        then: 'date is populated from filelocation'
-        date == '04/05/2015'
-
-        when: 'date is valid, filelocation in standard format'
-        date = textParsingService.parseDate('04/04/2015', filename)
-
-        then: 'date is populated from metadata'
-        date == '04/04/2015'
-
-        when: 'date is valid with whitespace'
-        date = textParsingService.parseDate(' 07/26/2015 10:30', filename)
-
-        then: 'date is populated from metadata'
-        date == '07/26/2015'
-
-        when: 'date is in the format MM/dd/yy'
-        date = textParsingService.parseDate('3/16/14 2 pm', filename)
-
-        then: 'date is populated from metadata'
-        date == '03/16/2014'
     }
 
-    def "FormatDate"() {
+    @Unroll
+    def "Format Date (#day, #month, #year)"() {
         when: "format date is called"
-        def date = textParsingService.formatDate(12, 12, 2014)
+        def date = textParsingService.formatDate(day, month, year)
 
         then: "date is formatted as 'MM/dd/yyyy'"
-        date == "12/12/2014"
+        date == formattedDate
+
+        where:
+        day | month | year || formattedDate
+        12  | 12    | 2014 || '12/12/2014'
 
     }
 
-    def "parseNotes"() {
-        when: 'comments is null'
-        def notes = textParsingService.parseNotes(null);
+    @Unroll
+    def "Parse Notes #input"() {
+        when: 'notes are parsed'
+        def notes = textParsingService.parseNotes(input);
 
-        then: 'no comments are parsed'
-        notes == '';
+        then: 'comments are returned'
+        notes == output;
 
-        when: 'comments is empty'
-        notes = textParsingService.parseNotes('');
+        where:
+        input                   || output
+        null                    || ''
+        ''                      || ''
+        'Christmas Eve Service' || 'Christmas Eve Service'
 
-        then: 'no comments are parsed'
-        notes == '';
-
-        when: 'comments exists'
-        notes = textParsingService.parseNotes('Christmas Eve Service')
-
-        then: 'comments are parsed'
-        notes == 'Christmas Eve Service'
     }
 }
