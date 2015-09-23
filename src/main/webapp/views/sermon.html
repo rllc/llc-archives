@@ -1,20 +1,78 @@
 <div class="table-responsive">
+    <form>
+        <div class="form-group">
+            <div class="input-group">
+                <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+                <input type="text" class="form-control" placeholder="Search" ng-model="searchTerm">
+            </div>
+        </div>
+    </form>
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
+
         <tr class="active">
             <th colspan="5" class="text-center"><h4>{{fullName}} Archived Sermons</h4></th>
         </tr>
         <tr>
-            <th><a href="" ng-click="sort('date')">Date</a></th>
-            <th><a href="" ng-click="sort('minister')">Minister</a></th>
-            <th><a href="" ng-click="sort('bibleText')">Bible Text</a></th>
-            <th><a href="" ng-click="sort('comments')">Comments</a></th>
-            <th><a href="" ng-click="sort('fileUrl')">Link</a></th>
+            <th class="sortable sort-desc" ng-click="sort('date')">
+                <div class="header-label">
+                    Date
+                </div>
+                <div class="sort-icon">
+                    <span ng-show="predicate == 'date' && !reverse" class="glyphicon glyphicon-triangle-top"></span>
+                    <span ng-show="predicate == 'date' && reverse" class="glyphicon glyphicon-triangle-bottom"></span>
+                </div>
+            </th>
+            <th class="sortable" ng-click="sort('minister')">
+                <div class="header-label">
+                    Minister
+                </div>
+                <div class="sort-icon">
+                    <span ng-show="predicate == 'minister' && !reverse"
+                          class="glyphicon glyphicon-triangle-top"></span>
+                    <span ng-show="predicate == 'minister' && reverse"
+                          class="glyphicon glyphicon-triangle-bottom"></span>
+                </div>
+            </th>
+            <th class="sortable" ng-click="sort('bibleText')">
+                <div class="header-label">
+                    Bible Text
+                </div>
+                <div class="sort-icon">
+                    <span ng-show="predicate == 'bibleText' && !reverse"
+                          class="glyphicon glyphicon-triangle-top"></span>
+                    <span ng-show="predicate == 'bibleText' && reverse"
+                          class="glyphicon glyphicon-triangle-bottom"></span>
+                </div>
+            </th>
+            <th class="sortable" ng-click="sort('comments')">
+                <div class="header-label">
+                    Comments
+                </div>
+                <div class="sort-icon">
+                    <span ng-show="predicate == 'comments' && !reverse"
+                          class="glyphicon glyphicon-triangle-top"></span>
+                    <span ng-show="predicate == 'comments' && reverse"
+                          class="glyphicon glyphicon-triangle-bottom"></span>
+                </div>
+            </th>
+            <th class="sortable" ng-click="sort('fileUrl')">
+                <div class="header-label">
+                    Link
+                </div>
+                <div class="sort-icon">
+                    <span ng-show="predicate == 'fileUrl' && !reverse"
+                          class="glyphicon glyphicon-triangle-top"></span>
+                    <span ng-show="predicate == 'fileUrl' && reverse"
+                          class="glyphicon glyphicon-triangle-bottom"></span>
+                </div>
+            </th>
         </tr>
         </thead>
         <tbody>
-        <tr ng-repeat="sermon in sermons | orderBy:predicate:reverse" class="pure-table-{{ $odd ? 'odd' : 'even'}}">
-            <td>{{sermon.date | date:'MM/dd/yyyy HH:mm'}}</td>
+        <tr ng-repeat="sermon in sermons | orderBy:predicate:reverse | filter:searchTerm"
+            class="pure-table-{{ $odd ? 'odd' : 'even'}}">
+            <td>{{sermon.date | date:'MM/dd/yyyy'}}</td>
             <td>{{sermon.minister}}</td>
             <td>{{sermon.bibleText}}</td>
             <td>{{sermon.comments}}</td>

@@ -10,7 +10,7 @@
 angular.module('llcArchivesApp')
     .controller('SermonCtrl', function ($scope, $http, $routeParams, SpringDataRestAdapter) {
         $scope.predicate = 'date';
-        $scope.reverse = false;
+        $scope.reverse = true;
 
         $scope.name = $routeParams.name;
         SpringDataRestAdapter.process(

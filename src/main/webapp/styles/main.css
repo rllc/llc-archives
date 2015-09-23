@@ -197,3 +197,16 @@ a.pure-button-primary {
         font-size: 300%;
     }
 }
+
+.sortable {
+    cursor: pointer;
+}
+
+.header-label {
+    float: left;
+}
+
+.sort-icon {
+    float: right;
+}
+
