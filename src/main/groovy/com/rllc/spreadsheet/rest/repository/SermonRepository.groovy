@@ -13,5 +13,7 @@ interface SermonRepository extends PagingAndSortingRepository<Sermon, Long> {
 
     List<Sermon> findById(@Param("id") long id);
 
+    List<Sermon> findByCongregation_Name(@Param("name") String name);
+
     List<Sermon> findByFileUrlEndingWith(@Param("file") String file);
 }

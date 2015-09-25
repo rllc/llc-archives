@@ -3,6 +3,7 @@ package com.rllc.spreadsheet.service
 import com.amazonaws.AmazonClientException
 import com.amazonaws.AmazonServiceException
 import com.rllc.spreadsheet.domain.RemoteFiles
+import com.rllc.spreadsheet.domain.S3File
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,12 +21,9 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
     AmazonService amazonService
 
     @Override
-    RemoteFiles findMp3Files(boolean refreshAll, String congregationKey) {
-
+    List<S3File> findMp3Files(String congregationKey) {
         try {
-            List<String> s3Files = amazonService.listFiles(refreshAll, congregationKey)
-            RemoteFiles remoteFiles = amazonService.downloadMetadata(s3Files, congregationKey)
-            return remoteFiles
+            return amazonService.listFiles(congregationKey)
         } catch (AmazonServiceException ase) {
             logger.info("Caught an AmazonServiceException, which" +
                     " means your request made it " +
@@ -46,6 +44,11 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
             logger.info("Error Message: " + ace.getMessage())
             return new RemoteFiles()
         }
+    }
+
+    @Override
+    RemoteFiles downloadMetadata(List<S3File> s3Files, String congregationKey) {
+        amazonService.downloadMetadata(s3Files, congregationKey)
     }
 
 }

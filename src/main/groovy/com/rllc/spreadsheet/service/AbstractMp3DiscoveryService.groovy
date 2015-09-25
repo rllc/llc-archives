@@ -4,6 +4,8 @@ import com.mpatric.mp3agic.ID3v1
 import com.mpatric.mp3agic.Mp3File
 import com.rllc.spreadsheet.domain.Mp3SermonFile
 import com.rllc.spreadsheet.domain.RemoteFiles
+import com.rllc.spreadsheet.domain.S3File
+import com.rllc.spreadsheet.filters.Mp3FileFilter
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,12 +22,32 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
     @Autowired
     TextParsingService textParsingService
 
-    abstract RemoteFiles findMp3Files(boolean refreshAll, String congregationKey)
+    @Autowired
+    FileFilteringService fileFilteringService
+
+    @Autowired
+    DatabaseCleanupService databaseCleanupService
+
+    @Autowired
+    Mp3FileFilter mp3FileFilter
+
+    abstract List<S3File> findMp3Files(String congregationKey)
+
+    abstract RemoteFiles downloadMetadata(List<S3File> s3Files, String congregationKey)
 
     @Override
     List<Mp3SermonFile> processMp3Files(boolean refreshAll, String congregationKey) {
         def sermonList = []
-        RemoteFiles mp3Results = findMp3Files(refreshAll, congregationKey)
+        List<S3File> allFiles = findMp3Files(congregationKey)
+        List<S3File> filteredFiles
+        if (refreshAll) {
+            filteredFiles = allFiles.findAll { mp3FileFilter.passes(it) }
+        } else {
+            filteredFiles = fileFilteringService.filter(allFiles)
+        }
+
+        databaseCleanupService.removeDeletedFiles(allFiles, congregationKey)
+        RemoteFiles mp3Results = downloadMetadata(filteredFiles, congregationKey)
         if (mp3Results) {
             def root = mp3Results.root
             List mp3Files = mp3Results.files
@@ -48,7 +70,6 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
         sermonList
     }
 
-    @Override
     Mp3SermonFile extractId3v1TagData(String basePath, File mp3FileHandle, ID3v1 id3v1Tag) {
         new Mp3SermonFile(
                 file: textParsingService.parseFilename(basePath, mp3FileHandle.absolutePath),

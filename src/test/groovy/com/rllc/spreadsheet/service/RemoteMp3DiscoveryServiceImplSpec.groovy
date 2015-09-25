@@ -52,7 +52,9 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
 
         new RemoteMp3DiscoveryServiceImpl(
                 amazonService: amazonService,
-                textParsingService: textParsingService
+                textParsingService: textParsingService,
+                fileFilteringService: Mock(FileFilteringService),
+                databaseCleanupService: Mock(DatabaseCleanupService)
         )
     }
 
@@ -65,7 +67,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
     }
 
 
-    def "GetMp3s"() {
+    def "process mp3 files"() {
         when: "mp3 files are found and processed"
         def sermons = mp3DiscoveryService.processMp3Files(false, 'rllc')
 
@@ -91,26 +93,6 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
                     assert sermon.file.contains('sermons/rockford/2015/20150315_RNevala.mp3')
                     break;
             }
-        }
-    }
-
-    def "FindMp3Files"() {
-        when: "mp3 directory is scanned for files"
-        RemoteFiles remoteFiles = mp3DiscoveryService.findMp3Files(false, 'rllc')
-        logger.info "remoteFiles : $remoteFiles"
-        def files = remoteFiles.files
-
-        then: "all sermons are found"
-        sermonFiles.each { sermon ->
-            logger.info "> verifying $sermon was found.."
-            def found = false
-            files.each { mp3File ->
-                logger.info mp3File.absolutePath
-                if (mp3File.absolutePath.contains(sermon)) {
-                    found = true
-                }
-            }
-            assert found == true
         }
     }
 
