@@ -17,24 +17,24 @@ def groovyVersion = '2.4.4'
 def spockVersion = '1.0-groovy-2.4'
 def springVersion = '4.2.0.RELEASE'
 
-mainClassName = "com.rllc.spreadsheet.Application"
-applicationName = "llc-spreadsheet-updater"
+mainClassName = "Application"
+applicationName = "llc-archives"
 
 repositories {
     mavenCentral()
 }
 
 jar {
-    baseName = 'llc-spreadsheet-appender'
+    baseName = 'llc-archives'
     version = '0.1.0'
 }
 
 springBoot {
-    mainClass = 'com.rllc.spreadsheet.Application'
+    mainClass = 'Application'
 }
 
 bootRepackage {
-    mainClass = 'com.rllc.spreadsheet.Application'
+    mainClass = 'Application'
 }
 
 dependencies {
