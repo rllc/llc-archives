@@ -1,7 +1,9 @@
 package com.rllc.spreadsheet.service
 
 import com.rllc.spreadsheet.domain.S3File
+import com.rllc.spreadsheet.rest.domain.Congregation
 import com.rllc.spreadsheet.rest.domain.Sermon
+import com.rllc.spreadsheet.rest.repository.CongregationRepository
 import com.rllc.spreadsheet.rest.repository.SermonRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,10 +20,13 @@ class DatabaseCleanupServiceImpl implements DatabaseCleanupService {
     @Autowired
     SermonRepository sermonRepository
 
+    @Autowired
+    CongregationRepository congregationRepository
+
     @Override
-    void removeDeletedFiles(List<S3File> s3Files, String congregation) {
+    void removeDeletedFiles(List<S3File> s3Files, String congregationName) {
         List<Sermon> filesToRemove = []
-        List<Sermon> sermons = sermonRepository.findByCongregation_Name(congregation)
+        List<Sermon> sermons = congregationRepository.findByName(congregationName)[0].sermons
         sermons.each { sermon ->
             def remove = true
             s3Files.each { s3File ->
@@ -34,9 +39,11 @@ class DatabaseCleanupServiceImpl implements DatabaseCleanupService {
             }
         }
         logger.info "cleaning up ${filesToRemove.size()} sermons which no longer exist in S3 storage"
+        Congregation congregation = congregationRepository.findByName(congregationName)[0]
         filesToRemove.each { sermon ->
             logger.info("deleting sermon : ${sermon.fileUrl}")
-            sermonRepository.delete(sermon)
+            congregation.sermons.removeAll { it.id == sermon.id }
         }
+        congregationRepository.save(congregation)
     }
 }
