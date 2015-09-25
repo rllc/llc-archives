@@ -25,14 +25,14 @@ class DatabaseCleanupServiceImplSpec extends Specification {
         sermonRepository = Mock(SermonRepository)
         sermonRepository.findByCongregation_Name(_) >> {
             [
-                    new Sermon(fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150101_RNikula.mp3"),
-                    new Sermon(fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150104_MLee.mp3"),
-                    new Sermon(fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150115_RWaaraniemi.mp3"),
-                    new Sermon(fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150118_JHaapsaari.mp3")
+                    new Sermon(id: 1, fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150101_RNikula.mp3"),
+                    new Sermon(id: 2, fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150104_MLee.mp3"),
+                    new Sermon(id: 3, fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150115_RWaaraniemi.mp3"),
+                    new Sermon(id: 4, fileUrl: "https://s3-us-west-2.amazonaws.com/rllcarchives/2015/20150118_JHaapsaari.mp3")
             ]
         }
 
-        sermonRepository.delete(_ as Sermon) >> {
+        sermonRepository.delete(_) >> {
             numberOfDeleteCalls++
         }
 

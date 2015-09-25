@@ -36,7 +36,7 @@ class DatabaseCleanupServiceImpl implements DatabaseCleanupService {
         logger.info "cleaning up ${filesToRemove.size()} sermons which no longer exist in S3 storage"
         filesToRemove.each { sermon ->
             logger.info("deleting sermon : ${sermon.fileUrl}")
-            sermonRepository.delete(sermon)
+            sermonRepository.delete(sermon.id)
         }
     }
 }
