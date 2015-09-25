@@ -30,11 +30,11 @@ jar {
 }
 
 springBoot {
-    mainClass = 'Application'
+    mainClass = 'org.llc.archive.Application'
 }
 
 bootRepackage {
-    mainClass = 'Application'
+    mainClass = 'org.llc.archive.Application'
 }
 
 dependencies {
