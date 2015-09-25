@@ -17,7 +17,7 @@ def groovyVersion = '2.4.4'
 def spockVersion = '1.0-groovy-2.4'
 def springVersion = '4.2.0.RELEASE'
 
-mainClassName = "Application"
+mainClassName = "org.llc.archive.Application"
 applicationName = "llc-archives"
 
 repositories {
