@@ -48,7 +48,8 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
 
     @Override
     RemoteFiles downloadMetadata(List<S3File> s3Files, String congregationKey) {
-        amazonService.downloadMetadata(s3Files, congregationKey)
+        def fileNames = s3Files.collect { it.filename }
+        amazonService.downloadMetadata(fileNames, congregationKey)
     }
 
 }
