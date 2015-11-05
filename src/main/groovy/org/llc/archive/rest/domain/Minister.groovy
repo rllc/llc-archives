@@ -10,7 +10,7 @@ class Minister {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "minister_id")
-    private long id;
+    Long id
 
     String firstName
     String middleName

@@ -11,7 +11,7 @@ class Congregation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = 'congregation_id')
-    private long id
+    Long id
 
     String name
     String fullName

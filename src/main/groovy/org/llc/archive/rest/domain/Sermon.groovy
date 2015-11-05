@@ -15,7 +15,7 @@ class Sermon implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "sermon_id")
-    private long id;
+    Long id
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "congregation_id")

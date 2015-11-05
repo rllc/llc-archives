@@ -11,7 +11,7 @@ class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "book_id")
-    private long id;
+    Long id
 
     String name
     String abbreviation

@@ -13,7 +13,7 @@ class SyncExecution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id
+    Long id
 
     Date date
     String username
