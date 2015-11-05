@@ -12,16 +12,16 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
-sourceCompatibility = JavaVersion.VERSION_1_7
-def groovyVersion = '2.4.4'
+sourceCompatibility = JavaVersion.VERSION_1_8
+def groovyVersion = '2.4.5'
 def spockVersion = '1.0-groovy-2.4'
-def springVersion = '4.2.0.RELEASE'
 
 mainClassName = "org.llc.archive.Application"
 applicationName = "llc-archives"
 
 repositories {
     mavenCentral()
+    jcenter()
 }
 
 jar {
@@ -42,7 +42,7 @@ dependencies {
 
     compile 'com.mpatric:mp3agic:0.8.3'
     compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-    compile 'com.amazonaws:aws-java-sdk-s3:1.10.14'
+    compile 'com.amazonaws:aws-java-sdk-s3:1.10.32'
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-autoconfigure")
@@ -52,15 +52,17 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile('org.springframework.boot:spring-boot-starter-jdbc')
 
-//    compile("com.h2database:h2")
-    compile 'org.apache.commons:commons-dbcp2:2.1'
-    compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
+    compile 'org.apache.commons:commons-dbcp2:2.1.1'
+    compile 'org.postgresql:postgresql:9.4-1204-jdbc42'
 
     testCompile "junit:junit:4.12"
-    testCompile 'cglib:cglib-nodep:3.1'
+    testCompile 'cglib:cglib-nodep:3.2.0'
     testCompile 'commons-io:commons-io:2.4'
     testCompile "org.spockframework:spock-core:${spockVersion}"
-    testCompile "org.springframework:spring-test:${springVersion}"
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile( 'com.athaydes:spock-reports:1.2.7' ) {
+        transitive = false
+    }
 }
 
 task stage(type: Copy, dependsOn: [clean, build]) {
