@@ -210,3 +210,26 @@ a.pure-button-primary {
     float: right;
 }
 
+.sermon-navigation {
+    padding-bottom: 1em;
+}
+
+.table-header {
+    font-size: x-large;
+}
+
+.list-inline {
+    margin: 0;
+}
+
+.search-input {
+    width: 200px;
+}
+
+.search-input-group {
+    width: 200px;
+}
+
+.search-column {
+    width: 200px;
+}

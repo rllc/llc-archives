@@ -1,18 +1,43 @@
+<div class="sermon-navigation">
+    <ul class="nav nav-tabs">
+        <li role="presentation" ng-class="{active: isActive('/')}"><a href="#/">ALL</a></li>
+        <li ng-repeat="congregation in congregations" role="presentation"
+            ng-class="{active: isActive('/congregations/' + name)}">
+            <a href="#/congregations/{{congregation.name}}">{{congregation.name | uppercase}}</a>
+        </li>
+    </ul>
+</div>
+
 <div class="table-responsive">
-    <form>
-        <div class="form-group">
-            <div class="input-group">
-                <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
-                <input type="text" class="form-control" placeholder="Search" ng-model="searchTerm">
-            </div>
-        </div>
-    </form>
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
-
-        <tr class="active">
-            <th colspan="5" class="text-center"><h4>{{fullName}} Archived Sermons</h4></th>
+        <tr>
+            <th>
+                <ul class="list-inline">
+                    <li>Page Size:</li>
+                    <li>
+                        <select name="sizeSelect" id="sizeSelect" class="form-control"
+                                ng-change="resetPage()"
+                                ng-model="size"
+                                ng-options="s as s for s in sizes">
+                        </select>
+                    </li>
+                </ul>
+            </th>
+            <th colspan="3">
+                <div class="table-header text-center">
+                    {{name | uppercase}} Archived Sermons
+                </div>
+            </th>
+            <th class="search-column">
+                <div class="input-group search-input-group">
+                    <div class="input-group-addon"><i class="glyphicon glyphicon-search"></i></div>
+                    <input type="text" class="form-control search-input" placeholder="Search" ng-model="query"
+                           ng-change="resetPage()">
+                </div>
+            </th>
         </tr>
+
         <tr>
             <th class="sortable sort-desc" ng-click="sort('date')">
                 <div class="header-label">
@@ -80,4 +105,25 @@
         </tr>
         </tbody>
     </table>
+</div>
+
+<div class="row table-footer">
+    <div class="col-md-8 text-left">
+        Showing {{currentPage * size}} to {{currentPage * size + size < pageData.totalElements ? currentPage * size +
+        size : pageData.totalElements }} of {{pageData.totalElements}} sermons
+    </div>
+    <div class="col-md-4 text-right">
+        <ul class="list-inline">
+            <li>
+                <button ng-click="page('prev')" type="button" class="btn btn-sm btn-info"><span
+                        aria-hidden="true">&larr;</span> Previous
+                </button>
+            </li>
+            <li>{{currentPage + 1}} of {{pageData.totalPages}}</li>
+            <li>
+                <button ng-click="page('next')" type="button" class="btn btn-sm btn-info">Next <span
+                        aria-hidden="true">&rarr;</span></button>
+            </li>
+        </ul>
+    </div>
 </div>
