@@ -92,7 +92,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                         comments: sermon.comments,
                         date: sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null,
                         congregation: congregationRepository.findByName(name)[0],
-                        fileUrl: "https://s3-us-west-2.amazonaws.com/${bucket}/${sermon.file}"
+                        fileUrl: "https://s3.amazonaws.com/${bucket}/${sermon.file}"
                 )
                 sermonRepository.save(newSermon)
             }
