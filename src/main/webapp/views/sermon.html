@@ -2,7 +2,7 @@
     <ul class="nav nav-tabs">
         <li role="presentation" ng-class="{active: isActive('/')}"><a href="#/">ALL</a></li>
         <li ng-repeat="congregation in congregations" role="presentation"
-            ng-class="{active: isActive('/congregations/' + name)}">
+            ng-class="{active: isActive('/congregations/' + congregation.name)}">
             <a href="#/congregations/{{congregation.name}}">{{congregation.name | uppercase}}</a>
         </li>
     </ul>
