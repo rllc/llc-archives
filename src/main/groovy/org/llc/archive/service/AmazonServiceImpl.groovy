@@ -42,18 +42,21 @@ class AmazonServiceImpl implements AmazonService {
 
         fileNames.each { fileName ->
             logger.info "downloading $fileName"
+            try {
+                GetObjectRequest getObjectRequest = new GetObjectRequest(
+                        amazonCredentials.bucket, fileName)
+                S3Object objectPortion = amazonS3Client.getObject(getObjectRequest)
+                byte[] buffer = ByteStreams.toByteArray(objectPortion.getObjectContent());
 
-            GetObjectRequest rangeObjectRequest = new GetObjectRequest(
-                    amazonCredentials.bucket, fileName)
-            rangeObjectRequest.setRange(0, 1024)
-            S3Object objectPortion = amazonS3Client.getObject(rangeObjectRequest)
-            byte[] buffer = ByteStreams.toByteArray(objectPortion.getObjectContent());
-
-            File targetFile = new File("${mp3Dir.absolutePath}/$fileName")
-            targetFile.getParentFile().mkdirs();
-            OutputStream outStream = new FileOutputStream(targetFile)
-            outStream.write(buffer)
-            mp3Files << targetFile
+                File targetFile = new File("${mp3Dir.absolutePath}/$fileName")
+                targetFile.getParentFile().mkdirs();
+                OutputStream outStream = new FileOutputStream(targetFile)
+                outStream.write(buffer)
+                mp3Files << targetFile
+            }
+            catch (all) {
+                logger.warn "error downloading $fileName ${all.printStackTrace()}"
+            }
         }
 
         logger.info "> files : $mp3Files"

@@ -59,7 +59,7 @@ class TextParsingServiceImpl implements TextParsingService {
             def naturalName = "$firstName $lastName"
 
             List<Minister> ministers = ministerRepository.findByLastName(lastName)
-            if (ministers.size() == 1) {
+            if (ministers?.size() == 1) {
                 return ministers[0].naturalName
             } else {
                 return parseMinister(naturalName)

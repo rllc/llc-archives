@@ -1,7 +1,9 @@
 package org.llc.archive.service
 
-import com.mpatric.mp3agic.ID3v1
-import com.mpatric.mp3agic.Mp3File
+import org.jaudiotagger.audio.AudioFile
+import org.jaudiotagger.audio.AudioFileIO
+import org.jaudiotagger.tag.FieldKey
+import org.jaudiotagger.tag.Tag
 import org.llc.archive.domain.Mp3SermonFile
 import org.llc.archive.domain.RemoteFiles
 import org.llc.archive.domain.S3File
@@ -54,9 +56,8 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
             mp3Files.each { File mp3FileHandle ->
                 logger.debug "> ${mp3FileHandle.name}"
                 try {
-                    def mp3file = new Mp3File(mp3FileHandle.absolutePath);
-                    def id3v1Tag = mp3file.hasId3v1Tag() ? mp3file.id3v1Tag : mp3file.id3v2Tag
-                    sermonList << extractId3v1TagData(root, mp3FileHandle, id3v1Tag)
+                    AudioFile mp3File = AudioFileIO.read(mp3FileHandle)
+                    sermonList << extractId3v1TagData(root, mp3FileHandle, mp3File.tag)
                 } catch (all) {
                     logger.warn "> ${mp3FileHandle.name} : ${all.message}"
                     sermonList << new Mp3SermonFile(
@@ -70,14 +71,29 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
         sermonList
     }
 
-    Mp3SermonFile extractId3v1TagData(String basePath, File mp3FileHandle, ID3v1 id3v1Tag) {
+    Mp3SermonFile extractId3v1TagData(String basePath, File mp3FileHandle, Tag tag) {
         new Mp3SermonFile(
                 file: textParsingService.parseFilename(basePath, mp3FileHandle.absolutePath),
-                date: textParsingService.parseDate(id3v1Tag.title, mp3FileHandle.name),
-                bibletext: textParsingService.parseBibleText(id3v1Tag.album),
-                minister: textParsingService.parseMinister(id3v1Tag.artist),
-                comments: textParsingService.parseNotes(id3v1Tag.comment)
+                date: textParsingService.parseDate(extractTag(tag, [FieldKey.TITLE]), mp3FileHandle.name),
+                bibletext: textParsingService.parseBibleText(extractTag(tag, [FieldKey.ALBUM])),
+                minister: textParsingService.parseMinister(extractTag(tag, [FieldKey.ARTIST, FieldKey.ALBUM_ARTIST])),
+                comments: textParsingService.parseNotes(extractTag(tag, [FieldKey.COMMENT]))
 
         )
+    }
+
+    private extractTag(Tag tag, List<FieldKey> keys) {
+        def value = ''
+        try {
+            keys.find { key ->
+                value = tag.getFirst(key)
+                return !value.isEmpty()
+            }
+        }
+        catch (all) {
+            logger.warn "> no ${keys.collect { it.name() }.join(', ')} found in mp3 tag"
+        }
+
+        return value
     }
 }
