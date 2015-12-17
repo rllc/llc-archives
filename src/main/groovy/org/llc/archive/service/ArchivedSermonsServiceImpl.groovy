@@ -82,12 +82,12 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                 existingSermon.congregation = congregationRepository.findByName(name)[0]
                 existingSermon.date = sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null
                 existingSermon.fileUrl = "https://s3.amazonaws.com/${bucket}/${sermon.file}"
-                existingSermon.minister = minister ? minister.naturalName : ''
+                existingSermon.minister = minister ? minister.naturalName : existingSermon.minister
                 sermonRepository.save(existingSermon)
             } else {
 
                 Sermon newSermon = new Sermon(
-                        minister: minister ? minister.naturalName : '',
+                        minister: minister ? minister.naturalName : sermon.minister,
                         bibleText: sermon.bibletext,
                         comments: sermon.comments,
                         date: sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null,
