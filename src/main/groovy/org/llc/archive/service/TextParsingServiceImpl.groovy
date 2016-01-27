@@ -21,6 +21,9 @@ class TextParsingServiceImpl implements TextParsingService {
     @Autowired
     MinisterRepository ministerRepository
 
+    @Autowired
+    NicknameFixer nicknameFixer
+
     @Override
     String parseFilename(String basePath, String absoluteFilePath) {
         def filename = absoluteFilePath
@@ -36,11 +39,23 @@ class TextParsingServiceImpl implements TextParsingService {
     String parseMinister(String artist) {
         List<String> ministers = ministerRepository.findAll().collect { "${it.firstName} ${it.lastName}" }
         String minister = artist.toLowerCase().split().collect { it.capitalize() }.join(' ')
-        List<String> similarMinisters = CosineSimilarityService.mostSimilar(minister, ministers, 0.4)
-        if (similarMinisters.size() > 0) {
-            minister = similarMinisters.get(0);
-        }
+        if (minister.trim() && minister.split().size() == 2) {
 
+            def tokens = minister.split()
+            def firstName = tokens[0]
+            def lastName = tokens[1]
+
+            def realFirstName = nicknameFixer.convertToRealName(firstName)
+            def realLastName = findMostSimilarLastName(lastName)
+
+            if (realLastName) {
+                minister = "$realFirstName $realLastName"
+                List<String> similarMinisters = CosineSimilarityService.mostSimilar(minister, ministers, 0.5)
+                if (similarMinisters.size() > 0) {
+                    minister = similarMinisters.get(0);
+                }
+            }
+        }
         if (artist != minister) {
             logger.info "{} -> {}", artist, minister
         }
@@ -56,16 +71,22 @@ class TextParsingServiceImpl implements TextParsingService {
 
             def firstName = name[0]
             def lastName = name.substring(1, name.length())
-            def naturalName = "$firstName $lastName"
-
-            List<Minister> ministers = ministerRepository.findByLastName(lastName)
+            List<Minister> ministers = ministerRepository.findByFirstNameStartingWithAndLastNameLike(firstName, findMostSimilarLastName(lastName))
             if (ministers?.size() == 1) {
                 return ministers[0].naturalName
-            } else {
-                return parseMinister(naturalName)
             }
         }
 
+        return ''
+    }
+
+    private String findMostSimilarLastName(String lastName) {
+        List<String> ministerLastNames = ministerRepository.findAll().collect { it.lastName }.unique()
+        List<String> similarMinisters = CosineSimilarityService.mostSimilar(lastName, ministerLastNames, 0.5)
+        if (similarMinisters.size() > 0) {
+            return similarMinisters[0]
+        }
+        return ''
     }
 
     @Override

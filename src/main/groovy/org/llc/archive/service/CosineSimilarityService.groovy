@@ -30,6 +30,10 @@ class CosineSimilarityService {
      * @return  the ordered candidates
      */
     static List<String> mostSimilar(String pattern, candidates, double threshold = 0) {
+        (mostSimilarWithDetails(pattern, candidates, threshold).values() as List).reverse()
+    }
+
+    static SortedMap<Double, String> mostSimilarWithDetails(String pattern, candidates, double threshold = 0) {
         SortedMap<Double, String> sorted = new TreeMap<Double, String>()
         for (candidate in candidates) {
             double score = stringSimilarity(pattern, candidate)
@@ -38,7 +42,7 @@ class CosineSimilarityService {
             }
         }
 
-        (sorted.values() as List).reverse()
+        sorted
     }
 
     private static double stringSimilarity(String s1, String s2, int degree = 2) {
