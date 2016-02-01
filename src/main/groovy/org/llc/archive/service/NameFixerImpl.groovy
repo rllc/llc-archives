@@ -25,17 +25,21 @@ class NameFixerImpl implements NameFixer {
 
     @Override
     String convertToFormalName(String nickname) {
-        if (nicknameToFormalNameMap.containsKey(nickname)) {
-            return nicknameToFormalNameMap[nickname]
+        if (nickname) {
+            if (nicknameToFormalNameMap.containsKey(nickname)) {
+                return nicknameToFormalNameMap[nickname]
+            }
+            return nickname
         }
-        return nickname
     }
 
     @Override
     String correctMisspelledLastName(String lastname) {
-        if (mistypedLastnameToCorrectLastName.containsKey(lastname)) {
-            return mistypedLastnameToCorrectLastName[lastname]
+        if (lastname) {
+            if (mistypedLastnameToCorrectLastName.containsKey(lastname)) {
+                return mistypedLastnameToCorrectLastName[lastname]
+            }
+            return lastname
         }
-        return lastname
     }
 }
