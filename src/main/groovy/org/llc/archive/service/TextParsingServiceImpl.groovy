@@ -22,7 +22,7 @@ class TextParsingServiceImpl implements TextParsingService {
     MinisterRepository ministerRepository
 
     @Autowired
-    NicknameFixer nicknameFixer
+    NameFixer nameFixer
 
     @Override
     String parseFilename(String basePath, String absoluteFilePath) {
@@ -45,8 +45,8 @@ class TextParsingServiceImpl implements TextParsingService {
             def firstName = tokens[0]
             def lastName = tokens[1]
 
-            def realFirstName = nicknameFixer.convertToRealName(firstName)
-            def realLastName = findMostSimilarLastName(lastName)
+            def realFirstName = nameFixer.convertToFormalName(firstName)
+            def realLastName = findMostSimilarLastName(nameFixer.correctMisspelledLastName(lastName))
 
             if (realLastName) {
                 minister = "$realFirstName $realLastName"
@@ -67,11 +67,13 @@ class TextParsingServiceImpl implements TextParsingService {
 
         def tokens = filename.split("_")
         if (tokens.size() == 2) {
-            def name = tokens[1].substring(0, tokens[1].length() - 4)
+            def name = tokens[1].substring(0, tokens[1].indexOf('.mp3'))
 
             def firstName = name[0]
             def lastName = name.substring(1, name.length())
-            List<Minister> ministers = ministerRepository.findByFirstNameStartingWithAndLastNameLike(firstName, findMostSimilarLastName(lastName))
+
+            def correctLastName = findMostSimilarLastName(nameFixer.correctMisspelledLastName(lastName))
+            List<Minister> ministers = ministerRepository.findByFirstNameStartingWithAndLastNameLike(firstName, correctLastName)
             if (ministers?.size() == 1) {
                 return ministers[0].naturalName
             }
@@ -82,7 +84,7 @@ class TextParsingServiceImpl implements TextParsingService {
 
     private String findMostSimilarLastName(String lastName) {
         List<String> ministerLastNames = ministerRepository.findAll().collect { it.lastName }.unique()
-        List<String> similarMinisters = CosineSimilarityService.mostSimilar(lastName, ministerLastNames, 0.5)
+        List<String> similarMinisters = CosineSimilarityService.mostSimilar(lastName, ministerLastNames, 0.7)
         if (similarMinisters.size() > 0) {
             return similarMinisters[0]
         }
