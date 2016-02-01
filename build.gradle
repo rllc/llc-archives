@@ -38,11 +38,11 @@ bootRepackage {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.12'
+    compile 'org.slf4j:slf4j-api:1.7.14'
 
     compile 'org:jaudiotagger:2.0.3'
     compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-    compile 'com.amazonaws:aws-java-sdk-s3:1.10.32'
+    compile 'com.amazonaws:aws-java-sdk-s3:1.10.50'
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-autoconfigure")
@@ -53,14 +53,14 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-jdbc')
 
     compile 'org.apache.commons:commons-dbcp2:2.1.1'
-    compile 'org.postgresql:postgresql:9.4-1204-jdbc42'
+    compile 'org.postgresql:postgresql:9.4.1207'
 
     testCompile "junit:junit:4.12"
     testCompile 'cglib:cglib-nodep:3.2.0'
     testCompile 'commons-io:commons-io:2.4'
     testCompile "org.spockframework:spock-core:${spockVersion}"
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile( 'com.athaydes:spock-reports:1.2.7' ) {
+    testCompile( 'com.athaydes:spock-reports:1.2.8' ) {
         transitive = false
     }
 }
