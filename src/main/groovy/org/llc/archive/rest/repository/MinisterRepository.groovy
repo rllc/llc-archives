@@ -19,4 +19,7 @@ interface MinisterRepository extends PagingAndSortingRepository<Minister, Long> 
 
     List<Minister> findByFirstNameAndLastNameLike(
             @Param("firstName") String firstName, @Param("lastName") String lastName)
+
+    List<Minister> findByFirstNameStartingWithAndLastNameLike(
+            @Param("firstName") String firstName, @Param("lastName") String lastName)
 }

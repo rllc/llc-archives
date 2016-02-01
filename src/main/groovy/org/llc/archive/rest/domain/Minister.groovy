@@ -23,4 +23,8 @@ class Minister {
     def getNaturalName() {
         "$firstName $lastName"
     }
+
+    def getDisplayName() {
+        "$lastName, $firstName"
+    }
 }

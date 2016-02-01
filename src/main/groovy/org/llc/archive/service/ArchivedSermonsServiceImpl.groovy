@@ -21,6 +21,7 @@ import org.springframework.stereotype.Component
 class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
     private static final Logger logger = LoggerFactory.getLogger(ArchivedSermonsServiceImpl.class);
+    public static final String AMAZON_S3_URL = "https://s3.amazonaws.com"
 
     @Autowired
     SermonRepository sermonRepository
@@ -81,7 +82,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                 existingSermon.comments = sermon.comments
                 existingSermon.congregation = congregationRepository.findByName(name)[0]
                 existingSermon.date = sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null
-                existingSermon.fileUrl = "https://s3.amazonaws.com/${bucket}/${sermon.file}"
+                existingSermon.fileUrl = AMAZON_S3_URL + "/${bucket}/${sermon.file}"
                 existingSermon.minister = minister ? minister.naturalName : existingSermon.minister
                 sermonRepository.save(existingSermon)
             } else {
@@ -92,7 +93,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
                         comments: sermon.comments,
                         date: sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null,
                         congregation: congregationRepository.findByName(name)[0],
-                        fileUrl: "https://s3.amazonaws.com/${bucket}/${sermon.file}"
+                        fileUrl: AMAZON_S3_URL + "/${bucket}/${sermon.file}"
                 )
                 sermonRepository.save(newSermon)
             }
