@@ -19,7 +19,7 @@ angular.module('llcArchivesApp')
 
 
         // load congregations
-        var httpPromise = $http.get('api/congregations').success(function (response) {
+        var httpPromise = $http.get('api/congregations?sort=name').success(function (response) {
             $scope.response = angular.toJson(response, true);
         });
 
