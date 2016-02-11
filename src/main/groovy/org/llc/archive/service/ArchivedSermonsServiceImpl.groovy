@@ -51,6 +51,8 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
         }
         def now = System.currentTimeMillis()
         def duration = now - start
+        // delete old sync execution records from the database
+        syncExecutionRepository.deleteAll()
         syncExecutionRepository.save(
                 new SyncExecution(
                         username: SecurityContextHolder.context.authentication.principal.username,
