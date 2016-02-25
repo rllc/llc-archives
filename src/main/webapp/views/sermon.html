@@ -12,7 +12,7 @@
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
-            <th class="hidden-xs hidden-sm">
+            <th class="hidden-xs">
                 <ul class="list-inline">
                     <li>Page Size:</li>
                     <li>
@@ -70,7 +70,7 @@
                           class="glyphicon glyphicon-triangle-bottom"></span>
                 </div>
             </th>
-            <th class="sortable hidden-xs hidden-sm" ng-click="sort('comments')">
+            <th class="sortable hidden-xs" ng-click="sort('comments')">
                 <div class="header-label">
                     Event
                 </div>
@@ -100,7 +100,7 @@
             <td>{{sermon.date | date:'MM/dd/yyyy':'UTC'}}</td>
             <td>{{sermon.minister}}</td>
             <td>{{sermon.bibleText}}</td>
-            <td class="hidden-xs hidden-sm">{{sermon.comments}}</td>
+            <td class="hidden-xs">{{sermon.comments}}</td>
             <td><a href="{{sermon.fileUrl}}">Listen</a></td>
         </tr>
         </tbody>
