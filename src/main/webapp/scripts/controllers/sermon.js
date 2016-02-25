@@ -14,7 +14,8 @@ angular.module('llcArchivesApp')
         $scope.currentPage = 0;
         $scope.predicate = 'date';
         $scope.reverse = true;
-        $scope.name = '';
+        $scope.name = $routeParams.name;
+        $scope.fullName = '';
         $scope.query = '';
 
 
@@ -27,7 +28,7 @@ angular.module('llcArchivesApp')
             $scope.congregations = processedResponse._embeddedItems;
             angular.forEach($scope.congregations, function(congregation) {
                 if (congregation.name === $routeParams.name) {
-                    $scope.name = congregation.fullName;
+                    $scope.fullName = congregation.fullName;
                 }
             });
         });
