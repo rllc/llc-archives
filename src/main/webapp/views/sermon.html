@@ -1,5 +1,5 @@
 <div class="sermon-navigation">
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs nav-justified">
         <li role="presentation" ng-class="{active: isActive('/')}"><a href="#/">ALL</a></li>
         <li ng-repeat="congregation in congregations" role="presentation"
             ng-class="{active: isActive('/congregations/' + congregation.name)}">
@@ -12,7 +12,7 @@
     <table class="table table-striped table-bordered table-hover table-condensed">
         <thead>
         <tr>
-            <th>
+            <th class="hidden-xs hidden-sm">
                 <ul class="list-inline">
                     <li>Page Size:</li>
                     <li>
@@ -70,7 +70,7 @@
                           class="glyphicon glyphicon-triangle-bottom"></span>
                 </div>
             </th>
-            <th class="sortable" ng-click="sort('comments')">
+            <th class="sortable hidden-xs hidden-sm" ng-click="sort('comments')">
                 <div class="header-label">
                     Event
                 </div>
@@ -100,7 +100,7 @@
             <td>{{sermon.date | date:'MM/dd/yyyy':'UTC'}}</td>
             <td>{{sermon.minister}}</td>
             <td>{{sermon.bibleText}}</td>
-            <td>{{sermon.comments}}</td>
+            <td class="hidden-xs hidden-sm">{{sermon.comments}}</td>
             <td><a href="{{sermon.fileUrl}}">Listen</a></td>
         </tr>
         </tbody>
@@ -108,11 +108,11 @@
 </div>
 
 <div class="row table-footer">
-    <div class="col-md-8 text-left">
+    <div class="col-md-8 col-xs-5 col-sm-8 text-left">
         Showing {{currentPage * size}} to {{currentPage * size + size < pageData.totalElements ? currentPage * size +
         size : pageData.totalElements }} of {{pageData.totalElements}} sermons
     </div>
-    <div class="col-md-4 text-right">
+    <div class="col-md-4 col-xs-6 col-sm-4 text-right">
         <ul class="list-inline">
             <li>
                 <button ng-click="page('prev')" type="button" class="btn btn-sm btn-info"><span
