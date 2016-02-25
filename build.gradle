@@ -13,9 +13,6 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 
 sourceCompatibility = JavaVersion.VERSION_1_8
-def groovyVersion = '2.4.5'
-def spockVersion = '1.0-groovy-2.4'
-
 mainClassName = "org.llc.archive.Application"
 applicationName = "llc-archives"
 
@@ -38,11 +35,11 @@ bootRepackage {
 }
 
 dependencies {
-    compile 'org.slf4j:slf4j-api:1.7.14'
+    compile 'org.slf4j:slf4j-api:1.+'
 
-    compile 'org:jaudiotagger:2.0.3'
-    compile "org.codehaus.groovy:groovy-all:${groovyVersion}"
-    compile 'com.amazonaws:aws-java-sdk-s3:1.10.50'
+    compile 'org:jaudiotagger:2.+'
+    compile "org.codehaus.groovy:groovy-all:2.+"
+    compile 'com.amazonaws:aws-java-sdk-s3:1.+'
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-autoconfigure")
@@ -52,15 +49,15 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-security")
     compile('org.springframework.boot:spring-boot-starter-jdbc')
 
-    compile 'org.apache.commons:commons-dbcp2:2.1.1'
-    compile 'org.postgresql:postgresql:9.4.1207'
+    compile 'org.apache.commons:commons-dbcp2:2.+'
+    compile 'org.postgresql:postgresql:9.+'
 
-    testCompile "junit:junit:4.12"
-    testCompile 'cglib:cglib-nodep:3.2.0'
-    testCompile 'commons-io:commons-io:2.4'
-    testCompile "org.spockframework:spock-core:${spockVersion}"
+    testCompile "junit:junit:4.+"
+    testCompile 'cglib:cglib-nodep:3.+'
+    testCompile 'commons-io:commons-io:2.+'
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile( 'com.athaydes:spock-reports:1.2.8' ) {
+    testCompile( 'com.athaydes:spock-reports:1.+' ) {
         transitive = false
     }
 }
