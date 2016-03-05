@@ -1,6 +1,7 @@
 package org.llc.archive.rest.domain
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder
+import groovy.transform.Canonical
 
 import javax.persistence.*
 
@@ -8,6 +9,7 @@ import javax.persistence.*
  * Created by Steven McAdams on 6/10/15.
  */
 @Entity
+@Canonical
 @JsonPropertyOrder(value = ["id", "congregation", "minister", "bibleText", "comments"])
 class Sermon implements Serializable {
     private static final long serialVersionUID = 1L;

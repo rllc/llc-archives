@@ -40,6 +40,7 @@ dependencies {
     compile 'org:jaudiotagger:2.+'
     compile "org.codehaus.groovy:groovy-all:2.+"
     compile 'com.amazonaws:aws-java-sdk-s3:1.+'
+    compile('com.rometools:rome:1.5.1')
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-autoconfigure")
@@ -57,7 +58,7 @@ dependencies {
     testCompile 'commons-io:commons-io:2.+'
     testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
     testCompile 'org.springframework.boot:spring-boot-starter-test'
-    testCompile( 'com.athaydes:spock-reports:1.+' ) {
+    testCompile('com.athaydes:spock-reports:1.+') {
         transitive = false
     }
 }
