@@ -2,7 +2,7 @@ package org.llc.archive.controller
 
 import groovy.util.logging.Slf4j
 import org.llc.archive.rest.repository.SermonRepository
-import org.llc.archive.rss.view.SermonRssFeedView
+import org.llc.archive.rss.view.SermonAtomFeedView
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
@@ -21,7 +21,7 @@ import org.springframework.web.servlet.ModelAndView
 class SermonFeedController {
 
     @Autowired
-    SermonRssFeedView sermonRssFeedView
+    SermonAtomFeedView sermonAtomFeedView
 
     @Autowired
     SermonRepository sermonRepository
@@ -33,7 +33,7 @@ class SermonFeedController {
         log.info "get feed : ${congregation}"
 
         ModelAndView mav = new ModelAndView()
-        mav.setView(sermonRssFeedView)
+        mav.setView(sermonAtomFeedView)
         def sermons
         if ('all' == congregation) {
             sermons = sermonRepository.findAll(new PageRequest(0, max, Sort.Direction.DESC, 'date'))
