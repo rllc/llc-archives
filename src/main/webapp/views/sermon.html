@@ -26,7 +26,10 @@
             </th>
             <th colspan="3">
                 <div class="table-header text-center">
-                    {{fullName | titlecase}} Archived Sermons <link href="feed/{{name ? name : 'all'}}" type="application/atom+xml" rel="alternate" title="Archive Semrons ATOM Feed" /><img src="images/rss-icon.gif" alt="RSS Feed"></a>
+                    {{fullName | titlecase}} Archived Sermons
+                    <a href="feed/{{name ? name : 'all'}}" type="application/atom+xml" rel="alternate" title="Archived Sermons ATOM Feed">
+                        <img src="images/rss-icon.gif" alt="RSS Feed">
+                    </a>
                 </div>
             </th>
             <th class="search-column">
