@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.model.S3Object
 import com.amazonaws.services.s3.model.S3ObjectSummary
 import com.google.common.io.ByteStreams
 import org.llc.archive.domain.AmazonCredentials
-import org.llc.archive.domain.RemoteFiles
+import org.llc.archive.domain.RemoteFile
 import org.llc.archive.domain.S3File
 import org.llc.archive.props.CongregationPropertyLoader
 import org.llc.archive.rest.repository.SermonRepository
@@ -33,36 +33,28 @@ class AmazonServiceImpl implements AmazonService {
     SermonRepository sermonRepository
 
     @Override
-    RemoteFiles downloadMetadata(List<String> fileNames, String congregationKey) {
-        logger.info("downloadMetadata $congregationKey")
-        AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey].amazonCredentials
-        AmazonS3 amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
-        def mp3Files = []
+    RemoteFile downloadMetadata(String fileName, String congregationKey) {
+        logger.info "downloading $fileName"
         def mp3Dir = File.createTempDir()
+        AmazonCredentials amazonCredentials = congregationPropertyLoader.credentials[congregationKey].amazonCredentials
+        AmazonS3Client amazonS3Client = new AmazonS3Client(new BasicAWSCredentials(amazonCredentials.accessKey, amazonCredentials.secretKey))
+        File targetFile
+        try {
+            GetObjectRequest getObjectRequest = new GetObjectRequest(
+                    amazonCredentials.bucket, fileName)
+            S3Object objectPortion = amazonS3Client.getObject(getObjectRequest)
+            byte[] buffer = ByteStreams.toByteArray(objectPortion.getObjectContent());
 
-        fileNames.each { fileName ->
-            logger.info "downloading $fileName"
-            try {
-                GetObjectRequest getObjectRequest = new GetObjectRequest(
-                        amazonCredentials.bucket, fileName)
-                S3Object objectPortion = amazonS3Client.getObject(getObjectRequest)
-                byte[] buffer = ByteStreams.toByteArray(objectPortion.getObjectContent());
-
-                File targetFile = new File("${mp3Dir.absolutePath}/$fileName")
-                targetFile.getParentFile().mkdirs();
-                OutputStream outStream = new FileOutputStream(targetFile)
-                outStream.write(buffer)
-                mp3Files << targetFile
-            }
-            catch (all) {
-                logger.warn "error downloading $fileName ${all.printStackTrace()}"
-            }
+            targetFile = new File("${mp3Dir.absolutePath}/$fileName")
+            targetFile.getParentFile().mkdirs();
+            OutputStream outStream = new FileOutputStream(targetFile)
+            outStream.write(buffer)
+        }
+        catch (all) {
+            logger.warn "error downloading $fileName ${all.printStackTrace()}"
         }
 
-        logger.info "> files : $mp3Files"
-        logger.info "> root : $mp3Dir.absolutePath"
-
-        return new RemoteFiles(files: mp3Files, root: mp3Dir.absolutePath)
+        return new RemoteFile(file: targetFile, root: mp3Dir.absolutePath)
     }
 
     @Override

@@ -2,7 +2,7 @@ package org.llc.archive.service
 
 import com.amazonaws.AmazonClientException
 import com.amazonaws.AmazonServiceException
-import org.llc.archive.domain.RemoteFiles
+import org.llc.archive.domain.RemoteFile
 import org.llc.archive.domain.S3File
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -34,7 +34,6 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
             logger.info("AWS Error Code:   " + ase.getErrorCode())
             logger.info("Error Type:       " + ase.getErrorType())
             logger.info("Request ID:       " + ase.getRequestId())
-            return new RemoteFiles()
         } catch (AmazonClientException ace) {
             logger.info("Caught an AmazonClientException, which means" +
                     " the client encountered " +
@@ -42,14 +41,11 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
                     "communicate with S3, " +
                     "such as not being able to access the network.")
             logger.info("Error Message: " + ace.getMessage())
-            return new RemoteFiles()
         }
     }
 
     @Override
-    RemoteFiles downloadMetadata(List<S3File> s3Files, String congregationKey) {
-        def fileNames = s3Files.collect { it.filename }
-        amazonService.downloadMetadata(fileNames, congregationKey)
+    RemoteFile downloadMetadata(S3File s3File, String congregationKey) {
+        amazonService.downloadMetadata(s3File.filename, congregationKey)
     }
-
 }

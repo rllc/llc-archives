@@ -6,7 +6,7 @@ import groovy.transform.Canonical
  * Created by Steven McAdams on 7/31/15.
  */
 @Canonical
-class RemoteFiles {
-    List files
+class RemoteFile {
+    File file
     String root
 }
