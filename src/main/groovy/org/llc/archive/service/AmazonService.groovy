@@ -1,6 +1,6 @@
 package org.llc.archive.service
 
-import org.llc.archive.domain.RemoteFiles
+import org.llc.archive.domain.RemoteFile
 import org.llc.archive.domain.S3File
 
 /**
@@ -8,7 +8,7 @@ import org.llc.archive.domain.S3File
  */
 interface AmazonService {
 
-    RemoteFiles downloadMetadata(List<String> fileNames, String congregationKey)
+    RemoteFile downloadMetadata(String fileName, String congregationKey)
 
     List<S3File> listFiles(String congregationKey)
 

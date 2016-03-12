@@ -7,6 +7,6 @@ import org.llc.archive.domain.Mp3SermonFile
  */
 interface Mp3DiscoveryService {
 
-    List<Mp3SermonFile> processMp3Files(boolean refreshAll, String congregationKey)
+    List<Mp3SermonFile> processMp3Files(Date fromDate, Date toDate, String congregationKey)
 
 }

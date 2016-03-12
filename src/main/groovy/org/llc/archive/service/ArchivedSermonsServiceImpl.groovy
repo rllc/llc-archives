@@ -42,13 +42,16 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
     private Mp3DiscoveryService mp3DiscoveryService;
 
     @Override
-    def updateDatastore(boolean refreshAll) {
+    def updateDatastore(Date fromDate, Date toDate, List<String> congregations) {
         logger.info("> refreshing LLC sermon database");
         def start = System.currentTimeMillis()
-        congregationPropertyLoader.credentials.each { name, creds ->
+
+        congregationPropertyLoader.credentials.findAll { it.key in congregations }.each { name, creds ->
             logger.info("========= ${name} =========");
-            updateDatastore(name, mp3DiscoveryService.processMp3Files(refreshAll, name));
+            updateDatastore(name, mp3DiscoveryService.processMp3Files(fromDate, toDate, name));
+            logger.info("... done!");
         }
+
         def now = System.currentTimeMillis()
         def duration = now - start
         // delete old sync execution records from the database

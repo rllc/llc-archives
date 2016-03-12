@@ -2,7 +2,6 @@ package org.llc.archive.service
 
 import org.llc.archive.domain.S3File
 import org.llc.archive.filters.FileFilter
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 /**
@@ -11,11 +10,8 @@ import org.springframework.stereotype.Component
 @Component
 class FileFilteringServiceImpl implements FileFilteringService {
 
-    @Autowired
-    Collection<FileFilter> filters
-
     @Override
-    List<S3File> filter(List<S3File> s3Files) {
+    List<S3File> filter(List<S3File> s3Files, Collection<FileFilter> filters) {
         List<S3File> filteredFiles = []
         s3Files.each { s3File ->
             def passes = true

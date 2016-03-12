@@ -3,11 +3,12 @@ package org.llc.archive.service
 import org.apache.commons.io.FileUtils
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
-import org.llc.archive.domain.RemoteFiles
+import org.llc.archive.domain.RemoteFile
 import org.llc.archive.rest.repository.MinisterRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import spock.lang.Specification
+import spock.lang.Unroll
 
 /**
  * Created by Steven McAdams on 4/26/15.
@@ -19,7 +20,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
     AmazonService amazonService = Mock(AmazonService.class)
 
     TextParsingService textParsingService
-    Mp3DiscoveryService mp3DiscoveryService
+    RemoteMp3DiscoveryServiceImpl mp3DiscoveryService
     MinisterRepository ministerRepository = Mock(MinisterRepository)
 
     @Rule
@@ -31,6 +32,14 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
             '/sermons/rockford/2015/20150315_RNevala.mp3'
     ]
 
+    def initializeFiles() {
+        sermonFiles.each { filePath ->
+            URL inputUrl = getClass().getResource(filePath);
+            File dest = new File("${mp3Directory.root}${filePath}");
+            FileUtils.copyURLToFile(inputUrl, dest);
+        }
+    }
+
     void setup() {
         textParsingService = new TextParsingServiceImpl(
                 ministerRepository: ministerRepository,
@@ -40,15 +49,13 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
         mp3DiscoveryService = setupMp3DiscoveryService()
     }
 
-
     def setupMp3DiscoveryService() {
         amazonService.listFiles(_, _) >> { v -> return sermonFiles }
-        amazonService.downloadMetadata(_, _) >> { v ->
-            new RemoteFiles(
+        amazonService.downloadMetadata(_, _) >> { fileName, congregationKey ->
+            new RemoteFile(
                     root: mp3Directory.root.absolutePath,
-                    files: sermonFiles.collect {
-                        new File("${mp3Directory.root}${it}")
-                    })
+                    file: new File("${mp3Directory.root}${fileName}")
+            )
         }
 
         new RemoteMp3DiscoveryServiceImpl(
@@ -59,42 +66,29 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
         )
     }
 
-    def initializeFiles() {
-        sermonFiles.each { filePath ->
-            URL inputUrl = getClass().getResource(filePath);
-            File dest = new File("${mp3Directory.root}${filePath}");
-            FileUtils.copyURLToFile(inputUrl, dest);
-        }
-    }
 
-
-    def "process mp3 files"() {
+    @Unroll
+    def "process mp3 file #inputFile"() {
         when: "mp3 files are found and processed"
-        def sermons = mp3DiscoveryService.processMp3Files(false, 'rllc')
+        def sermon = mp3DiscoveryService.extractMp3Data(
+                new RemoteFile(
+                        file: new File("${mp3Directory.root}${inputFile}"),
+                        root: mp3Directory.root
+                )
+        )
 
-        then: "sermons are parsed from files"
-        sermons.each { sermon ->
-            switch (sermon.minister) {
-                case "Nathan Muhonen":
-                    assert sermon.bibletext == "Luke 2:1-20"
-                    assert sermon.date == "12/24/2012"
-                    assert sermon.comments == "Christmas Eve Service"
-                    assert sermon.file.contains('sermons/rockford/2014/20141224_NMuhonen.mp3')
-                    break;
-                case "Jon Bloomquist":
-                    assert sermon.bibletext == "Deuteronomy 5:1-4"
-                    assert sermon.date == "03/15/2015"
-                    assert sermon.comments == ""
-                    assert sermon.file.contains('sermons/rockford/2015/20150315_JBloomquist.mp3')
-                    break;
-                case "Rick Nevala":
-                    assert sermon.bibletext == "Acts 8:9-20"
-                    assert sermon.date == "03/15/2015"
-                    assert sermon.comments == ""
-                    assert sermon.file.contains('sermons/rockford/2015/20150315_RNevala.mp3')
-                    break;
-            }
-        }
+        then: "metadata is parsed from file"
+        sermon.minister == minister
+        sermon.bibletext == bibleText
+        sermon.date == date
+        sermon.comments == comments
+        sermon.file.contains(fileName)
+
+        where:
+        inputFile                                         || minister         || bibleText           || date         || comments                || fileName
+        '/sermons/rockford/2014/20141224_NMuhonen.mp3'    || 'Nathan Muhonen' || 'Luke 2:1-20'       || '12/24/2012' || 'Christmas Eve Service' || '20141224_NMuhonen'
+        '/sermons/rockford/2015/20150315_JBloomquist.mp3' || 'Jon Bloomquist' || 'Deuteronomy 5:1-4' || '03/15/2015' || ''                      || '20150315_JBloomquist'
+        '/sermons/rockford/2015/20150315_RNevala.mp3'     || 'Rick Nevala'    || 'Acts 8:9-20'       || '03/15/2015' || ''                      || '20150315_RNevala'
     }
 
 }
