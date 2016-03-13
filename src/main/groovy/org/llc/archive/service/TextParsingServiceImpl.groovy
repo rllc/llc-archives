@@ -1,6 +1,5 @@
 package org.llc.archive.service
 
-import org.llc.archive.rest.domain.Minister
 import org.llc.archive.rest.repository.MinisterRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -37,58 +36,10 @@ class TextParsingServiceImpl implements TextParsingService {
 
     @Override
     String parseMinister(String artist) {
-        List<String> ministers = ministerRepository.findAll().collect { "${it.firstName} ${it.lastName}" }
-        String minister = artist.toLowerCase().split().collect { it.capitalize() }.join(' ')
-        if (minister.trim() && minister.split().size() == 2) {
-
-            def tokens = minister.split()
-            def firstName = tokens[0]
-            def lastName = tokens[1]
-
-            def realFirstName = nameFixer.convertToFormalName(firstName)
-            def realLastName = findMostSimilarLastName(nameFixer.correctMisspelledLastName(lastName))
-
-            if (realLastName) {
-                minister = "$realFirstName $realLastName"
-                List<String> similarMinisters = CosineSimilarityService.mostSimilar(minister, ministers, 0.5)
-                if (similarMinisters.size() > 0) {
-                    minister = similarMinisters.get(0);
-                }
-            }
+        if (!artist) {
+            return ''
         }
-        if (artist != minister) {
-            logger.info "{} -> {}", artist, minister
-        }
-        return minister
-    }
-
-    @Override
-    String parseMinisterFromFilename(String filename) {
-
-        def tokens = filename.split("_")
-        if (tokens.size() == 2) {
-            def name = tokens[1].substring(0, tokens[1].indexOf('.mp3'))
-
-            def firstName = name[0]
-            def lastName = name.substring(1, name.length())
-
-            def correctLastName = findMostSimilarLastName(nameFixer.correctMisspelledLastName(lastName))
-            List<Minister> ministers = ministerRepository.findByFirstNameStartingWithAndLastNameLike(firstName, correctLastName)
-            if (ministers?.size() == 1) {
-                return ministers[0].naturalName
-            }
-        }
-
-        return ''
-    }
-
-    private String findMostSimilarLastName(String lastName) {
-        List<String> ministerLastNames = ministerRepository.findAll().collect { it.lastName }.unique()
-        List<String> similarMinisters = CosineSimilarityService.mostSimilar(lastName, ministerLastNames, 0.7)
-        if (similarMinisters.size() > 0) {
-            return similarMinisters[0]
-        }
-        return ''
+        artist.toLowerCase().split().collect { it.capitalize() }.join(' ')
     }
 
     @Override
