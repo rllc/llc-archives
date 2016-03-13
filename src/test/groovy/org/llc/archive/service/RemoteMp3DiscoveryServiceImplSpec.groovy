@@ -42,8 +42,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
 
     void setup() {
         textParsingService = new TextParsingServiceImpl(
-                ministerRepository: ministerRepository,
-                nameFixer: new NameFixerImpl()
+                ministerRepository: ministerRepository
         )
         initializeFiles()
         mp3DiscoveryService = setupMp3DiscoveryService()

@@ -20,9 +20,6 @@ class TextParsingServiceImpl implements TextParsingService {
     @Autowired
     MinisterRepository ministerRepository
 
-    @Autowired
-    NameFixer nameFixer
-
     @Override
     String parseFilename(String basePath, String absoluteFilePath) {
         def filename = absoluteFilePath
