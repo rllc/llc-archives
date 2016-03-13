@@ -48,7 +48,7 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
         congregationPropertyLoader.credentials.findAll { it.key in congregations }.each { name, creds ->
             logger.info("========= ${name} =========");
-            updateDatastore(name, mp3DiscoveryService.processMp3Files(fromDate, toDate, name));
+            writeToDatabase(name, mp3DiscoveryService.processMp3Files(fromDate, toDate, name));
             logger.info("... done!");
         }
 
@@ -65,45 +65,29 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
         )
     }
 
-    def updateDatastore(String name, List<Mp3SermonFile> sermons) {
+    def writeToDatabase(String name, List<Mp3SermonFile> sermons) {
         def bucket = congregationPropertyLoader.credentials[name].amazonCredentials.bucket
         sermons.each { sermon ->
             logger.debug "> sermon : ${sermon.file}"
 
-            def minister = null
-            if (sermon.minister) {
-                logger.debug "> minister : ${sermon.minister}"
-                def tokens = sermon.minister.split()
-                if (tokens.size() == 2) {
-                    def firstName = tokens[0]
-                    def lastName = tokens[1]
-                    minister = ministerRepository.findByFirstNameAndLastNameLike(firstName, lastName)[0]
-                }
-            }
-            def existingSermons = sermonRepository.findByFileUrlEndingWith(sermon.file)
-            if (existingSermons.size() > 0) {
-                def existingSermon = existingSermons[0]
-                existingSermon.bibleText = sermon.bibletext
-                existingSermon.comments = sermon.comments
-                existingSermon.congregation = congregationRepository.findByName(name)[0]
-                existingSermon.date = sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null
-                existingSermon.fileUrl = AMAZON_S3_URL + "/${bucket}/${sermon.file}"
-                existingSermon.minister = minister ? minister.naturalName : existingSermon.minister
-                sermonRepository.save(existingSermon)
-            } else {
+            Sermon sermonToUpdate = getExistingSermonOrCreateNew(sermon)
+            sermonToUpdate.bibleText = sermon.bibletext
+            sermonToUpdate.comments = sermon.comments
+            sermonToUpdate.congregation = congregationRepository.findByName(name)[0]
+            sermonToUpdate.date = sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null
+            sermonToUpdate.fileUrl = AMAZON_S3_URL + "/${bucket}/${sermon.file}"
+            sermonToUpdate.minister = sermon.minister
+            sermonRepository.save(sermonToUpdate)
 
-                Sermon newSermon = new Sermon(
-                        minister: minister ? minister.naturalName : sermon.minister,
-                        bibleText: sermon.bibletext,
-                        comments: sermon.comments,
-                        date: sermon.date ? new Date().parse("MM/dd/yyyy", sermon.date) : null,
-                        congregation: congregationRepository.findByName(name)[0],
-                        fileUrl: AMAZON_S3_URL + "/${bucket}/${sermon.file}"
-                )
-                sermonRepository.save(newSermon)
-            }
+        }
+    }
 
-
+    private Sermon getExistingSermonOrCreateNew(Mp3SermonFile sermon) {
+        def existingSermons = sermonRepository.findByFileUrlEndingWith(sermon.file)
+        if (existingSermons.size() > 0) {
+            return existingSermons[0]
+        } else {
+            return new Sermon()
         }
     }
 }

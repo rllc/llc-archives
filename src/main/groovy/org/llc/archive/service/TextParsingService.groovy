@@ -9,8 +9,6 @@ interface TextParsingService {
 
     String parseMinister(String artist)
 
-    String parseMinisterFromFilename(String filename)
-
     String parseBibleText(String album)
 
     String parseTime(String title)
