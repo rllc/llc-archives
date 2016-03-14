@@ -4,7 +4,6 @@ import org.apache.commons.io.FileUtils
 import org.junit.Rule
 import org.junit.rules.TemporaryFolder
 import org.llc.archive.domain.RemoteFile
-import org.llc.archive.rest.repository.MinisterRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import spock.lang.Specification
@@ -21,7 +20,6 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
 
     TextParsingService textParsingService
     RemoteMp3DiscoveryServiceImpl mp3DiscoveryService
-    MinisterRepository ministerRepository = Mock(MinisterRepository)
 
     @Rule
     public TemporaryFolder mp3Directory = new TemporaryFolder();
@@ -41,9 +39,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
     }
 
     void setup() {
-        textParsingService = new TextParsingServiceImpl(
-                ministerRepository: ministerRepository
-        )
+        textParsingService = new TextParsingServiceImpl()
         initializeFiles()
         mp3DiscoveryService = setupMp3DiscoveryService()
     }
