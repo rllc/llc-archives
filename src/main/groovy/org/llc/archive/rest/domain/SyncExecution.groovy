@@ -1,5 +1,7 @@
 package org.llc.archive.rest.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -16,7 +18,9 @@ class SyncExecution {
     Long id
 
     Date date
-    String username
-    Long executionTimeMs
 
+    @JsonIgnore
+    String username
+
+    Long executionTimeMs
 }

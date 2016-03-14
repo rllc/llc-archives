@@ -5,7 +5,6 @@ import org.llc.archive.props.CongregationPropertyLoader
 import org.llc.archive.rest.domain.Sermon
 import org.llc.archive.rest.domain.SyncExecution
 import org.llc.archive.rest.repository.CongregationRepository
-import org.llc.archive.rest.repository.MinisterRepository
 import org.llc.archive.rest.repository.SermonRepository
 import org.llc.archive.rest.repository.SyncExecutionRepository
 import org.slf4j.Logger
@@ -28,9 +27,6 @@ class ArchivedSermonsServiceImpl implements ArchivedSermonsService {
 
     @Autowired
     CongregationRepository congregationRepository
-
-    @Autowired
-    MinisterRepository ministerRepository
 
     @Autowired
     SyncExecutionRepository syncExecutionRepository

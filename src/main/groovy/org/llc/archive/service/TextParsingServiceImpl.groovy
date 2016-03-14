@@ -1,9 +1,7 @@
 package org.llc.archive.service
 
-import org.llc.archive.rest.repository.MinisterRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
 import java.text.ParseException
@@ -16,9 +14,6 @@ import java.text.SimpleDateFormat
 class TextParsingServiceImpl implements TextParsingService {
 
     private static final Logger logger = LoggerFactory.getLogger(TextParsingServiceImpl.class)
-
-    @Autowired
-    MinisterRepository ministerRepository
 
     @Override
     String parseFilename(String basePath, String absoluteFilePath) {
