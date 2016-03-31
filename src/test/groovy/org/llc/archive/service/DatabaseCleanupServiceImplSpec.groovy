@@ -46,7 +46,7 @@ class DatabaseCleanupServiceImplSpec extends Specification {
             numberOfSermonsSaved = c[0].sermons.size()
         }
 
-        databaseCleanupService = new DatabaseCleanupServiceImpl(
+        databaseCleanupService = new DatabaseCleanupService(
                 congregationRepository: congregationRepository
         )
     }

@@ -9,18 +9,14 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-/**
- * Created by Steven McAdams on 5/18/15.
- */
 @Component(value = "remoteMp3DiscoveryService")
-class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
+class RemoteMp3DiscoveryService extends AbstractMp3DiscoveryService {
 
-    private static final Logger logger = LoggerFactory.getLogger(RemoteMp3DiscoveryServiceImpl.class)
+    private static final Logger logger = LoggerFactory.getLogger(RemoteMp3DiscoveryService.class)
 
     @Autowired
     AmazonService amazonService
 
-    @Override
     List<S3File> findMp3Files(String congregationKey) {
         try {
             return amazonService.listFiles(congregationKey)
@@ -44,7 +40,6 @@ class RemoteMp3DiscoveryServiceImpl extends AbstractMp3DiscoveryService {
         }
     }
 
-    @Override
     RemoteFile downloadMetadata(S3File s3File, String congregationKey) {
         amazonService.downloadMetadata(s3File.filename, congregationKey)
     }

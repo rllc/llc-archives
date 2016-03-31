@@ -40,7 +40,7 @@ class CongregationPropertyLoader {
             }
 
         }
-        props.groupBy { prop -> prop.split("\\.")[1] }.each { congregation, value ->
+        props.groupBy { String prop -> prop.split("\\.")[1] }.each { congregation, value ->
             credentials[congregation] = new CongregationCredentials(
                     password: env.getProperty("llc.${congregation}.password"),
                     amazonCredentials: new AmazonCredentials(

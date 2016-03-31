@@ -11,7 +11,7 @@ class TextParsingServiceImplSpec extends Specification {
     TextParsingService textParsingService
 
     void setup() {
-        textParsingService = new TextParsingServiceImpl()
+        textParsingService = new TextParsingService()
     }
 
     @Unroll

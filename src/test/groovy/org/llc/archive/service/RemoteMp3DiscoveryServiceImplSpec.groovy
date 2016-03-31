@@ -19,7 +19,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
     AmazonService amazonService = Mock(AmazonService.class)
 
     TextParsingService textParsingService
-    RemoteMp3DiscoveryServiceImpl mp3DiscoveryService
+    RemoteMp3DiscoveryService mp3DiscoveryService
 
     @Rule
     public TemporaryFolder mp3Directory = new TemporaryFolder();
@@ -39,7 +39,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
     }
 
     void setup() {
-        textParsingService = new TextParsingServiceImpl()
+        textParsingService = new TextParsingService()
         initializeFiles()
         mp3DiscoveryService = setupMp3DiscoveryService()
     }
@@ -53,7 +53,7 @@ class RemoteMp3DiscoveryServiceImplSpec extends Specification {
             )
         }
 
-        new RemoteMp3DiscoveryServiceImpl(
+        new RemoteMp3DiscoveryService(
                 amazonService: amazonService,
                 textParsingService: textParsingService,
                 fileFilteringService: Mock(FileFilteringService),

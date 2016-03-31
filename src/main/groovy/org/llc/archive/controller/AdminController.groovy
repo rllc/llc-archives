@@ -19,12 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
-import java.text.DateFormat
-import java.text.SimpleDateFormat
-
-/**
- * Created by Steven McAdams on 6/28/15.
- */
 @Controller
 @Slf4j
 @RequestMapping(value = "/admin")
@@ -76,7 +70,6 @@ class AdminController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
-        final DateFormat df = new SimpleDateFormat(DATE_PATTERN);
         final CustomDateEditor dateEditor = new CustomDateEditor(df, true) {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {

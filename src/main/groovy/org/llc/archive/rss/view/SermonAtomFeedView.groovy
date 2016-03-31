@@ -1,10 +1,6 @@
 package org.llc.archive.rss.view
 
-import com.rometools.rome.feed.atom.Content
-import com.rometools.rome.feed.atom.Entry
-import com.rometools.rome.feed.atom.Feed
-import com.rometools.rome.feed.atom.Link
-import com.rometools.rome.feed.atom.Person
+import com.rometools.rome.feed.atom.*
 import org.llc.archive.rest.domain.Sermon
 import org.llc.archive.rest.repository.SermonRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -49,7 +45,7 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
             entries << new Entry(
                     title: "${sermon.minister} - ${sermon.bibleText}",
                     alternateLinks: [
-                            new Link( href:  sermon.fileUrl)
+                            new Link(href: sermon.fileUrl)
                     ],
                     summary: new Content(
                             value: sermon.comments

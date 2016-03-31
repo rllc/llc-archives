@@ -15,11 +15,8 @@ import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 
-/**
- * Created by Steven McAdams on 5/5/15.
- */
 @Component
-abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
+abstract class AbstractMp3DiscoveryService {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractMp3DiscoveryService.class);
 
@@ -36,7 +33,6 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
 
     abstract RemoteFile downloadMetadata(S3File s3File, String congregationKey)
 
-    @Override
     List<Mp3SermonFile> processMp3Files(Date fromDate, Date toDate, String congregationKey) {
         List<S3File> allFiles = findMp3Files(congregationKey)
         databaseCleanupService.removeDeletedFiles(allFiles, congregationKey)
@@ -93,7 +89,7 @@ abstract class AbstractMp3DiscoveryService implements Mp3DiscoveryService {
         )
     }
 
-    private extractTag(Tag tag, List<FieldKey> keys) {
+    private static extractTag(Tag tag, List<FieldKey> keys) {
         def value = ''
         try {
             keys.find { key ->
