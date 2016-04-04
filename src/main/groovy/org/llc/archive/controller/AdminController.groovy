@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 
+import java.text.SimpleDateFormat
+
 @Controller
 @Slf4j
 @RequestMapping(value = "/admin")
@@ -70,7 +72,7 @@ class AdminController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) throws Exception {
-        final CustomDateEditor dateEditor = new CustomDateEditor(df, true) {
+        final CustomDateEditor dateEditor = new CustomDateEditor(new SimpleDateFormat(DATE_PATTERN), true) {
             @Override
             public void setAsText(String text) throws IllegalArgumentException {
                 if ('today'.equals(text)) {
