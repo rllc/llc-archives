@@ -10,6 +10,7 @@ import org.llc.archive.domain.S3File
 import org.llc.archive.filters.BetweenDatesFileFilter
 import org.llc.archive.filters.FileFilter
 import org.llc.archive.filters.Mp3FileFilter
+import org.llc.archive.rest.repository.SermonRepository
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
@@ -29,6 +30,9 @@ abstract class AbstractMp3DiscoveryService {
     @Autowired
     DatabaseCleanupService databaseCleanupService
 
+    @Autowired
+    SermonRepository sermonRepository
+
     abstract List<S3File> findMp3Files(String congregationKey)
 
     abstract RemoteFile downloadMetadata(S3File s3File, String congregationKey)
@@ -41,7 +45,8 @@ abstract class AbstractMp3DiscoveryService {
                 new Mp3FileFilter(),
                 new BetweenDatesFileFilter(
                         fromDate: fromDate,
-                        toDate: toDate
+                        toDate: toDate,
+                        sermonRepository: sermonRepository
                 )
         ]
 
