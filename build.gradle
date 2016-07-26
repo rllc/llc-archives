@@ -42,7 +42,7 @@ dependencies {
     compile 'org:jaudiotagger:2.+'
     compile "org.codehaus.groovy:groovy-all:2.+"
     compile 'com.amazonaws:aws-java-sdk-s3:1.+'
-    compile('com.rometools:rome:1.5.1')
+    compile('com.rometools:rome:1.6.1')
 
     compile("org.springframework.boot:spring-boot-starter-actuator")
     compile("org.springframework.boot:spring-boot-autoconfigure")
