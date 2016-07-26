@@ -71,13 +71,24 @@ angular.module('llcArchivesApp')
             $scope.currentPage = 0;
             $scope.refreshSermons();
         };
-        $scope.handleOutboundLinkClicks = function(event) {
+
+        $scope.track = function() {
+            $window.ga('send', {
+                hitType: 'pageview',
+                page: location.pathname
+            });
+        };
+
+        $scope.listen = function(event) {
             $window.ga('send', 'event', {
                 eventCategory: 'Outbound Link',
                 eventAction: 'click',
                 eventLabel: event.target.href,
                 transport: 'beacon'
             });
+            window.setTimeout(function() {
+                $window.location.href = event.target.href;
+            }, 200);
         };
 
         $scope.refreshSermons = function () {

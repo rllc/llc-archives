@@ -3,7 +3,7 @@
         <li role="presentation" ng-class="{active: isActive('/')}"><a href="#/">ALL</a></li>
         <li ng-repeat="congregation in congregations" role="presentation"
             ng-class="{active: isActive('/congregations/' + congregation.name)}">
-            <a href="#/congregations/{{congregation.name}}">{{congregation.name | uppercase}}</a>
+            <a href="#/congregations/{{congregation.name}}" ng-click="track()">{{congregation.name | uppercase}}</a>
         </li>
     </ul>
 </div>
@@ -105,7 +105,7 @@
             <td>{{sermon.minister}}</td>
             <td>{{sermon.bibleText}}</td>
             <td class="hidden-xs">{{sermon.comments}}</td>
-            <td><a href="{{sermon.fileUrl}}" ng-click="handleOutboundLinkClicks($event)">Listen</a></td>
+            <td><a href="{{sermon.fileUrl}}" ng-click="listen($event)">Listen</a></td>
         </tr>
         </tbody>
     </table>
