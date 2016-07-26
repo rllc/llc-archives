@@ -8,7 +8,7 @@
  * Controller of the llcArchivesApp
  */
 angular.module('llcArchivesApp')
-    .controller('SermonCtrl', function ($scope, $http, $location, $routeParams, SpringDataRestAdapter) {
+    .controller('SermonCtrl', function ($scope, $http, $window, $location, $routeParams, SpringDataRestAdapter) {
         $scope.size = 10;
         $scope.sizes = [5, 10, 25, 50];
         $scope.currentPage = 0;
@@ -71,7 +71,14 @@ angular.module('llcArchivesApp')
             $scope.currentPage = 0;
             $scope.refreshSermons();
         };
-
+        $scope.handleOutboundLinkClicks = function(event) {
+            $window.ga('send', 'event', {
+                eventCategory: 'Outbound Link',
+                eventAction: 'click',
+                eventLabel: event.target.href,
+                transport: 'beacon'
+            });
+        };
 
         $scope.refreshSermons = function () {
 
