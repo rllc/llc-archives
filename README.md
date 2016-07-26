@@ -6,6 +6,7 @@ Archived sermons, backed by the cloud.
 
 
 # getting started
+### prerequisite - postgres
 ```shell
 git clone git@github.com:rllc/llc-archives.git
 cd llc-archives
@@ -14,6 +15,13 @@ cd llc-archives
 ```
 open a browser to [http://localhost:8080](http://localhost:8080)
 
+# getting started with docker
+```shell
+./gradlew clean buildDocker
+cd src/main/docker
+docker-compose up
+```
+open a browser to [http://localhost:8080](http://localhost:8080)
 
 # architecture
 ![asdfdas 1](https://cloud.githubusercontent.com/assets/679510/8988873/5e9a25ac-36ae-11e5-9460-45b48c6798e8.png)

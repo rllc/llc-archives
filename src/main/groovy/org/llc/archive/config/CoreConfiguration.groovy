@@ -25,9 +25,9 @@ public class CoreConfiguration {
 
         URI dbUri;
         try {
-            String username;
-            String password;
-            String url = "jdbc:postgresql:llc";
+            String username = 'docker';
+            String password = 'docker';
+            String url = "jdbc:postgresql://db:5432/llc";
             String dbProperty = System.getProperty("database.url")
             logger.info "dbProperty : $dbProperty"
 
