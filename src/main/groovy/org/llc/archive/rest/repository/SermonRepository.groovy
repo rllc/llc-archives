@@ -18,7 +18,7 @@ interface SermonRepository extends PagingAndSortingRepository<Sermon, Long> {
 
     Page<Sermon> findByCongregation_Name(@Param("name") String name, Pageable pageable)
 
-    Sermon findOneByOrderByDateDesc()
+    Sermon findFirstByOrderByDateDesc()
 
     @Query(value = """
         select s from Sermon s
