@@ -75,7 +75,7 @@ angular.module('llcArchivesApp')
         $scope.track = function (event) {
             $window.ga('send', {
                 hitType: 'pageview',
-                page: event.target.href
+                page: '/' + event.target.hash
             });
         };
 
