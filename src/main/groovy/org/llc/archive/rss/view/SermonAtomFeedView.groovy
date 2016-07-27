@@ -45,10 +45,10 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
             comments.setType(Content.TEXT)
 
             entries << new Entry(
-                    id: sermon.fileUrl,
+                    id: new URI(sermon.fileUrl),
                     title: "${sermon.minister} - ${sermon.bibleText}",
                     alternateLinks: [
-                            new Link(href: sermon.fileUrl)
+                            new Link(href: new URI(sermon.fileUrl))
                     ],
                     summary: new Content(
                             value: "${sermon.minister} : ${sermon.comments}"
