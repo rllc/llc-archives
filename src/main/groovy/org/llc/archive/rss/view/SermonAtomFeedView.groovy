@@ -23,7 +23,7 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
     protected void buildFeedMetadata(Map<String, Object> model, Feed feed, HttpServletRequest request) {
         feed.title = 'LLC Archived Sermons'
         feed.id = 'https://llc-archives.herokuapp.com/'
-        feed.updated = sermonRepository.findOneByOrderByDateDesc().date
+        feed.updated = sermonRepository.findFirstByOrderByDateDesc().date
         feed.alternateLinks = [
                 new Link(href: 'https://llc-archives.herokuapp.com/')
         ]
