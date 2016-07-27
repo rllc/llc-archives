@@ -22,8 +22,10 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
     @Override
     protected void buildFeedMetadata(Map<String, Object> model, Feed feed, HttpServletRequest request) {
         feed.title = 'LLC Archived Sermons'
+        feed.id = 'https://llc-archives.herokuapp.com/'
+        feed.updated = sermonRepository.findOneByOrderByDateDesc().date
         feed.alternateLinks = [
-                new Link(href: 'https://llc-archives.herokuapp.com')
+                new Link(href: 'https://llc-archives.herokuapp.com/')
         ]
         super.buildFeedMetadata(model, feed, request)
     }
@@ -43,12 +45,13 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
             comments.setType(Content.TEXT)
 
             entries << new Entry(
+                    id: sermon.fileUrl,
                     title: "${sermon.minister} - ${sermon.bibleText}",
                     alternateLinks: [
                             new Link(href: sermon.fileUrl)
                     ],
                     summary: new Content(
-                            value: sermon.comments
+                            value: "${sermon.minister} : ${sermon.comments}"
                     ),
                     authors: [
                             new Person(
