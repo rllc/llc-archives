@@ -10,9 +10,6 @@ import org.springframework.web.servlet.view.feed.AbstractAtomFeedView
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
-/**
- * Created by Steven McAdams on 3/3/16.
- */
 @Component
 class SermonAtomFeedView extends AbstractAtomFeedView {
 
@@ -45,10 +42,10 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
             comments.setType(Content.TEXT)
 
             entries << new Entry(
-                    id: new URI(sermon.fileUrl),
+                    id: encode(sermon.fileUrl),
                     title: "${sermon.minister} - ${sermon.bibleText}",
                     alternateLinks: [
-                            new Link(href: new URI(sermon.fileUrl))
+                            new Link(href: encode(sermon.fileUrl))
                     ],
                     summary: new Content(
                             value: "${sermon.minister} : ${sermon.comments}"
@@ -65,5 +62,9 @@ class SermonAtomFeedView extends AbstractAtomFeedView {
         }
 
         return entries
+    }
+
+    String encode(String link) {
+        link.replaceAll("\\s", "%20")
     }
 }
