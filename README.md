@@ -18,7 +18,6 @@ open a browser to [http://localhost:8080](http://localhost:8080)
 # getting started with docker
 ```shell
 ./gradlew clean buildDocker
-cd src/main/docker
 docker-compose up
 ```
 open a browser to [http://localhost:8080](http://localhost:8080)
