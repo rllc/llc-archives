@@ -3,7 +3,7 @@ services:
   web:
     image: llc/llc-archives
     ports:
-      - "9090:8080"
+      - "8080:8080"
     depends_on:
       - db
     links:
