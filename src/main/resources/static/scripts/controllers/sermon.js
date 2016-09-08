@@ -25,7 +25,7 @@ angular.module('llcArchivesApp')
         });
 
         SpringDataRestAdapter.process(httpPromise).then(function (processedResponse) {
-            $scope.congregations = processedResponse._embeddedItems;
+            $scope.congregations = processedResponse.content;
             angular.forEach($scope.congregations, function (congregation) {
                 if (congregation.name === $routeParams.name) {
                     $scope.fullName = congregation.fullName;
@@ -114,7 +114,7 @@ angular.module('llcArchivesApp')
             SpringDataRestAdapter.process(
                 $http.get(buildQuery())
             ).then(function (sermonResponse) {
-                    $scope.sermons = sermonResponse._embeddedItems;
+                    $scope.sermons = sermonResponse.content;
                     $scope.pageData = sermonResponse.page;
                 });
         };
