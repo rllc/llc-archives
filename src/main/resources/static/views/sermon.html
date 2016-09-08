@@ -112,10 +112,7 @@
 </div>
 
 <div class="row table-footer">
-  <div ng-if="!pageData.totalElements" class="col-md-8 col-xs-5 col-sm-8 text-left">
-      Showing 0 to 0 of 0 sermons
-  </div>
-    <div ng-if="pageData.totalElements" class="col-md-8 col-xs-5 col-sm-8 text-left">
+    <div class="col-md-8 col-xs-5 col-sm-8 text-left">
         Showing {{currentPage * size}} to {{currentPage * size + size < pageData.totalElements ? currentPage * size +
         size : pageData.totalElements }} of {{pageData.totalElements}} sermons
     </div>
@@ -134,7 +131,6 @@
         </ul>
     </div>
 </div>
-
 
 
 <div class="panel panel-default feedback">
