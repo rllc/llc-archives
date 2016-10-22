@@ -23,4 +23,4 @@ docker-compose up
 open a browser to [http://localhost:8080](http://localhost:8080)
 
 # architecture
-![asdfdas 1](https://cloud.githubusercontent.com/assets/679510/8988873/5e9a25ac-36ae-11e5-9460-45b48c6798e8.png)
+![asdfdas 1](https://cloud.githubusercontent.com/assets/679510/19615807/1c52b32e-97cb-11e6-9925-8c5377ab1f57.png)
