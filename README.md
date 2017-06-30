@@ -1,26 +1,27 @@
-# spreadsheet-updater
-Archived sermons, backed by the cloud.
+This has come in handy more times than it should have.
 
-[ ![Codeship Status for rllc/spreadsheet-updater](https://codeship.com/projects/21f82550-cf6f-0132-f2fb-0625bb0d2ed5/status?branch=master)](https://codeship.com/projects/76704)
-[![Dependency Status](https://www.versioneye.com/user/projects/553eedc61395378a90000047/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/553eedc61395378a90000047)
+## Configuration
 
+To redirect all requests to example.com:
 
-# getting started
-### prerequisite - postgres
-```shell
-git clone git@github.com:rllc/llc-archives.git
-cd llc-archives
-./gradlew clean test
-./gradlew bootRun
 ```
-open a browser to [http://localhost:8080](http://localhost:8080)
-
-# getting started with docker
-```shell
-./gradlew clean buildDocker
-docker-compose up
+heroku config:add NEW_BASE_URL=http://example.com
 ```
-open a browser to [http://localhost:8080](http://localhost:8080)
 
-# architecture
-![asdfdas 1](https://cloud.githubusercontent.com/assets/679510/19615807/1c52b32e-97cb-11e6-9925-8c5377ab1f57.png)
+## Deployment
+
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+If the old app that you're redirecting from isn't a Node app you'll need to change the [buildpack](https://devcenter.heroku.com/articles/buildpacks):
+
+```
+heroku buildpacks:set heroku/nodejs
+```
+
+You can then replace the app by pushing with `-f`:
+
+```
+git push heroku master -f
+```
+
+**NOTE:** If the above doesn't work you may need to delete and re-create your Heroku app before pushing an entirely new Git repository into it.
